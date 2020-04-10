@@ -85,8 +85,6 @@ services:
       - "--x_jinmu_h5_server_base_v2_1=https://res-cdn.jinmuhealth.com/app/jinmu_v2_1/dev/report"
       - "--x_pulse_test_raw_data_s3_key_prefix=spec-v2"
       - "--x_ae_config_dir=/ae_data"
-      - "--x_blocker_config_file=/blocker/config_doc.yml"
-      - "--x_blocker_db_file=/blocker/GeoLite2-Country.mmdb.gz"
     environment:
       - LOG_FORMAT=logstash
     ports:

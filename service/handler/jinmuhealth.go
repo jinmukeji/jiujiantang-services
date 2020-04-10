@@ -49,7 +49,6 @@ func NewJinmuHealth(
 	awsClient *aws.Client,
 	ae *ae.Engine,
 	wechat *wechat.Wxmp,
-	blockerPool *blocker.BlockerPool,
 	algorithmServerAddress string) *JinmuHealth {
 
 	j := &JinmuHealth{
@@ -64,7 +63,6 @@ func NewJinmuHealth(
 		subscriptionSvc:        subscriptionpb.NewSubscriptionManagerAPIService(subscriptionServiceName, client.DefaultClient),
 		deviceSvc:              devicepb.NewDeviceManagerAPIService(deviceServiceName, client.DefaultClient),
 		rpcAnalysisSvc:         analysispb.NewAnalysisManagerAPIService(rpcAnalysisServiceName, client.DefaultClient),
-		blockerPool:            blockerPool,
 		algorithmServerAddress: algorithmServerAddress,
 	}
 	return j
