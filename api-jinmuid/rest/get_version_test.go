@@ -34,7 +34,7 @@ func (suite *VersionTestSuite) SetupSuite() {
 
 // TestGetVersion 版本
 func (suite *VersionTestSuite) TestGetVersion() {
-	suite.Expect.GET("/version").Expect().Body().Contains("com.xima.srv.svc-jinmuid")
+	suite.Expect.GET("/version").Expect().Body().Contains("com.himalife.srv.svc-jinmuid")
 }
 
 func TestVersionTestSuite(t *testing.T) {

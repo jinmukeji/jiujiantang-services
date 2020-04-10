@@ -13,7 +13,7 @@ type DeviceManagerService struct {
 }
 
 const (
-	rpcServiceName = "com.xima.srv.device"
+	rpcServiceName = "com.himalife.srv.device"
 )
 
 // NewDeviceManagerService 构建DeviceManagerService

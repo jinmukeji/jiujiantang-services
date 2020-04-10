@@ -14,8 +14,8 @@ type webHandler struct {
 }
 
 const (
-	rpcServiceName       = "com.xima.srv.svc-jinmuid"
-	rpcDeviceServiceName = "com.xima.srv.svc-device"
+	rpcServiceName       = "com.himalife.srv.svc-jinmuid"
+	rpcDeviceServiceName = "com.himalife.srv.svc-device"
 )
 
 func newWebHandler(jwtMiddleware *jwtmiddleware.Middleware) *webHandler {

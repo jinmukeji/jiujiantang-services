@@ -24,7 +24,7 @@ type handler struct {
 }
 
 const (
-	rpcServiceName = "com.xima.srv.svc-biz-core"
+	rpcServiceName = "com.himalife.srv.svc-biz-core"
 )
 
 func newHandler(ops *Options) *handler {

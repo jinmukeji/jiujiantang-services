@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/suite"
 )
 
-const rpcJinmuidServiceName = "com.xima.srv.svc-jinmuid"
+const rpcJinmuidServiceName = "com.himalife.srv.svc-jinmuid"
 
 type Account struct {
 	account      string

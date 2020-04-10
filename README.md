@@ -6,7 +6,7 @@
 
 本项目是 **gf-api** 微服务。
 
-**fqdn:** `com.xima.srv.svc-biz-core`
+**fqdn:** `com.himalife.srv.svc-biz-core`
 
 ## 1 配置开发环境
 
@@ -173,10 +173,10 @@ go run main.go
 首先，启动 Micro API网关，默认监听`8080`端口:
 
 ```sh
-micro api --handler=rpc --namespace=com.xima.srv
+micro api --handler=rpc --namespace=com.himalife.srv
 ```
 
-其中 `com.xima.srv` 是RPC服务的命名空间
+其中 `com.himalife.srv` 是RPC服务的命名空间
 
 > 参考信息: https://micro.mu/blog/2016/04/18/micro-architecture.html
 
@@ -193,20 +193,20 @@ http --json POST \
 # 直接访问 /rpc 路径调用方法，使用 Form 表单形式提交请求
 http --form POST \
 	http://127.0.0.1:8080/rpc \
-	service='com.xima.srv.svc-biz-core' \
+	service='com.himalife.srv.svc-biz-core' \
 	method='Jinmuhealth.Echo' \
 	request='{"content": "Hello, Sky"}'
 
 # 直接访问 /rpc 路径调用方法访问短信网关
 http  \
 http://127.0.0.1:8080/rpc \
-service='com.xima.srv.svc-sms-gw' \
+service='com.himalife.srv.svc-sms-gw' \
 method='SMS.GetVersion' 
 
 # 直接访问 /rpc 路径调用方法访问邮件网关
 http  \
 http://127.0.0.1:8080/rpc \
-service='com.xima.srv.svc-sem-gw' \
+service='com.himalife.srv.svc-sem-gw' \
 method='SEM.GetVersion' 
 
 

@@ -18,10 +18,10 @@ type v2Handler struct {
 }
 
 const (
-	rpcServiceName             = "com.xima.srv.svc-biz-core"
-	rpcSubscriptionServiceName = "com.xima.srv.svc-subscription"
-	rpcJinmuidServiceName      = "com.xima.srv.svc-jinmuid"
-	rpcAnalysisServiceName     = "com.xima.srv.svc-analysis"
+	rpcServiceName             = "com.himalife.srv.svc-biz-core"
+	rpcSubscriptionServiceName = "com.himalife.srv.svc-subscription"
+	rpcJinmuidServiceName      = "com.himalife.srv.svc-jinmuid"
+	rpcAnalysisServiceName     = "com.himalife.srv.svc-analysis"
 )
 
 func newV2Handler(jwtMiddleware *jwtmiddleware.Middleware) *v2Handler {

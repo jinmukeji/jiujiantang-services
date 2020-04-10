@@ -19,11 +19,11 @@ import (
 )
 
 const (
-	rpcSmsServiceName       = "com.xima.srv.svc-sms-gw"
-	rpcSemServiceName       = "com.xima.srv.svc-sem-gw"
-	rpcServiceName          = "com.xima.srv.svc-jinmuid"
-	rpcBizServiceName       = "com.xima.srv.svc-biz-core"
-	subscriptionServiceName = "com.xima.srv.svc-subscription"
+	rpcSmsServiceName       = "com.himalife.srv.svc-sms-gw"
+	rpcSemServiceName       = "com.himalife.srv.svc-sem-gw"
+	rpcServiceName          = "com.himalife.srv.svc-jinmuid"
+	rpcBizServiceName       = "com.himalife.srv.svc-biz-core"
+	subscriptionServiceName = "com.himalife.srv.svc-subscription"
 )
 
 func main() {
