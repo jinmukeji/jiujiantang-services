@@ -1,0 +1,1735 @@
+swagger: '2.0'
+info:
+  description: 金姆健康一体机API v1.0
+  version: 1.11.3-beta
+  title: 金姆健康一体机API v1.10+
+  termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
+  contact:
+    email: support@jinmuhealth.com
+host: 'integrated.api.jinmuhealth.com:49433'
+basePath: /v2
+tags:
+  - name: client
+    description: App 客户端
+  - name: auth
+    description: 用户授权
+  - name: device
+    description: Device 管理  
+  - name: qrcode 
+    description: 二维码
+  - name: user
+    description: 用户
+  - name: measurement 
+    description: 测量  
+schemes:
+  - http    
+paths:
+  '/client/auth':
+    post:
+      tags:
+        - client
+      summary: 提交客户端授权
+      operationId: submitClientAuth
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Auth'
+      responses:
+        '200':
+          description: 成功响应 
+          schema:
+            $ref: '#/definitions/ClientAuthResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+  # Account - signin 账户登录
+  '/account/signin':
+    post:
+      tags:
+        - auth
+      summary: 账户登录
+      operationId: accountSignIn
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: Client验证授权信息
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AccountSignIn'
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/AccountSignInResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+  # Account - signout 账户登出          
+  '/account/{account}/signout':
+    post:
+      tags:
+        - auth
+      summary: 账户登出
+      operationId: accountSignOut
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: Client验证授权信息
+          required: true
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: account
+          in: path
+          type: string
+          required: true  
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/AccountSignOutResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'            
+            
+  '/organizations/{organization_id}/devices':
+    post:
+      tags:
+        - device
+      summary: 批量关联 Device
+      operationId: accountBindOrganizationDevices
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: organization_id
+          in: path
+          type: integer
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DeviceList'
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/BindDevicesResponse'
+          examples:
+            application/json:
+              ok: true
+              data:
+                successful_devices:
+                  - mac: string
+                failed_devices:
+                  - mac: string
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+    get:
+      tags:
+        - device
+      summary: 获取组织关联的 Device 列表
+      operationId: accountGetOrganizationDeviceList
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: organization_id
+          in: path
+          type: integer
+          required: true
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/GetDeviceResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+  '/organizations/{organization_id}/devices/delete':              
+    post:
+      tags:
+        - device
+      summary: 批量解除组织关联的 Device
+      operationId: accountUnbindOrganizationDevices
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: organization_id
+          in: path
+          type: integer
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DeviceList'
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/UnbindDeviceResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+  '/organizations/{organization_id}/devices/is_bindable':
+    post:
+      tags:
+        - device
+      summary: 判断 Device 是否可以被该组织关联
+      operationId: accountCheckOrganizationDeviceBindable
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: organization_id
+          in: path
+          type: integer
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Device'
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/IsBindDevicesResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+  '/wxmp/qrcode':             
+    get:
+      summary: 获取临时二维码
+      operationId: getWxmpTempQrCodeURL
+      tags:
+        - qrcode
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true   
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/QRCodeResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse' 
+
+    # 获取资源
+  '/jinmu_res/getUrl':
+    post:
+      tags:
+        - res
+      summary: 获取金姆资源的baseURL 
+      operationId: getJMResBaseURL
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/JMRes'
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/JMResResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+  '/users/{user_id}/profile':
+    put:
+      tags:
+        - user
+      summary: 修改组织下用户的个人档案
+      operationId: accountModifyOrganizationUserProfile
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: user_id
+          in: path
+          description: 用户 ID
+          required: true
+          type: integer
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: body
+          in: body
+          description: 客户档案
+          schema:
+            $ref: '#/definitions/PutUserProfile'
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/UserProfileResponse'
+    get:
+      tags:
+        - user
+      summary: Owner 获取组织下用户的个人档案
+      operationId: ownerGetOrganizationUserProfile
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          description: Client验证授权信息
+          required: true
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: user_id
+          in: path
+          description: 用户 id
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/UserProfileResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+    # Measurements 测量与分析
+  '/measurements':
+    post:
+      tags:
+        - measurement
+      summary: 提交测量 
+      operationId: submitMeasurement
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: body
+          in: body
+          schema:
+            $ref: '#/definitions/Measurement'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/MeasureResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse' 
+    get:
+      tags:
+        - measurement
+      summary: 查看测量历史记录
+      description: 测量历史记录.最新的结果会靠前
+      operationId: ownerQueryMeasurementList
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: open_id
+          type: string
+          in: query
+          description: 微信的OpenID
+          required: true
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/MeasurementDataWithAnalysisResponse'
+          description: OK
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+  '/measurements/{record_id}/token':
+    get:
+      tags:
+        - measurement
+      summary: 得到分享的token
+      description: 得到分享的token
+      operationId: ownerGetRecordToken
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录token
+          required: true
+        - name: record_id
+          in: path
+          type: integer
+          description: 测量记录ID
+          required: true
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/RecordTokenResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'             
+  '/measurements/{record_id}/analyze':
+    post:
+      tags:
+        - measurement
+      summary: 提交智能分析
+      operationId: submitMeasurementAnalysis
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: record_id
+          in: path
+          required: true
+          type: integer
+          description: 测量流水号
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+        - name: body
+          in: body
+          required: false
+          schema:
+            $ref: '#/definitions/Analysis'
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/AnalysisResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse'
+    get:
+      tags:
+        - measurement
+      summary: 获取智能分析
+      operationId: getMeasurementAnalysis
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: Authorization
+          in: header
+          type: string
+          required: true
+          description: Client验证授权信息
+        - name: record_id
+          in: path
+          required: true
+          type: integer
+          description: 测量流水号
+        - name: X-Access-Token
+          in: header
+          type: string
+          description: 用户登录 token
+          required: true
+      responses:
+        '200':
+          description: 成功响应
+          schema:
+            $ref: '#/definitions/GetAnalysisResponse'
+        default:
+          description: 失败响应
+          schema:
+            $ref: '#/definitions/SimpleErrorResponse' 
+
+definitions:    
+  RegisterType: &REGISTRY_TYPE
+    type: string
+    # enum:
+    #   - username
+    #   - email
+    #   - phone
+    #   - wechat
+    #   - legacy
+    description: |
+      注册类型，支持以下字符串值：
+      - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+      - `username` - 用户名
+      - `email` - 邮箱
+      - `phone` - 手机
+      - `wechat` - 微信
+  # Enum: 性别
+  Gender: &GENDER
+    type: integer
+    enum: 
+      - 0
+      - 1
+    default: 0
+    description: |
+      性别:
+      - `0` - 男(默认值)
+      - `1` - 女  
+  # Enum: 手指
+  Finger: &FINGER
+    type: integer
+    enum: 
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+    default: 4
+    description: |
+      手指:
+      - `1` - 左小姆
+      - `2` - 左无名指
+      - `3` - 左中指
+      - `4` - 左食指(默认值)
+      - `5` - 左大拇
+      - `6` - 右大拇
+      - `7` - 右食指
+      - `8` - 右中指
+      - `9` - 右无名指
+      - `10` - 右小拇
+
+  # Enum: 测量姿态    
+  MeasurementPosture: &MeasurementPosture
+    type: integer
+    enum:
+      - 0 
+      - 1
+      - 2
+    default: 0
+    description: |
+      姿态:
+      - `0` - 坐姿
+      - `1` - 站姿
+      - `2` - 躺姿     
+
+  AnalysisReportContentTags: &ANALYSIS_REPORT_CONTENT_TAGS
+    type: array
+    description: 分析报告的选项标签
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'    
+
+  # Enum: 测量结果记录类型
+  RecordType: &RECORD_TYPE
+    type: integer
+    enum: 
+      - 5
+      - 7
+    default: 7
+    description: |
+      测量结果记录类型:
+        - `5` - 1.5版本
+        - `7` - 1.7以上版本(包括1.7), 默认值
+  ChannelsAndCollateralsStrength: &CHANNELS_AND_COLLATERALS_STRENGTH
+    type: array
+    description: 经络强度
+    items:
+      $ref: '#/definitions/AnalysisReportCCStrengthItem'  
+  AnalysisReportCCStrengthItem:
+    type: object
+    description: 经络强度 Item
+    properties:
+      key:
+        type: string
+        description: 解读项的标识 Key
+      label:
+        type: array
+        description: 经络强度标签
+        items:
+          $ref: '#/definitions/CCStrengthLabel'
+      disabled:
+        type: boolean
+        description: 是否已经弃用。
+      remark:
+        type: string
+        description: 备注 
+  CCStrengthLabel:
+    type: object
+    description: 经络强度分析的项目的标签
+    properties:
+      label:
+        type: string
+        description: 文本标签，可以是HTML
+      CC:
+        type: string
+        description: 经络标识      
+
+  BabyTips: &BABY_TIPS
+    type: array
+    description: 宝宝提示
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  ConstitutionDifferentiationExplainNotices: &CONSTITUTION_DIFFERENTIATION_EXPLAIN_NOTICES
+    type: array
+    description: 体质判断注意事项
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'    
+
+  ChannelsAndCollateralsExplainNotices: &CHANNELS_AND_COLLATERALS_EXPLAIN_NOTICES
+    type: array
+    description: 经络检测注意事项
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  MeasurementTips: &MEASUREMENT_TIPS
+    type: array
+    description: 测量提示
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  ConstitutionDifferentiationExplains:
+    type: array
+    description: 体质判断注意事项
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem' 
+
+  DictionaryEntries: &DICTIONARY_ENTRIES
+    type: array
+    description: 词条描述
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem' 
+
+  FactorExplains: &FACTOR_EXPLAINS
+    type: array
+    description: 因子解读
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'    
+
+  AnalysisReportContentLead: &ANALYSIS_REPORT_CONTENT_LEAD
+    type: array
+    description: 分析导语内容
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'   
+
+  AnalysisReportContentTipsForWoman: &ANALYSIS_REPORT_CONTENT_TIPS_FOR_WOMAN
+    type: array
+    description: 分析报告的女性提示
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  AnalysisReportCCExplains: &ANALYSIS_REPORT_CC_EXPLAINS
+    type: array
+    description: 分析报告的经络解读
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  AnalysisReportCDExplains: &ANALYSIS_REPORT_CD_EXPLAINS
+    type: array
+    description: 分析报告的体质判断
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  AnalysisReportSDExplains: &ANALYSIS_REPORT_SD_EXPLAINS
+    type: array
+    description: 分析报告的脏腑判断
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+  HealthDescriptions: &HEALTH_DESCRIPTIONS
+    type: array
+    description: 健康描述
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'     
+
+  UterineHealthIndexes: &UTERINE_HEALTH_INDEXES 
+    type: array
+    description: 分析报告的子宫健康指数（ZG）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  UterusAttentionPrompts: &UTERUS_ATTENTION_PROMPTS
+    type: array
+    description: 分析报告的子宫注意提示（ZGTS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  UterineHealthDescriptions: &UTERINE_HEALTH_DESCRIPTIONS
+    type: array
+    description: 分析报告的子宫健康描述（ZGMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  MenstrualHealthValues: &MENSTRUAL_HEALTH_VALUES
+    type: array
+    description: 分析报告的月经健康数值（YJ）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  MenstrualHealthDescriptions: &MENSTRUAL_HEALTH_DESCRIPTIONS
+    type: array
+    description: 分析报告的月经健康描述（YJMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'    
+
+  GynecologicalInflammations: &GYNECOLOGICAL_INFLAMMATIONS
+    type: array
+    description: 分析报告的妇科炎症（FK）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'        
+
+  GynecologicalInflammationDescriptions: &GYNECOLOGICAL_INFLAMMATIONS_DESCRIPTIONS
+    type: array
+    description: 分析报告的妇科炎症描述（FKMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  BreastHealth: &BREAST_HEALTH
+    type: array
+    description: 分析报告的乳腺健康（RX）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  BreastHealthDescriptions: &BREAST_HEALTH_DESCRIPTIONS
+    type: array
+    description: 分析报告的乳腺健康描述（RXMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  EmotionalHealthIndexes: &EMOTIONAL_HEALTH_INDEXES
+    type: array
+    description: 分析报告的情绪健康指数（QX）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  EmotionalHealthDescriptions: &EMOTIONAL_HEALTH_DESCRIPTIONS
+    type: array
+    description: 分析报告的情绪健康描述（QXMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  FacialSkins: &FACIAL_SKINS  
+    type: array
+    description: 分析报告的面部美肤（MB）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  FacialSkinDescriptions: &FACIAL_SKIN_DESCRIPTIONS
+    type: array
+    description: 分析报告的面部美肤描述（MBMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'  
+
+  ReproductiveAgeConsiderations: &REPRODUCTIVE_AGE_CONSIDERATIONS
+    type: array
+    description: 分析报告的生殖年龄注意事项（SZTS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem'
+
+  HormoneLevels: &HORMONE_LEVEL
+    type: array
+    description: 分析报告的激素水平（JS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem' 
+
+  BreastCancerOvarianCancers: &BREAST_CANCER_OVARIAN_CANCERS
+    type: array
+    description: 分析报告的乳腺癌卵巢癌（BC）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem' 
+      
+  BreastCancerOvarianCancerDescriptions: &BREAST_CANCER_OVARIAN_CANCERS_DESCRIPTIONS
+    type: array
+    description: 分析报告的乳腺癌卵巢癌描述（BCMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem' 
+
+  LymphaticHealth: &LYMPHATIC_HEALTH
+    type: array
+    description: 分析报告的淋巴健康（LB）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem' 
+     
+  LymphaticHealthDescriptions: &LYMPHATIC_HEALTH_DESCRIPTIONS
+    type: array
+    description: 分析报告的淋巴健康描述（LBMS）
+    items:
+      $ref: '#/definitions/AnalysisReportGeneralExplainItem' 
+
+  AnalysisReportGeneralExplainItem:
+    type: object
+    description: 标准解读 Item
+    properties:
+      key:
+        type: string
+        description: 解读项的标识 Key
+      label:
+        type: string
+        description: 解读项的文本标签。支持HTML。
+      content:
+        type: string
+        description: 解读项的正文内容。支持HTML。    
+  BasicResponse:
+    type: object
+    description: "标准Response消息体"
+    required:
+      - ok
+    properties:
+      ok:
+        type: boolean
+        description: "请求是否成功"
+      error:
+        $ref: '#/definitions/StandardErrorModel'    
+  SimpleErrorResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - error
+        properties:
+          error:
+            $ref: '#/definitions/StandardErrorModel'
+  UserProfileResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/User'
+  User:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        description: 用户ID
+      username:
+        type: string
+        description: 用户名
+      register_type: *REGISTRY_TYPE
+      is_profile_completed: 
+        type: boolean
+        description: profile是否完整/完成初始化 0是完整 1是不完整
+      is_removable:
+        type: boolean
+        description: 是否能够删除  
+      profile:
+        $ref: '#/definitions/UserProfile'            
+  PutUserProfile:
+    type: object
+    properties:
+      profile:
+        $ref: '#/definitions/UserProfile'
+  UserProfile:
+    type: object
+    properties:
+      nickname:
+        type: string
+        description: 客户昵称
+      birthday:
+        type: string
+        description: 生日 '2018-04-12' 格式 （可选）
+        format: date-time
+      age:
+        type: integer
+        description: 年龄
+        minimum: 0
+      gender: *GENDER
+      height:
+        type: integer
+        description: 身高（必填）单位厘米
+        minimum: 0
+      weight:
+        type: integer
+        description: 体重（必填）单位厘米
+        minimum: 0
+      phone:
+        type: string
+        description: 联系电话（可选）
+      email:
+        type: string
+        description: 联系邮箱（可选）
+      remark:
+        type: string
+        description: 备注 不超过200字符
+        maxLength: 200
+      user_defined_code:
+        type: string
+        description:  用户自定义代码
+      state:
+        type: string
+        description: 所在省份
+      city:
+        type: string
+        description: 所在城市
+      street:
+        type: string
+        description: 所在街道
+      country:
+        type: string
+        description: 国家      
+  BindDevicesResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/DevicesResult'
+  UnbindDeviceResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/DevicesResult'
+  QRCodeResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/QRCode'
+         
+  QRCode:
+    type: object
+    properties:
+      image_url:
+        type: string
+        description: 下载图片的url
+      raw_url:
+        type: string
+        description: 显示图片的url 
+      expired_at:
+        type: string
+        description: 到期时间
+        format: date-time
+      scene_id:
+        type: integer
+        description: 场景ID    
+  DevicesResult:
+    type: object
+    properties:
+      successful_devices:
+        type: array
+        items:
+          $ref: '#/definitions/Device'
+      failed_devices:
+        type: array
+        items:
+          $ref: '#/definitions/Device'          
+  StandardErrorModel:
+    type: object
+    description: "标准错误消息"
+    required:
+      - msg
+      - code  
+    properties:
+      msg:
+        type: string
+        description: "错误信息"
+        nullable: true
+      code:
+        type: integer
+        description: "错误码"
+        nullable: true
+  NullAble:          
+     type: object                
+  Auth:
+    type: object
+    properties:
+      client_id:
+        type: string
+        description: 客户端ID
+      secret_key_hash:
+        type: string
+        description: 经过 SHA256 签名的 App 授权密钥
+      seed:
+        type: string
+        description: '随机种子。四个可读ASCII字符，例如：`a#B9`'      
+  ClientAuthResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/Authorization'
+  GetDeviceResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/definitions/Device'          
+  Authorization:
+    type: object
+    properties:
+      authorization:
+        type: string
+        description: Client验证授权信息
+      expired_at:
+        type: string
+        description: 到期时间
+        format: date-time  
+  AccountSignIn:
+    type: object
+    properties:
+      account:
+        type: string
+        description: 账户 
+      password: 
+        type: string
+        description: 密码 
+      machine_uuid:
+        type: string
+        description: 机器唯一标识  
+  AccountSignInResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/Account'
+  AccountSignOutResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            nullable: true
+            $ref: '#/definitions/NullAble'
+  Account:
+    type: object
+    properties:
+      access_token:
+        type: string
+        description: 机构登录会话信息
+      organization_id:
+        type: integer
+        description: 组织ID
+      expired_at:
+        type: string
+        description: 到期时间
+        format: date-time     
+  DeviceList:
+    type: array
+    items:
+      $ref: '#/definitions/Device'
+  Device:
+    type: object
+    properties:
+      mac:
+        $ref: '#/definitions/Mac'
+  Mac:
+    type: string
+    description: MAC 地址 
+
+  JMResResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/BaseURL'
+  BaseURL:
+    type: object
+    properties:
+      entry_url:
+        type: string
+        description:  词条的BaseURL
+      faq_url:
+        type: string
+        description:  faq的BaseURL  
+      questionnaire_url:
+        type: string
+        description:  问答的BaseURL
+  JMRes:
+    type: object
+    properties:
+      client_id:
+        type: string
+        description: 客户端ID
+      app_version:
+        type: string
+        description: app版本 
+  IsBindDevicesResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/BindInfo'
+  BindInfo:
+    type: object
+    properties:
+      bindable:
+        type: boolean
+        description: Y是能被关联 N是不能被关联
+  MeasureResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/MeasureResult'
+  MeasureResult:
+    type: object
+    properties:
+      cid:
+        type: integer
+        description: 测量流水号
+      record_id:
+        type: integer
+        description: 测量记录ID
+      c0:
+        type: integer
+        description: '心包经 位于区间[-10,10]内'
+      c1:
+        type: integer
+        description: '肝经 位于区间[-10,10]内'
+      c2:
+        type: integer
+        description: '肾经 位于区间[-10,10]内'
+      c3:
+        type: integer
+        description: '脾经 位于区间[-10,10]内'
+      c4:
+        type: integer
+        description: '肺经 位于区间[-10,10]内'
+      c5:
+        type: integer
+        description: '胃经 位于区间[-10,10]内'
+      c6:
+        type: integer
+        description: '胆经 位于区间[-10,10]内'
+      c7:
+        type: integer
+        description: '膀胱经 位于区间[-10,10]内'
+      wave_data:
+        type: array
+        items:
+          type: integer
+        description: 截取的波形数据
+      app_heart_rate:
+        type: integer
+        description: App 测量的心率
+      app_highest_heart_rate:
+        type: integer
+        description: App 测的最高心率
+      app_lowest_heart_rate:
+        type: integer
+        description: App 测的最低心率
+      heart_rate:
+        type: integer
+        description: 服务器返回的心率
+      created_at:
+        type: string
+        description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+        format: date-time
+      finger: *FINGER
+      record_type: *RECORD_TYPE
+  Measurement:
+    type: object
+    properties:
+      measurement:
+        $ref: '#/definitions/MeasurementData'
+  MeasurementData:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        description: 用户ID
+      data0:
+        type: string
+        description: base64编码后的二进制蓝牙数据
+      data1:
+        type: string
+        description: base64编码后的二进制蓝牙数据
+      mac:
+        type: string
+        description: 设备 MAC 地址
+      mobile_type:
+        type: string
+        description: |
+          设备类型，支持以下字符串值：
+          - `ANDROID`
+          - `IPHONE`
+      app_heart_rate:
+        type: integer
+        description: App 测的心率
+      app_highest_heart_rate:
+        type: integer
+        description: App 测的最高心率
+      app_lowest_heart_rate:
+        type: integer
+        description: App 测的最低心率        
+      finger: *FINGER
+      record_type: *RECORD_TYPE
+      measurement_posture: *MeasurementPosture      
+  MeasurementDataWithAnalysisResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/definitions/MeasurementHistoryRecord'
+  MeasurementHistoryRecord:
+    type: object
+    properties:
+      user_id:
+        type: integer
+        description: 用户ID
+      cid:
+        type: integer
+        description: 上下文ID
+      transaction_no:
+        type: string  
+        description: 测量流水号  
+      record_id:
+        type: integer
+        description: 测量记录ID
+      c0:
+        type: integer
+        description: '心包经 位于区间[-10,10]内'
+      c1:
+        type: integer
+        description: '肝经 位于区间[-10,10]内'
+      c2:
+        type: integer
+        description: '肾经 位于区间[-10,10]内'
+      c3:
+        type: integer
+        description: '脾经 位于区间[-10,10]内'
+      c4:
+        type: integer
+        description: '肺经 位于区间[-10,10]内'
+      c5:
+        type: integer
+        description: '胃经 位于区间[-10,10]内'
+      c6:
+        type: integer
+        description: '胆经 位于区间[-10,10]内'
+      c7:
+        type: integer
+        description: '膀胱经 位于区间[-10,10]内'
+      app_heart_rate:
+        type: integer
+        description: App测的心率
+      remark:
+        type: string
+        description: 备注
+      created_at:
+        type: string
+        description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+        format: date-time  
+      heart_rate:
+        type: integer
+        description: 算法服务器测的心率
+      finger:
+        type: integer
+        description: 1左小指-5左大姆 6右大姆-10右小姆
+      record_type:
+        type: integer
+        description: 5是1.5版本，7是1.7以上版本(包括1.7)
+      tags: *ANALYSIS_REPORT_CONTENT_TAGS
+      has_paid:
+        type: boolean
+        description: 是否完成支付               
+      show_full_report:
+        type: boolean
+        description: 是否显示完整报告   
+  Analysis:
+    type: object
+    properties:
+      cid:
+        type: integer
+        description: 测量流水号
+      analysis_session:
+        type: string
+        description: 智能分析会话信息（如果有问询需要在后续请求中填写该字段）
+      answers:
+        type: array
+        items:
+          $ref: '#/definitions/Answer'
+  Answer:
+    type: object
+    properties:
+      question_key:
+        type: string
+        description: 问题唯一标识
+      values:
+        type: array
+        description: 答案
+        items:
+          type: string
+          description: 答案的值
+  AnalysisResult:
+    type: object
+    properties:
+      cid:
+        type: integer
+        description: 上下文ID
+      transaction_no:
+        type: string  
+        description: 测量流水号  
+      analysis_session:
+        type: string
+        description: 智能分析会话信息
+      analysis_done:
+        type: boolean
+        description: 智能分析是否结束，true 表示分析结束，false 表示需要回答问题
+      questionnaire:
+        $ref: '#/definitions/Questionnaire'
+      analysis_report:
+        $ref: '#/definitions/AnalysisReport'
+      analysis_report_result_error:
+        type: string
+        description: 智能分析结果是否存在异常   
+        
+  AnalysisResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/AnalysisResult'
+            
+  Questionnaire:
+    type: object
+    description: 智能分析问卷
+    properties:
+      title:
+        type: string
+        description: 问卷的标题
+      questions:
+        type: array
+        description: 问题列表
+        items:
+          $ref: '#/definitions/Question'
+      answers:
+        type: array
+        description: 答案列表
+        items:
+          $ref: '#/definitions/Answer'
+      created_at:
+        type: string
+        description: '问卷创建时间 2018-07-04T08:01:27Z 格式'
+        format: date-time 
+  Question:
+    type: object
+    properties:
+      key:
+        type: string
+        description: 问题的标识
+      title:
+        type: string
+        description: 问题标题
+      description:
+        type: string
+        description: 问题描述
+      tip:
+        type: string
+        description: 问题的提示信息
+      type:
+        type: string
+        description: 单选或多选 单选 single_choice 多选 multiple_choice
+      choices:
+        type: array
+        description: 问题的选项
+        items:
+          $ref: '#/definitions/QuestionChoiceItem'
+      default_keys:
+        type: array
+        description: 默认选中的 key 清单
+        items:
+          type: string
+          description: 选项的 key
+  QuestionChoiceItem:
+    type: object
+    description: 选择题问题的选项
+    properties:
+      key:
+        type: string
+        description: 选项的标识
+      name:
+        type: string
+        description: 选项显示的名称
+      value:
+        type: string
+        description: 选项的值
+      conflict_keys:
+        type: array
+        description: 冲突的选项的 key 清单
+        items:
+          type: string
+          description: 选项的 key        
+    # 分析报告
+  AnalysisReport:
+    type: object
+    description: 分析报告
+    required:
+      - report_version
+      - report_id
+      - content
+    properties:
+      report_version:
+        type: string
+        description: 分析报告版本. 当前仅支持 `1.0` 这个值.
+      report_id:
+        type: string
+        description: 分析报告 ID
+      content:
+        $ref: '#/definitions/AnalysisReportContent'  
+  AnalysisReportContent:
+    type: object
+    description: 分析报告的内容
+    properties:
+      user_profile:
+        $ref: '#/definitions/AnalysisReportContentUserProfile'
+      measurement_result:
+        $ref: '#/definitions/AnalysisReportContentMeasurementResult'
+      tags: *ANALYSIS_REPORT_CONTENT_TAGS
+      lead: *ANALYSIS_REPORT_CONTENT_LEAD
+      tips_for_woman: *ANALYSIS_REPORT_CONTENT_TIPS_FOR_WOMAN
+      channels_and_collaterals_explains: *ANALYSIS_REPORT_CC_EXPLAINS
+      constitution_differentiation_explains: *ANALYSIS_REPORT_CD_EXPLAINS
+      syndrome_differentiation_explains: *ANALYSIS_REPORT_SD_EXPLAINS
+      channels_and_collaterals_strength: *CHANNELS_AND_COLLATERALS_STRENGTH
+      constitution_differentiation_explain_notices: *CONSTITUTION_DIFFERENTIATION_EXPLAIN_NOTICES
+      channels_and_collaterals_explain_notices: *CHANNELS_AND_COLLATERALS_EXPLAIN_NOTICES
+      measurement_tips: *MEASUREMENT_TIPS
+      dictionary_entries: *DICTIONARY_ENTRIES
+      factor_explains: *FACTOR_EXPLAINS
+      baby_tips: *BABY_TIPS
+      health_descriptions: *HEALTH_DESCRIPTIONS
+      uterine_health_indexes: *UTERINE_HEALTH_INDEXES
+      uterus_attention_prompts: *UTERUS_ATTENTION_PROMPTS
+      uterine_health_descriptions: *UTERINE_HEALTH_DESCRIPTIONS
+      menstrual_health_values: *MENSTRUAL_HEALTH_VALUES
+      menstrual_health_descriptions: *MENSTRUAL_HEALTH_DESCRIPTIONS
+      gynecological_inflammations: *GYNECOLOGICAL_INFLAMMATIONS
+      gynecological_inflammation_descriptions: *GYNECOLOGICAL_INFLAMMATIONS_DESCRIPTIONS
+      breast_health: *BREAST_HEALTH
+      breast_health_descriptions: *BREAST_HEALTH_DESCRIPTIONS
+      emotional_health_indexes: *EMOTIONAL_HEALTH_INDEXES
+      emotional_health_descriptions: *EMOTIONAL_HEALTH_DESCRIPTIONS
+      facial_skins: *FACIAL_SKINS
+      facial_skin_descriptions: *FACIAL_SKIN_DESCRIPTIONS
+      reproductive_age_considerations: *REPRODUCTIVE_AGE_CONSIDERATIONS
+      hormone_levels: *HORMONE_LEVEL
+      breast_cancer_ovarian_cancers: *BREAST_CANCER_OVARIAN_CANCERS
+      breast_cancer_ovarian_cancer_descriptions: *BREAST_CANCER_OVARIAN_CANCERS_DESCRIPTIONS
+      lymphatic_health: *LYMPHATIC_HEALTH
+      lymphatic_health_descriptions: *LYMPHATIC_HEALTH_DESCRIPTIONS
+      m0:
+        type: integer
+        description:  月经健康指数
+        nullable: true
+      m1:
+        type: integer
+        description:  月经不调指数
+        nullable: true
+      m2:
+        type: integer
+        description:  痛经指数
+        nullable: true 
+      m3:
+        type: integer
+        description:  乳腺健康问答计分
+        nullable: true
+      f100:
+        type: integer
+        description:  子宫健康指数
+      f101:
+        type: integer
+        description:  妇科疾病风险指数
+      f102:
+        type: integer
+        description:  妇科炎症指数 
+      f103:
+        type: integer
+        description:  情绪健康指数
+      f104:
+        type: integer
+        description:  面部美肤指数 
+      f105:
+        type: integer
+        description:  生殖年龄指数
+      f106:
+        type: integer
+        description:  激素水平指数 
+      f107:
+        type: integer
+        description:  淋巴健康指数       
+      created_at:
+        type: string
+        description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+        format: date-time
+  AnalysisReportContentUserProfile:
+    type: object
+    description: 分析报告的 UserProfile
+    properties:
+      user_id:
+        type: integer
+        description: 用户ID
+      nickname:
+        type: string
+        description: 客户昵称
+      birthday:
+        type: string
+        description: 生日 UTC 格式 （可选）
+        format: date-time
+      age:
+        type: integer
+        description: 年龄
+        minimum: 0
+      gender: *GENDER
+      height:
+        type: integer
+        description: 身高（必填）单位厘米
+        minimum: 0
+      weight:
+        type: integer
+        description: 体重（必填）单位厘米
+        minimum: 0
+      avatar_url:
+        type: string
+        description: 头像           
+
+  AnalysisReportContentMeasurementResult:
+    type: object
+    description: 分析报告中的测量结果信息
+    properties:
+      finger: *FINGER
+      c0:
+        type: integer
+        description: '心包经 位于区间[-10,10]内'
+      c1:
+        type: integer
+        description: '肝经 位于区间[-10,10]内'
+      c2:
+        type: integer
+        description: '肾经 位于区间[-10,10]内'
+      c3:
+        type: integer
+        description: '脾经 位于区间[-10,10]内'
+      c4:
+        type: integer
+        description: '肺经 位于区间[-10,10]内'
+      c5:
+        type: integer
+        description: '胃经 位于区间[-10,10]内'
+      c6:
+        type: integer
+        description: '胆经 位于区间[-10,10]内'
+      c7:
+        type: integer
+        description: '膀胱经 位于区间[-10,10]内'
+      heart_rate:
+        type: integer
+        description: 服务器返回的心率  
+      app_heart_rate:
+        type: integer
+        description: App 测量的心率
+      partial_pulse_wave:
+        type: array
+        items:
+          type: integer
+        description: 截取的波形数据
+      app_highest_heart_rate:
+        type: integer
+        description: app最大的心率 
+      app_lowest_heart_rate:
+        type: integer
+        description: app最小的心率 
+  GetAnalysisResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/AnalysisReport'                 
+  RecordTokenResponse:
+    allOf:
+      - $ref: '#/definitions/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            $ref: '#/definitions/RecordToken'
+  RecordToken:
+    type: object
+    properties:
+      token:
+        type: string
+        description: 分享记录的token 
+                      
+                       

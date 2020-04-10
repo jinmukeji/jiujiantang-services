@@ -1,0 +1,13 @@
+# 反向代理
+:80 {
+    proxy / web-rest-api-v2:19002/ {
+      transparent
+    }
+    # CORS
+    cors / {
+      methods POST,GET,OPTIONS,PUT,DELETE 
+      allow_credentials true
+      allowed_headers *
+      exposed_headers *
+    }
+}

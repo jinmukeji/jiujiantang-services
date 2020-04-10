@@ -1,0 +1,65 @@
+{
+    "version":1,
+    "docker-builds":[
+        {
+            "image_name":"svc-biz-core",
+            "dockerfile": "../service/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"web-rest-api-v2",
+            "dockerfile": "../api-v2/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"web-rest-api-l-v2",
+            "dockerfile": "../api-l-v2/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"web-rest-wechat",
+            "dockerfile": "../wechat/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"svc-sms-gw",
+            "dockerfile": "../sms/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"svc-sem-gw",
+            "dockerfile": "../sem/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"web-rest-jinmuid",
+            "dockerfile": "../api-jinmuid/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"svc-jinmuid",
+            "dockerfile": "../jinmuid/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"svc-subscription",
+            "dockerfile": "../subscription/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"svc-device",
+            "dockerfile": "../device/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"svc-analysis",
+            "dockerfile": "../analysis/Dockerfile",
+            "working_dir": "./out"
+        },
+        {
+            "image_name":"web-rest-sys",
+            "dockerfile": "../api-sys/Dockerfile",
+            "working_dir": "./out"
+        }
+    ]
+}

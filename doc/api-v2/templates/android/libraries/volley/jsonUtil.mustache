@@ -1,0 +1,103 @@
+{{>licenseInfo}}
+package {{invokerPackage}};
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.Locale;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import {{modelPackage}}.*;
+
+public class JsonUtil {
+  public static GsonBuilder gsonBuilder;
+
+  private static DateFormat iso8601Format;
+  private static DateFormat iso8601NoMilliFormat;
+
+  static {
+    iso8601Format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+    iso8601Format.setTimeZone(TimeZone.getTimeZone("UTC"));
+    iso8601NoMilliFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+    iso8601NoMilliFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+    gsonBuilder = new GsonBuilder();
+    gsonBuilder.serializeNulls();
+    gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+    gsonBuilder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+      private Date deserializeToDate(JsonElement json) {
+        String token = json.getAsString();
+        try {
+            if(token.indexOf('.')>=0) {
+              return iso8601Format.parse(token);
+            } else {
+              return iso8601NoMilliFormat.parse(token);
+            }
+        } catch (ParseException e) {
+            throw new JsonSyntaxException(token, e);
+        }
+      }
+      
+      public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        Date date = deserializeToDate(json);
+        if (typeOfT == Date.class) {
+            return date;
+        } else if (typeOfT == Timestamp.class) {
+            return new Timestamp(date.getTime());
+        } else if (typeOfT == java.sql.Date.class) {
+            return new java.sql.Date(date.getTime());
+        } else {
+            throw new IllegalArgumentException(getClass() + " cannot deserialize to " + typeOfT);
+        }
+      }
+    });
+  }
+
+  public static Gson getGson() {
+    return gsonBuilder.create();
+  }
+
+  public static String serialize(Object obj){
+    return getGson().toJson(obj);
+  }
+
+  public static <T> T deserializeToList(String jsonString, Class cls){
+    return getGson().fromJson(jsonString, getListTypeForDeserialization(cls));
+  }
+
+  public static <T> T deserializeToObject(String jsonString, Class cls){
+    return getGson().fromJson(jsonString, getTypeForDeserialization(cls));
+  }
+
+  public static Type getListTypeForDeserialization(Class cls) {
+    String className = cls.getSimpleName();
+    {{#models}}{{#model}}
+    if ("{{classname}}".equalsIgnoreCase(className)) {
+      return new TypeToken<List<{{classname}}>>(){}.getType();
+    }
+    {{/model}}{{/models}}
+    return new TypeToken<List<Object>>(){}.getType();
+  }
+
+  public static Type getTypeForDeserialization(Class cls) {
+    String className = cls.getSimpleName();
+    {{#models}}{{#model}}
+    if ("{{classname}}".equalsIgnoreCase(className)) {
+      return new TypeToken<{{classname}}>(){}.getType();
+    }
+    {{/model}}{{/models}}
+    return new TypeToken<Object>(){}.getType();
+  }
+
+};

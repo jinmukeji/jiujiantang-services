@@ -1,0 +1,177 @@
+openapi: 3.0.0
+info:
+  description: SysAPI v1.0
+  version: "1.11.4-beta-oas3"
+  title: JinmuSys-API
+  termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
+  contact:
+    email: support@jinmuhealth.com
+tags:
+  - name: version
+    description: 版本
+  - name: sys
+    description: 系统配置
+paths:
+  /version:
+    get:
+      summary: 查看版本信息
+      operationId: getVersion
+      tags:
+        - version
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+              examples:
+                response:
+                  value:
+                    ok: true
+                    data:
+                      version: string
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /_sys/client_preferences:
+    post:
+      tags:
+        - sys
+      summary: 获得app的资源文件
+      operationId: submitClientAuth
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientPreferencesResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientPreferencesBody'
+        required: true
+servers:
+  - url: 'http://api.jinmul.jinmuhealth.com:59233'
+    description: Production
+components:
+  schemas:
+    BasicResponse:
+      type: object
+      description: 标准Response消息体
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+          description: 请求是否成功
+        error:
+          $ref: '#/components/schemas/StandardErrorModel'
+    SimpleErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - error
+          properties:
+            error:
+              $ref: '#/components/schemas/StandardErrorModel'
+    StandardErrorModel:
+      type: object
+      description: 标准错误消息
+      required:
+        - msg
+        - code
+      properties:
+        msg:
+          type: string
+          description: 错误信息
+          nullable: true
+        code:
+          type: integer
+          description: 错误码
+          nullable: true
+    ClientPreferencesBody:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: 客户端ID
+        secret_key_hash:
+          type: string
+          description: 经过 SHA256 签名的 App 授权密钥
+        seed:
+          type: string
+          description: '随机种子。四个可读ASCII字符，例如：`a#B9`'
+        client_version:
+          type: string
+          description: 客户端版本
+        environment:
+          type: string
+          enum:
+            - 'dev'
+            - 'testing'
+            - 'staging'
+            - 'production'
+          default: 'production'
+          description: |
+            环境:
+            - `dev` - dev环境
+            - `testing` - testing环境
+            - `staging` - statging环境
+             - `production` - 生产环境
+    ClientPreferencesResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ClientPreferences'
+    ClientPreferences:
+      type: object
+      description: 资源文件
+      properties:
+        api_url:
+          type: string
+          description: Api的url
+        app_login_url:
+          type: string
+          description: 登录的url
+        app_entry_url:
+          type: string
+          description: 词条的BaseURL
+        app_faq_url:
+          type: string
+          description: faq的BaseURL
+        app_report_url:
+          type: string
+          description: 问答的BaseURL
+    VersionResponse:
+      description: Version 响应
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Version'
+    Version:
+      type: object
+      properties:
+        version:
+          type: string
+          description: 服务器版本信息

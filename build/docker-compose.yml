@@ -1,0 +1,348 @@
+version: '3'
+services:
+  ###################################
+  etcd:
+    image: bitnami/etcd:latest
+    environment:
+      - ALLOW_NONE_AUTHENTICATION=yes
+      - ETCD_ADVERTISE_CLIENT_URLS=http://etcd:2379
+    ports:
+      - 2379:2379
+      - 2380:2380
+    volumes:
+      - ./etcd_data:/opt/bitnami/etcd/data
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.101
+
+  calc:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/calc:0.2.5
+    command:
+      - "--server_address=:50051"
+    ports:
+      - "50051:50051"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.102
+
+  caddy:
+    container_name: caddy
+    image: abiosoft/caddy:latest
+    restart: always
+    volumes:
+      - ./wxh5/:/srv
+      - ./Caddyfile:/etc/Caddyfile
+    ports:
+      - 8681:80
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.103
+
+  ###################################
+  # JM Services
+  ###################################
+
+  # JM svc-biz-core
+  svc-biz-core:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/svc-biz-core:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      - "--server_address=:19001"
+      # env setting
+      - "--x_db_address=jinmu-test.cjzrjn31gtsw.rds.cn-north-1.amazonaws.com.cn:63306"
+      - "--x_db_username=${X_DB_USERNAME}"
+      - "--x_db_password=${X_DB_PASSWORD}"
+      - "--x_db_database=jinmu_develop"
+      - "--x_db_enable_log=true"
+      - "--x_db_max_connections=1"
+      - "--x_mail_address=smtp.exmail.qq.com"
+      - "--x_mail_username=passwordservice@jinmuhealth.com"
+      - "--x_mail_password=${X_MAIL_PASSWORD}"
+      - "--x_mail_sender_nickname=金姆健康"
+      - "--x_mail_port=465"
+      - "--x_mail_charset=UTF-8"
+      - "--x_mail_reply=information@jinmuhealth.com"
+      - "--x_algorithm_server_address=calc:50051"
+      - "--x_aws_bucket_name=jm-measurement-data"
+      - "--x_aws_access_key=${X_AWS_ACCESS_KEY}"
+      - "--x_aws_secret_key=${X_AWS_SECRET_KEY}"
+      - "--x_aws_region=cn-north-1"
+      - "--x_wave_data_key_prefix=dev"
+      - "--x_wx_app_id=${X_WX_APP_ID}"
+      - "--x_wx_app_secret=${X_WX_APP_SECRET}"
+      - "--x_wx_ori_id=gh_9872e6e3a972"
+      - "--x_wx_token=jmwechat123456"
+      - "--x_wx_encoded_aes_key=${X_WX_ENCODED_AES_KEY}"
+      - "--x_wx_callback_server_base=http://h5.jinmuhealth.com"
+      - "--x_wx_h5_server_base=hhttps://dev-h5.jinmuhealth.com/app/wechat/report/dev_v1_9"
+      - "--x_wx_template_id=D8ZxCYNQxVBjGkGwA3cDEd24ucmiSV_CkzQ2nIsMKHY"
+      - "--x_jinmu_h5_server_base=https://res-cdn.jinmuhealth.com/app/jinmu_v2_0/dev/report/V1_9"
+      - "--x_jinmu_h5_server_base_v2_0=https://res-cdn.jinmuhealth.com/app/jinmu_v2_0/dev/report/V2_0"
+      - "--x_jinmu_h5_server_base_v2_1=https://res-cdn.jinmuhealth.com/app/jinmu_v2_1/dev/report"
+      - "--x_pulse_test_raw_data_s3_key_prefix=spec-v2"
+      - "--x_ae_config_dir=/ae_data"
+      - "--x_blocker_config_file=/blocker/config_doc.yml"
+      - "--x_blocker_db_file=/blocker/GeoLite2-Country.mmdb.gz"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19001:19001"
+    depends_on:
+      - etcd
+      - calc
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.104
+
+  # JM web-rest-api-v2
+  web-rest-api-v2:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/web-rest-api-v2:${VERSION}
+    command:
+      - "--server_address=:19002"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pools
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      # env setting
+      - "--x_api_base=v2-api"
+      - "--x_jwt_sign_in_key=jinmuhealth"
+    environment:
+      - LOG_FORMAT=logstash
+    depends_on:
+      - etcd
+      - svc-biz-core
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.105
+
+  # JM svc-sms-gw
+  svc-sms-gw:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/svc-sms-gw:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      - "--server_address=:19003"
+      # env setting
+      - "--x_db_address=jinmu-test.cjzrjn31gtsw.rds.cn-north-1.amazonaws.com.cn:63306"
+      - "--x_db_username=${X_DB_USERNAME}"
+      - "--x_db_password=${X_DB_PASSWORD}"
+      - "--x_db_database=jinmu_develop"
+      - "--x_db_enable_log=true"
+      - "--x_db_max_connections=1"
+      - "--x_aliyun_sms_access_key_id=${X_ALIYUN_SMS_ACCESS_KEY_ID}"
+      - "--x_aliyun_sms_access_key_secret=${X_ALIYUN_SMS_ACCESS_KEY_Secret}"
+      - "--x_tencent_yun_sms_access_key_id=${X_TENCENT_YUN_SMS_ACCESS_APP_ID}"
+      - "--x_tencent_yun_sms_access_key_secret=${X_TENCENT_YUN_SMS_ACCESS_KEY_Secret}"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19003:19003"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.106
+
+  # JM svc-sem-gw
+  svc-sem-gw:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/svc-sem-gw:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      - "--server_address=:19004"
+      # env setting
+      - "--x_db_address=jinmu-test.cjzrjn31gtsw.rds.cn-north-1.amazonaws.com.cn:63306"
+      - "--x_db_username=${X_DB_USERNAME}"
+      - "--x_db_password=${X_DB_PASSWORD}"
+      - "--x_db_database=jinmu_develop"
+      - "--x_db_enable_log=true"
+      - "--x_db_max_connections=1"
+      - "--x_aliyun_sem_access_key_id=${X_ALIYUN_SEM_ACCESS_KEY_ID}"
+      - "--x_aliyun_sem_access_key_secret=${X_ALIYUN_SEM_ACCESS_KEY_Secret}"
+      - "--x_netease_sem_user=${X_NETEASE_SEM_USER}"
+      - "--x_netease_sem_passwd=${X_NETEASE_SEM_PASSWD}"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19004:19004"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.107
+
+  # JM svc-jinmuid
+  svc-jinmuid:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/svc-jinmuid:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      - "--server_address=:19005"
+      # env setting
+      - "--x_db_address=jinmu-test.cjzrjn31gtsw.rds.cn-north-1.amazonaws.com.cn:63306"
+      - "--x_db_username=${X_DB_USERNAME}"
+      - "--x_db_password=${X_DB_PASSWORD}"
+      - "--x_db_database=jinmu_develop"
+      - "--x_db_enable_log=true"
+      - "--x_db_max_connections=1"
+      - "--x_encrypt_key=${X_ENCRYPT_KEY}"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19005:19005"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.108
+
+  # JM web-rest-jinmuid
+  web-rest-jinmuid:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/web-rest-jinmuid:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      - "--server_address=:19006"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      # env setting
+      - "--x_api_base=api"
+      - "--x_jwt_sign_in_key=jinmuhealth"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19006:19006"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.109
+
+  # JM svc-subscription
+  svc-subscription:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/svc-subscription:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      - "--server_address=:19007"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      # env setting
+      - "--x_db_address=jinmu-test.cjzrjn31gtsw.rds.cn-north-1.amazonaws.com.cn:63306"
+      - "--x_db_username=${X_DB_USERNAME}"
+      - "--x_db_password=${X_DB_PASSWORD}"
+      - "--x_db_database=jinmu_develop"
+      - "--x_db_enable_log=true"
+      - "--x_db_max_connections=1"
+      - "--x_activation_code_encrypt_key=jinmu"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19007:19007"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.110
+
+  # JM svc-device
+  svc-device:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/svc-device:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      - "--server_address=:19008"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      # env setting
+      - "--x_db_address=jinmu-test.cjzrjn31gtsw.rds.cn-north-1.amazonaws.com.cn:63306"
+      - "--x_db_username=${X_DB_USERNAME}"
+      - "--x_db_password=${X_DB_PASSWORD}"
+      - "--x_db_database=jinmu_develop"
+      - "--x_db_enable_log=true"
+      - "--x_db_max_connections=1"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19008:19008"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.111
+
+# JM svc-analysis
+  svc-analysis:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/svc-analysis:${VERSION}
+    command:
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      - "--server_address=:19009"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      #  env setting
+      - "--x_db_address=jinmu-test.cjzrjn31gtsw.rds.cn-north-1.amazonaws.com.cn:63306"
+      - "--x_db_username=${X_DB_USERNAME}"
+      - "--x_db_password=${X_DB_PASSWORD}"
+      - "--x_db_database=jinmu_develop"
+      - "--x_db_enable_log=true"
+      - "--x_db_max_connections=1"
+      - "--x_aws_bucket_name=jm-measurement-data"
+      - "--x_aws_access_key=${X_AWS_ACCESS_KEY}"
+      - "--x_aws_secret_key=${X_AWS_SECRET_KEY}"
+      - "--x_aws_region=cn-north-1"
+      - "--x_wave_data_key_prefix=dev"
+      - "--x_pulse_test_raw_data_s3_key_prefix=spec-v2"
+      - "--x_production_ae_log=false"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "19009:19009"
+    depends_on:
+      - etcd
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.112
+
+  # JM web-rest-sys
+  web-rest-sys:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/web-rest-sys:${VERSION}
+    command:
+      # Setup service registry with command override
+      - "--registry=etcd"
+      - "--registry_address=${ETCD_ADDRESS}"
+      - "--server_address=:9010"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+      # env setting
+      - "--x_api_base=/"
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "9010:9010"
+    depends_on:
+      - etcd
+      - svc-biz-core
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.113
+
+networks:
+  app_net:
+    ipam:
+      driver: default
+      config:
+        #
+        # 合法的可以地址范围如下：
+        #   A类地址：10.0.0.0～10.255.255.255
+        #   B类地址：172.16.0.0～172.31.255.255
+        #   C类地址：192.168.0.0～192.168.255.255
+        #
+        # 避免使用与部署环境 VPC 的 CIDR 相冲突的子网，以下几个禁止使用：
+        #   - 172.31.0.0/16
+        #   - 172.31.0.0/16
+        #   - 10.0.0.0/16
+        #   - 10.169.0.0/16
+        #
+        - subnet: "192.168.192.0/24"

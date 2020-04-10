@@ -1,0 +1,5 @@
+{
+    "invokerPackage": "com.jinmuhealth.restv2",
+    "modelPackage": "com.jinmuhealth.restv2.client.model",
+    "apiPackage": "com.jinmuhealth.restv2.client.api"
+}

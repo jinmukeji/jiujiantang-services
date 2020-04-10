@@ -1,0 +1,48 @@
+{
+	"info": {
+		"name": "JinmuHealth API V1",
+		"_postman_id": "e10d0796-ba4d-bf80-9987-b06966d893d6",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "404 Not Found",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{api-v1-entrypoint}}/",
+					"host": [
+						"{{api-v1-entrypoint}}"
+					],
+					"path": [
+						""
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{api-v1-entrypoint}}/version",
+					"host": [
+						"{{api-v1-entrypoint}}"
+					],
+					"path": [
+						"version"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

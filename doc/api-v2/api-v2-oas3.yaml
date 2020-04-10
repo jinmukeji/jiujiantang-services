@@ -1,0 +1,4330 @@
+openapi: 3.0.0
+info:
+  description: 金姆健康平台 API v2
+  version: "2.1.0-beta-oas3"
+  title: Jinmu-API
+  termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
+  contact:
+    email: support@jinmuhealth.com
+tags:
+  - name: version
+    description: 版本
+  - name: client
+    description: App 客户端
+  - name: auth
+    description: 用户授权
+  - name: organization_user
+    description: 组织的用户管理
+  - name: subscription
+    description: 订阅
+  - name: measurement
+    description: 测量与分析
+  - name: feedback
+    description: 意见反馈
+  - name: tip
+    description: 测量提示
+  - name: res
+    description: 资源文件
+  - name: notification
+    description: 本地消息推送
+  - name: bluetooth
+    description: 蓝牙
+  - name: activation_code
+    description: 激活码 
+  - name: user
+    description: 用户
+paths:
+  /version:
+    get:
+      summary: 查看版本信息
+      operationId: getVersion
+      tags:
+        - version
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+              examples:
+                response:
+                  value:
+                    ok: true
+                    data:
+                      version: string
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /configuration/local_notification:
+    get:
+      summary: 获取本地推送消息
+      operationId: getLocalNotifications
+      tags:
+        - notification
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocalNotificationResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /client/auth:
+    post:
+      tags:
+        - client
+      summary: 提交客户端授权
+      operationId: submitClientAuth
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientAuthResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+  /users/signin:
+    post:
+      tags:
+        - auth
+      summary: 用户登录
+      operationId: userSignIn
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsersSignInResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignIn'
+        required: true
+  /user/{user_id}/token:
+    get:
+      tags:
+        - auth
+      summary: 刷新token
+      operationId: GetLatestToken
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLatestTokenResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /users/signout:
+    post:
+      tags:
+        - auth
+      summary: 注销用户登录
+      operationId: userSignOut
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignOutResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/{owner_id}/users/delete':
+    post:
+      tags:
+        - organization_user
+      summary: Owner 删除多个用户
+      operationId: ownerDeleteUsers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: owner_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OwnerDeleteUsersResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserIDList'
+  '/owner/organizations/{organization_id}/subscription':
+    post:
+      tags:
+        - subscription
+      summary: Owner 查询组织订阅
+      operationId: ownerGetOrganizationSubscription
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: organization_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /owner/users/signup:
+    post:
+      tags:
+        - organization_user
+      summary: Owner 在组织下注册一个用户
+      operationId: ownerCreateUser
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OwnerSignUpResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerSignUp'
+        required: true
+  '/owner/users/{user_id}/preferences':
+    get:
+      tags:
+        - organization_user
+      summary: Owner 获取组织下用户的首选项配置
+      operationId: ownerGetOrganizationUserPreferences
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: UserID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /owner/organizations:
+    get:
+      tags:
+        - organization_user
+      summary: Owner 查看拥有的组织清单
+      operationId: ownerGetOrganizationList
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+             type: string
+        - in: header
+          name: X-Access-Token
+          required: true
+          description: 用户登录 token
+          schema:
+             type: string
+      responses:
+         '200':
+           description: 成功响应
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/MoreOrganizationsResponse'
+         default:
+           description: 失败响应
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/users/{user_id}/profile':
+    get:
+      tags:
+        - organization_user
+      summary: Owner 获取组织下用户的个人档案
+      operationId: ownerGetOrganizationUserProfile
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+    put:
+      tags:
+        - organization_user
+      summary: Owner 修改组织下用户的个人档案
+      operationId: ownerModifyOrganizationUserProfile
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 ID
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PutUserProfile'
+        description: 客户档案
+                
+  '/user/{user_id}/subscription':
+    get:
+      tags:
+        - subscription
+      summary: 用户获取当前订阅情况
+      operationId: getUserSubscription
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserSubscriptionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/organizations/{organization_id}/users':
+    post:
+      tags:
+        - organization_user
+      summary: Owner 向组织批量关联多个 Users
+      operationId: ownerBulkAddOrganizationUsers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: path
+          name: organization_id
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoreUserProfileResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        $ref: '#/components/requestBodies/UserIDList'
+    get:
+      tags:
+        - organization_user
+      summary: Owner 查看组织下关联的 Users
+      operationId: ownerGetOrganizationUsers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: path
+          name: organization_id
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: offset
+          description: 分页偏移量
+          schema:
+            type: integer
+        - in: query
+          name: size
+          description: 每页最大显示数量
+          schema:
+            type: integer
+        - in: query
+          name: keyword
+          description: 搜索关键词
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoreUserProfileResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/organizations/{organization_id}/users/delete':
+    post:
+      tags:
+        - organization_user
+      summary: Owner 向组织批量解除关联多个 User
+      operationId: ownerBulkDeleteOrganizationUsers
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: path
+          name: organization_id
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelOwnerResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        $ref: '#/components/requestBodies/UserIDList'
+  '/owner/{owner_id}/users/sign_up':
+    post:
+      tags:
+        - organization_user
+      summary: Owner 添加用户
+      operationId: ownerAddUser
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: owner_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OwnerAddUserResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OwnerAddUserBody'
+  '/owner/{owner_id}/organizations/users':
+    get:
+      tags:
+        - organization_user
+      summary: Owner 获取组织下用户
+      operationId: ownerGetOrganizationUsersByOwnerID
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: owner_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoreUserProfileResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /owner/measurements:
+    post:
+      tags:
+        - measurement
+      summary: 提交测量
+      operationId: ownerSubmitMeasurement
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeasureResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Measurement'
+    get:
+      tags:
+        - measurement
+      summary: 查看测量历史记录
+      description: 测量历史记录.最新的结果会靠前
+      operationId: ownerQueryMeasurementList
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: start
+          description: '筛选起始时间，UTC时区， 2018-07-04T08:01:27Z 格式'
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: end
+          description: '筛选结束时间，UTC时区， 2018-07-04T08:01:27Z 格式'
+          schema:
+            type: string
+            format: date-time
+        - in: query
+          name: offset
+          description: 分页偏移量
+          schema:
+            type: integer
+        - in: query
+          name: size
+          description: 每页最大显示数量
+          schema:
+            type: integer
+        - in: query
+          name: user_id
+          required: true
+          description: 用户ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeasurementDataWithAnalysisResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/measurements/{record_id}/remark':
+    put:
+      tags:
+        - measurement
+      summary: 修改测量备注
+      description: 修改测量备注
+      operationId: ownerModifyMeasurementRemark
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: record_id
+          description: 测量记录ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemarkResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Remark'
+        required: true
+  '/owner/measurements/{record_id}/token':
+    get:
+      tags:
+        - measurement
+      summary: 得到分享的token
+      description: 得到分享的token
+      operationId: ownerGetRecordToken
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: record_id
+          description: 测量记录ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordTokenResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/measurements/token/{token}/analyze':
+    get:
+      tags:
+        - measurement
+      summary: 得到分析报告
+      description: 得到分析报告
+      operationId: ownerGetAnalyzeResultByToken
+      parameters:
+        - in: path
+          name: token
+          description: 分享的token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAnalysisResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/measurements/{record_id}/analyze':
+    post:
+      tags:
+        - measurement
+      summary: 提交智能分析
+      operationId: ownerSubmitMeasurementAnalysis
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: path
+          name: record_id
+          required: true
+          description: 测量流水号
+          schema:
+            type: integer
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Analysis'
+    get:
+      tags:
+        - measurement
+      summary: 获取智能分析
+      operationId: ownerGetMeasurementAnalysis
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: path
+          name: record_id
+          required: true
+          description: 测量流水号
+          schema:
+            type: integer
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAnalysisResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  
+  '/user/measurements/{user_id}/delete':
+    post:
+      tags:
+        - measurement
+      summary: 删除记录  
+      operationId: userDeleteRecord
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteRecordResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        $ref: '#/components/requestBodies/DeleteRecordBody'
+  /tips:
+    get:
+      tags:
+        - tip
+      summary: 测量提示
+      operationId: getTips
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipsResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /feedback:
+    post:
+      tags:
+        - feedback
+      summary: 意见反馈
+      operationId: submitFeedback
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Feedback'
+        required: true
+  /res/getUrl:
+    post:
+      tags:
+        - res
+      summary: 获取金姆资源的baseURL
+      operationId: getJMResBaseURL
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JMResResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JMRes'
+        required: true
+  /owner/notification:
+    post:
+      tags:
+        - notification
+      summary: 阅读通知
+      operationId: readNotification
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadNotificationResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadNotification'
+        required: true
+    get:
+      tags:
+        - notification
+      summary: 得到阅读通知
+      operationId: getNotifications
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNotificationsResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  /bluetooth_name_prefix:
+    get:
+      tags:
+        - bluetooth
+      summary: 获取查找搜索蓝牙name前缀
+      operationId: getBluetoothNamePrefixes
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetBluetoothNamePrefixesResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/activation_code':
+    post:
+      tags:
+        - activation_code
+      summary: 得到激活码内容
+      operationId: getActivationCodeInfo
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetActivationCodeInfoResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Code'
+  '/owner/user/{user_id}/activation_code':
+    post:
+      tags:
+        - activation_code
+      summary: 使用激活码
+      operationId: useSubscriptionActivationCode
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UseSubscriptionActivationCodeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Code'
+
+  '/owner/{user_id}/week_measurements':
+    get:
+      tags:
+        - measurement
+      summary: 周趋势
+      operationId: getWeekMeasurements
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeekMonthTrend'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/{user_id}/month_measurements':
+    get:
+      tags:
+        - measurement
+      summary: 月趋势
+      operationId: getMonthMeasurements
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          description: 用户ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeekMonthTrend'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/measurements/{record_id}/v2/analyze':
+    post:
+      tags:
+        - measurement
+      summary: 新分析接口
+      operationId: SubmitV2MeasurementAnalysis
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: record_id
+          required: true
+          schema:
+            type: integer      
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2AnalyzeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/V2AnalyzeBody'
+    get:
+      tags:
+        - measurement
+      summary: 新分析接口
+      operationId: GetSubmitV2MeasurementAnalysis
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: record_id
+          required: true
+          schema:
+            type: integer      
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2AnalyzeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/measurements/token/{token}/v2/analyze':
+    get:
+      tags:
+        - measurement
+      summary: 新分析接口
+      operationId: GetV2MeasurementAnalysisByToken
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/V2AnalyzeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/owner/{user_id}/measurements/v2/monthly_report':
+    post:
+      tags:
+        - measurement
+      summary: AE月报接口
+      operationId: GetMonthlyReport
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeeklyMonthlyReportResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonthlyReportBody'
+  '/owner/{user_id}/measurements/v2/weekly_report':
+    post:
+      tags:
+        - measurement
+      summary: AE周报接口
+      operationId: GetWeeklyReport
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer            
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeeklyMonthlyReportResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WeeklyReportBody'
+  '/bind/{user_id}/old_user':
+    post:
+      tags:
+        - user
+      summary: 绑定老用户
+      operationId: bindOldUser
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 机构登录会话信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BindOldUserResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindOldUserBody'
+        required: true
+externalDocs:
+  description: Find out more about JinmuHealth
+  url: 'http://www.jinmuhealth.com/developer/developer-plan.html'
+servers:
+  - url: 'https://api.jinmuhealth.com:59433/v2-api'
+    description: Production 
+  - url: 'https://sandbox.api.jinmuhealth.com:49433/v2-api'
+    description: Production
+components:
+  requestBodies:
+    WeeklyReportResponse:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/WeeklyReportBody'  
+    MonthlyReportBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/MonthlyReportBody'
+    V2AnalyzeBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/V2AnalyzeBody'
+    UserIDList:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserIDList'
+      required: true
+    DeviceList:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeviceList'
+      required: true
+    DeleteRecordBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DeleteRecordBody' 
+  schemas:
+    Gender:
+      type: string
+      enum:
+        - '0'
+        - '1'
+      default: '0'
+      description: |
+        性别:
+        - `0` - 男(默认值),实际上为integer类型
+        - `1` - 女,实际上为integer类型
+    Finger:
+      type: string
+      enum:
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+      default: '4'
+      description: |
+        手指:
+        - `1` - 左小姆,实际上为integer类型
+        - `2` - 左无名指,实际上为integer类型
+        - `3` - 左中指,实际上为integer类型
+        - `4` - 左食指(默认值),实际上为integer类型
+        - `5` - 左大拇,实际上为integer类型
+        - `6` - 右大拇,实际上为integer类型
+        - `7` - 右食指,实际上为integer类型
+        - `8` - 右中指,实际上为integer类型
+        - `9` - 右无名指,实际上为integer类型
+        - `10` - 右小拇,实际上为integer类型
+    Frequency:
+      type: string
+      enum: 
+        - '0'
+        - '1'
+        - '2'
+      description: |
+        频率对应关系:
+        - `0` - Daily,实际上为integer类型
+        - `1` - Weekly,实际上为integer类型
+        - `2` - Monthly ,实际上为integer类型
+    MeasurementPosture:
+      type: string
+      enum:
+        - 0
+        - 1
+        - 2
+      default: 0
+      description: |
+        姿态:
+        - `0` - 坐姿    
+        - `1` - 站姿
+        - `2` - 躺姿 
+
+    RecordType:
+      type: string
+      enum:
+        - '5'
+        - '7'
+      default: '7'
+      description: |
+        测量结果记录类型:
+          - `5` - 1.5版本,实际上为integer类型
+          - `7` - 1.7以上版本(包括1.7), 默认值,实际上为integer类型
+    StandardErrorModel:
+      type: object
+      description: 标准错误消息
+      required:
+        - msg
+        - code
+      properties:
+        msg:
+          type: string
+          description: 错误信息
+          nullable: true
+        code:
+          type: integer
+          description: 错误码
+          nullable: true
+    BasicResponse:
+      type: object
+      description: 标准Response消息体
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+          description: 请求是否成功
+        error:
+          $ref: '#/components/schemas/StandardErrorModel'
+    SimpleErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - error
+          properties:
+            error:
+              $ref: '#/components/schemas/StandardErrorModel'
+    WeekMonthTrend:
+      type: object
+      properties:
+        meridian_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendCData'
+          description: 经络数据列表
+        average_meridian:
+           $ref: '#/components/schemas/TrendCData'
+        disease_statistics:
+           $ref: '#/components/schemas/DiseaseStatistics'
+        error_message:
+          type: string
+          description: 异常提示
+        start_time:
+          type: string
+          format: date-time
+          description: 统计数据的开始时间        
+        end_time:
+          type: string
+          format: date-time
+          description: 统计数据的结束时间  
+        physical_dialectics:
+          type: array
+          items: 
+            type: string
+    TrendCData:
+     type: object
+     properties:
+      c0:
+        type: integer
+      c1:
+       type: integer
+      c2:
+       type: integer
+      c3:
+       type: integer
+      c4:
+        type: integer
+      c5:
+       type: integer
+      c6:
+       type: integer
+      c7:
+       type: integer
+      test_time:
+       type: string
+       format: date-time
+       description: 测试时间
+      record_id:
+        type: integer
+        description: 记录ID
+    DiseaseStatistics:
+      type: object
+      additionalProperties:
+        type: integer
+
+    WeeklyReportBody:
+      type: object
+      properties:
+        language:
+          type: string
+    MonthlyReportBody:
+      type: object
+      properties:
+        language:
+          type: string
+    V2AnalyzeResponse:
+      description: v2分析响应
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/V2Analyze'          
+    V2Analyze:
+      type: object
+      properties:
+        report_version:
+          type: string
+          description: 版本
+        report_id:
+          type: integer
+          description: 报告ID 
+        transaction_id:
+          type: integer
+          description: 业务ID
+        ask_questions:
+          $ref: '#/components/schemas/AskQuestions'
+        report_content:
+          $ref: '#/components/schemas/V2ReportContent'
+    AskQuestions:
+     type: object
+     additionalProperties:
+      type: array
+      items:
+       $ref: '#/components/schemas/AskQuestion'
+    AskQuestion:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 问题的Key
+        type:
+          type: string
+          description: 问题的类型
+        content:
+          type: string
+          description: 问题的提问内容
+        choices:
+          type: array
+          items:
+           $ref: '#/components/schemas/AnswerItem'    
+    AnswerItem:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 选项的Key     
+        content:
+          type: string
+          description: 选项的内容
+        conflict_keys:
+          type: array
+          items:
+           type: string
+          description: 与该选项冲突的Key列表
+        selected:
+          type: boolean
+          description: 是否默认被选中
+    V2ReportContent:
+      type: object
+      properties:
+        created_time:
+          type: string
+          format: date-time
+          description: 记录创建时间
+        user_profile:
+          $ref: '#/components/schemas/V2ReportUserProfileModule'
+        pulse_test:
+          $ref: '#/components/schemas/V2PulseTestModule'
+        remark:
+          $ref: '#/components/schemas/V2RemarkModule'
+        heartrate:
+          $ref: '#/components/schemas/V2HeartRateModule' 
+        risk_estimate:
+          $ref: '#/components/schemas/V2RiskEstimateModule' 
+        physical_dialectics:
+          $ref: '#/components/schemas/V2PhysicalDialecticsModule' 
+        dirty_dialectic:
+          $ref: '#/components/schemas/V2DirtyDialecticModule'
+        physical_therapy_index:
+          $ref: '#/components/schemas/V2PhysicalTherapyIndexModule'
+        conditioning_advice:
+          $ref: '#/components/schemas/V2ConditioningAdviceModule'
+        partial_pulse_wave:
+          $ref: '#/components/schemas/V2PartialPulseWaveModule'
+        meridian_bar_chart:
+          $ref: '#/components/schemas/V2MeridianBarChartModule'
+        meridian_explain:
+          $ref: '#/components/schemas/V2MeridianExplainModule'
+        measurement_judgment:
+          $ref: '#/components/schemas/V2MeasurementJudgmentModule'
+        tips:
+          $ref: '#/components/schemas/V2TipsModule'
+        stress_state_judgment:
+          $ref: '#/components/schemas/V2StressStateJudgmentModule'
+        emotional_health:
+          $ref: '#/components/schemas/V2EmotionalHealthModule'
+        facial_skin:
+          $ref: '#/components/schemas/V2FacialSkinModule'
+        facial_skin_male:
+          $ref: '#/components/schemas/V2FacialSkinMaleModule'
+        gynecological_disease_risk_estimate:
+          $ref: '#/components/schemas/V2GynecologicalDiseaseRiskEstimateModule'
+        gynecological_inflammations:
+          $ref: '#/components/schemas/V2GynecologicalInflammationsModule'
+        hormone_level:
+          $ref: '#/components/schemas/V2HormoneLevelModule'
+        uterine_health:
+          $ref: '#/components/schemas/V2UterineHealthModule'
+        menstrual_sunflower:
+          $ref: '#/components/schemas/V2MenstrualSunflowerModule'
+        irregular_menstruation:
+          $ref: '#/components/schemas/V2IrregularMenstruationModule'
+        dysmenorrhea_index:
+          $ref: '#/components/schemas/V2DysmenorrheaIndexModule'
+        reproductive_age:
+          $ref: '#/components/schemas/V2ReproductiveAgeModule'
+        lymphatic_health:
+          $ref: '#/components/schemas/V2LymphaticHealthModule'
+        breast_health:
+          $ref: '#/components/schemas/V2BreastHealthModule'
+        breast_cancer:
+          $ref: '#/components/schemas/V2BreastCancerModule'
+    V2MeridianBarChartModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        meridian_value:
+          $ref: '#/components/schemas/V2MeridianValueModule'
+      description:
+        经络柱状图模块
+    V2MeridianValueModule:
+      type: object
+      properties:
+        c0:
+          type: integer
+        c1:
+          type: integer
+        c2:
+          type: integer
+        c3:
+          type: integer
+        c4:
+          type: integer
+        c5:
+          type: integer
+        c6:
+          type: integer
+        c7:
+          type: integer
+        test_time:
+          type: string
+          format: date-time
+          description: 测试时间
+      description:
+        经络值    
+    V2RiskEstimateModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        disease_estimate:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'  
+          description:
+             疾病分值    
+        prompt_message:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'  
+          description:
+             提示信息  
+      description:
+        风险预估模块     
+    V2BreastCancerModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        乳腺癌卵巢癌风险模块     
+    V2BreastHealthModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f108:
+          type: boolean
+        m3:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        乳腺健康模块       
+    V2LymphaticHealthModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f07:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        淋巴健康模块     
+    V2ReproductiveAgeModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f05:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        生殖年龄模块        
+    V2DysmenorrheaIndexModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        m2:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        痛经模块    
+    V2IrregularMenstruationModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        m1:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        月经不调模块
+    V2MenstrualSunflowerModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        m0:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        月经（天葵）健康模块 
+    V2UterineHealthModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f100:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        子宫健康模块  
+    V2HormoneLevelModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f106:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        激素水平模块   
+    V2GynecologicalInflammationsModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f102:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        妇科炎症模块        
+    V2GynecologicalDiseaseRiskEstimateModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f101:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        妇科疾病风险预估模块      
+    V2FacialSkinMaleModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f109:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        男性面部美肤模块    
+    V2FacialSkinModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f104:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        面部美肤模块
+    V2EmotionalHealthModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f103:
+          type: boolean
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        情绪健康模块
+    V2StressStateJudgmentModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        has_stress_state:
+          type: boolean
+        has_done_sports:
+          type: boolean
+        has_drinked_wine:
+          type: boolean
+        has_had_cold:
+          type: boolean
+        has_rhinitis_episode:
+          type: boolean
+        has_abdominal_pain:
+          type: boolean
+        has_viral_infection:
+          type: boolean
+        has_physiological_period:
+          type: boolean
+        has_ovulation:
+          type: boolean
+        has_pregnant:
+          type: boolean
+        has_lactations:
+          type: boolean
+      description:
+        应激态模块
+    V2TipsModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        温馨提示模块
+    V2MeasurementJudgmentModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        测量异常判断模块    
+    V2MeridianExplainModule:   
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description:
+        经络解读模块
+    V2PartialPulseWaveModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        points:
+          type: array
+          items:
+           type: integer
+      description:
+        局部脉搏波模块
+    V2ConditioningAdviceModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        dietary_advice:
+          $ref: '#/components/schemas/V2DietaryAdviceModule'
+        sports_advice:
+          $ref: '#/components/schemas/V2SportsAdviceModule'
+        chinese_medicine_advice:
+          $ref: '#/components/schemas/V2ChineseMedicineAdviceModule'
+        physical_therapy_advice:
+          $ref: '#/components/schemas/V2PhysicalTherapyAdviceModule'
+      description:
+        调理建议模块
+    V2DietaryAdviceModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description: 食疗建议
+    V2SportsAdviceModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description: 运动方案    
+    V2ChineseMedicineAdviceModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description: 中药调理建议  
+    V2PhysicalTherapyAdviceModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+      description: 理疗建议  
+    V2PhysicalTherapyIndexModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        f0:
+          type: integer
+        f1:
+          type: integer
+        f2:
+          type: integer
+        f3:
+          type: integer
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'   
+    V2DirtyDialecticModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'    
+    WeeklyMonthlyReportResponse:
+      type: object
+      properties:
+        report_version:
+          type: string
+          description: 报告版本
+        start_time:
+           type: string
+           format: date-time
+           description: 开始时间
+        end_time:
+           type: string
+           format: date-time
+           description: 结束时间
+        error_message:
+           type: string
+           description: 错误提示
+        report_content:
+           $ref: '#/components/schemas/V2ReportContent'
+    V2PhysicalDialecticsModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        lookups:
+          type: array
+          items:
+            $ref: '#/components/schemas/V2Lookup'
+    V2Lookup:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 序号
+        content: 
+          type: string
+          description: 显示内容
+        score: 
+          type: string
+          description: 得分或排序值
+        link_key:
+          type: string
+          description: 词条链接 Key
+    V2HeartRateModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        average_heart_rate:
+          type: integer
+          description: 平均心率
+        highest_heart_rate:
+          type: integer
+          description: 最高心率      
+        lowest_heart_rate:
+          type: integer
+          description: 最低心率    
+    V2RemarkModule:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: 是否显示该模块
+        content:
+          type: string
+          description: 备注模块
+    V2PulseTestModule:
+      type: object
+      properties:
+        fingers:
+          type: array
+          items:
+            type: integer
+    V2ReportUserProfileModule:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+        nickname:
+          type: string
+          description: 昵称
+        birthday:
+          format: date-time
+          description: 用户生日
+        age:
+          type: integer
+          description: 年龄
+        gender:
+          type: integer
+          description: ｜
+            性别
+            2 - 男
+            3 - 女
+        height:
+          type: integer
+          description: 身高
+        weight:
+          type: integer
+          description: 体重
+        nickname_initial:
+          type: string
+          description: 昵称首字母          
+    V2AnalyzeBody:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          description: 业务ID
+        language:
+          type: string
+          description: 语言
+        question_answers:
+          $ref: '#/components/schemas/QuestionAnswers'
+    QuestionAnswers:
+      type: object
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/QuestionAnswer'
+    QuestionAnswer:
+      type: object
+      properties:
+        question_key:
+          type: string
+        answer_keys:
+          type: array
+          items:
+            type: string
+    FeedbackResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    VersionResponse:
+      description: Version 响应
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Version'
+    LocalNotificationResponse:
+      description: LocalNotification 响应
+      allOf:
+      - $ref: '#/components/schemas/BasicResponse'
+      - type: object
+        required:
+          - data
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/LocalNotification'
+    ClientAuthResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Authorization'
+    Authorization:
+      type: object
+      properties:
+        authorization:
+          type: string
+          description: Client验证授权信息
+        expired_at: 
+          type: string
+          format: date-time
+          description: 过期时间
+    OrganizationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Preferences'
+    OwnerSignUpResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/User'
+    TipsResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/TipInfo'
+
+    OwnerSignUp:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: 客户端ID
+        register_type:
+          type: string
+          description: |
+            注册类型，支持以下字符串值：
+            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `username` - 用户名
+            - `email` - 邮箱
+            - `phone` - 手机
+            - `wechat` - 微信
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+    UsersSignInResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Client'
+    GetLatestTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/LatestToken'
+    LatestToken:
+      properties:
+        access_token:
+          type: string
+          description: 机构登录会话信息
+        user_id:
+          type: integer
+          description: 用户ID
+        expired_at: 
+          type: string
+          format: date-time
+          description: 过期时间
+    TipInfo:
+      type: object
+      properties:
+        content:
+          type: string
+          description: 提示的内容
+        duration:
+          type: integer
+          description: 提示内容的间隔时间
+    Client:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: 机构登录会话信息
+        remain_days:
+          type: integer
+          description: 剩余天数
+        expired_at:
+          type: string
+          description: 到期时间
+          format: date-time
+        user_id:
+          type: integer
+          description: 用户ID
+        access_token_expired_at:
+          type: string
+          description: 到期时间
+          format: date-time      
+    UserProfileResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/User'
+    JMResResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/BaseURL'
+    BaseURL:
+      type: object
+      properties:
+        entry_url:
+          type: string
+          description: 词条的BaseURL
+        faq_url:
+          type: string
+          description: faq的BaseURL
+        questionnaire_url:
+          type: string
+          description: 问答的BaseURL
+    JMRes:
+      type: object
+      properties:
+        app_version:
+          type: string
+          description: app版本
+    User:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+        username:
+          type: string
+          description: 用户名
+        register_type:
+          type: string
+          description: |
+            注册类型，支持以下字符串值：
+            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `username` - 用户名
+            - `email` - 邮箱
+            - `phone` - 手机
+            - `wechat` - 微信
+        is_profile_completed:
+          type: boolean
+          description: profile是否完整/完成初始化 0是完整 1是不完整
+        is_removable:
+          type: boolean
+          description: 是否能够删除
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+    MoreUserProfileResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/User'
+    getUserSubscriptionResponse:
+      allOf:
+        - $ref:  '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SubscriptionInformation'
+    SubscriptionInformation:
+      allOf:
+        - type: object
+          properties:
+            subscriptions:
+              $ref: '#/components/schemas/SingleSubscriptionInformation'
+
+    SingleSubscriptionInformation:
+      allOf:
+        - type: object
+          properties:
+            user_subscription_status:
+              type: integer
+              enum:
+                - 0
+                - 1
+                - 2
+              description: |
+                对应关系:
+                - `0` - 未订阅
+                - `1` - 订阅未过期
+                - `2` - 订阅已过期
+            total_user_count:
+              type: integer
+              description:
+                总共用户数量
+            max_user_count:
+              type: integer
+              description:
+                最大用户数量                
+            expired_at:
+              type: string
+              format: date-time
+              description:
+                过期时间               
+            subscription_type:
+              type: string
+              description: |
+                账号的服务等级，支持以下字符串值：
+                - `Customized` - 定制化
+                - `Trial` - 试用版
+                - `Golden` - 黄金姆
+                - `Platinum` - 白金姆
+                - `Diamond` - 钻石姆
+                - `Gift` - 礼品版
+    SubscriptionResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SubscriptionInfo'
+    SubscriptionInfo:
+      type: object
+      properties:
+        created_at:
+          type: string
+          description: '测量日期 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+        total_user_count:
+          type: integer
+          description: 已经添加的用户数目
+        max_user_limits:
+          type: integer
+          description: 最大用户数目
+        subscription_type:
+          type: string
+          description: |
+            账号的服务等级，支持以下字符串值：
+            - `Customized` - 定制化
+            - `Trial` - 试用版
+            - `Golden` - 黄金姆
+            - `Platinum` - 白金姆
+            - `Diamond` - 钻石姆
+            - `Gift` - 礼品版
+        expired_at:
+          type: string
+          description: 到期时间
+          format: date-time
+        active:
+          type: boolean
+          description: 是否激活
+        message:
+          type: string
+        expiration_status:
+          type: integer
+          description: |
+            过期状态
+            - `0` 过期
+            - `1` 快要过期
+            - `2` 没有过期
+    OwnerDeleteUsersResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'  
+    MoreOrganizationsResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Organization'
+    Organization:
+       type: object
+       properties:
+         organization_id:
+           type: integer
+           description: 组织 id
+         subscription:
+           $ref: '#/components/schemas/Subscription'
+         profile:
+           $ref: '#/components/schemas/OrganizationProfile'
+    OrganizationProfile:
+       type: object
+       properties:
+         name:
+           type: string
+           description: 组织名称
+         state:
+           type: string
+           description: 所在省份
+         city:
+           type: string
+           description: 所在城市
+         street:
+           type: string
+           description: 所在街道
+         phone:
+           type: string
+           description: 联系电话
+         contact:
+           type: string
+           description: 联系人
+         type:
+           type: string
+           description: 机构类型
+         email:
+           type: string
+           description: 邮箱
+         country:
+           type: string
+           description: 国家
+    Subscription:
+      type: object
+      properties:
+        created_at:
+          type: string
+          description: '测量日期 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+        total_user_count:
+          type: integer
+          description: 已经添加的用户数目
+        max_user_limits:
+          type: integer
+          description: 最大用户数目
+        subscription_type:
+          type: string
+          description: |
+            账号的服务等级，支持以下字符串值：
+            - `Customized` - 定制化
+            - `Trial` - 试用版
+            - `Golden` - 黄金姆
+            - `Platinum` - 白金姆
+            - `Diamond` - 钻石姆
+            - `Gift` - 礼品版
+        expired_at:
+          type: string
+          description: 到期时间
+          format: date-time
+        active:
+          type: boolean
+          description: 是否激活
+    CancelOwnerResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    MeasureResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/MeasureResult'
+    OwnerAddUserResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/OwnerAddUser'
+
+    OwnerAddUser:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+        is_removable:
+          type: boolean
+          description: 是否可以移除
+        nickname:
+          type: string
+          description: 昵称
+        gender:
+          type: integer
+          default: '0'
+          description: |
+            性别:
+              - `0` - 男(默认值),实际上为integer类型
+              - `1` - 女,实际上为integer类型
+        birthday:
+          type: string
+          description: 生日 UTC 格式
+          format: date-time
+        height:
+          type: integer
+          description: 身高
+        weight:
+          type: integer
+          description: 体重
+    MeasureResult:
+      type: object
+      properties:
+        cid:
+          type: integer
+          description: 测量流水号
+        record_id:
+          type: integer
+          description: 测量记录ID
+        c0:
+          type: integer
+          description: '心包经 位于区间[-10,10]内'
+        c1:
+          type: integer
+          description: '肝经 位于区间[-10,10]内'
+        c2:
+          type: integer
+          description: '肾经 位于区间[-10,10]内'
+        c3:
+          type: integer
+          description: '脾经 位于区间[-10,10]内'
+        c4:
+          type: integer
+          description: '肺经 位于区间[-10,10]内'
+        c5:
+          type: integer
+          description: '胃经 位于区间[-10,10]内'
+        c6:
+          type: integer
+          description: '胆经 位于区间[-10,10]内'
+        c7:
+          type: integer
+          description: '膀胱经 位于区间[-10,10]内'
+        wave_data:
+          type: array
+          items:
+            type: integer
+          description: 截取的波形数据
+        app_heart_rate:
+          type: integer
+          description: App 测量的心率
+        app_highest_heart_rate:
+          type: integer
+          description: App 测的最高心率
+        app_lowest_heart_rate:
+          type: integer
+          description: App 测的最低心率
+        heart_rate:
+          type: integer
+          description: 服务器返回的心率
+        created_at:
+          type: string
+          description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+        finger:
+          $ref: '#/components/schemas/Finger'
+        record_type:
+          $ref: '#/components/schemas/RecordType'
+    MeasurementDataWithAnalysisResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/MeasurementHistoryRecord'
+    RemarkResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    GetAnalysisResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/AnalysisReport'
+    AnalysisResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/AnalysisResult'
+    AnalysisResult:
+      type: object
+      properties:
+        cid:
+          type: integer
+          description: 上下文ID
+        transaction_no:
+          type: string
+          description: 测量流水号
+        analysis_session:
+          type: string
+          description: 智能分析会话信息
+        analysis_done:
+          type: boolean
+          description: 智能分析是否结束，true 表示分析结束，false 表示需要回答问题
+        questionnaire:
+          $ref: '#/components/schemas/Questionnaire'
+        analysis_report:
+          $ref: '#/components/schemas/AnalysisReport'
+        analysis_report_result_error:
+          type: string
+          description: 智能分析结果是否存在异常
+    SignOutResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    NullAble:
+      type: object
+    Feedback:
+      type: object
+      properties:
+        contact_way:
+          type: string
+          description: 联系方式
+        content:
+          type: string
+          description: 反馈的内容
+    Auth:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: 客户端ID
+        secret_key_hash:
+          type: string
+          description: 经过 SHA256 签名的 App 授权密钥
+        seed:
+          type: string
+          description: '随机种子。四个可读ASCII字符，例如：`a#B9`'
+    Preferences:
+      type: object
+      properties:
+        enable_choose_status:
+          type: boolean
+          description: 是否开启选择状态
+        enable_comment:
+          type: boolean
+          description: 是否开启备注
+        enable_constitution_differentiation:
+          type: boolean
+          description: 是否开启中医体质判读
+        enable_heart_rate_chart:
+          type: boolean
+          description: 是否开启心率扇形图
+        enable_meridian_bar_graph:
+          type: boolean
+          description: 是否开启柱状图
+        enable_pulse_wave_chart:
+          type: boolean
+          description: 是否开启波形图
+        enable_syndrome_differentiation:
+          type: boolean
+          description: 是否开启中医脏腑判读
+        enable_warm_prompt:
+          type: boolean
+          description: 是否开启温馨提示
+        enable_western_medicine_analysis:
+          type: boolean
+          description: 是否开启西医判读
+        enable_health_trending:
+          type: boolean
+          description: 是否开启健康趋势
+    UserProfile:
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: 客户昵称
+        birthday:
+          type: string
+          description: 生日 UTC 格式 （可选）
+          format: date-time
+        age:
+          type: integer
+          description: 年龄
+          minimum: 0
+        gender:
+          $ref: '#/components/schemas/Gender'
+        height:
+          type: integer
+          description: 身高（必填）单位厘米
+          minimum: 0
+        weight:
+          type: integer
+          description: 体重（必填）单位厘米
+          minimum: 0
+        phone:
+          type: string
+          description: 联系电话（可选）
+        email:
+          type: string
+          description: 联系邮箱（可选）
+        remark:
+          type: string
+          description: 备注 不超过200字符
+          maxLength: 200
+        user_defined_code:
+          type: string
+          description: 用户自定义代码
+        state:
+          type: string
+          description: 所在省份
+        city:
+          type: string
+          description: 所在城市
+        street:
+          type: string
+          description: 所在街道
+        country:
+          type: string
+          description: 国家
+        nickname_initial:
+          type: string
+          description: 昵称首字母
+    UserSignIn:
+      type: object
+      properties:
+        sign_in_key:
+          type: string
+          description: 用户名/邮箱/电话号码
+        register_type:
+          type: string
+          description: |
+            注册类型，支持以下字符串值：
+            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `username` - 用户名
+            - `email` - 邮箱
+            - `phone` - 手机
+            - `wechat` - 微信
+        password_hash:
+          type: string
+          description: 密码 SHA256 encoded
+    OwnerAddUserBody:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: 客户端ID
+        register_type:
+          type: string
+          description: |
+            注册类型，支持以下字符串值：
+            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `username` - 用户名
+            - `email` - 邮箱
+            - `phone` - 手机
+            - `wechat` - 微信
+        nickname:
+          type: string
+          description: 昵称
+        gender:
+          type: integer
+          default: '0'
+          description: |
+            性别:
+            - `0` - 男(默认值),实际上为integer类型
+            - `1` - 女,实际上为integer类型
+        birthday:
+          type: string
+          description: 生日 UTC 格式
+          format: date-time
+        height:
+          type: integer
+          description: 身高
+        weight:
+          type: integer
+          description: 体重
+    PutUserProfile:
+      type: object
+      description: Gender（性别）不能修改
+      properties:
+        profile:
+          $ref: '#/components/schemas/UserProfile'
+    UserIDList:
+      type: object
+      properties:
+        user_id_list:
+          type: array
+          items:
+            type: integer
+    MeasurementData:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+        data0:
+          type: string
+          description: base64编码后的二进制蓝牙数据
+        data1:
+          type: string
+          description: base64编码后的二进制蓝牙数据
+        mac:
+          type: string
+          description: 设备 MAC 地址
+        mobile_type:
+          type: string
+          description: |
+            设备类型，支持以下字符串值：
+            - `ANDROID`
+            - `IPHONE`
+        app_heart_rate:
+          type: integer
+          description: App 测的心率
+        app_highest_heart_rate:
+          type: integer
+          description: App 测的最高心率
+        app_lowest_heart_rate:
+          type: integer
+          description: App 测的最低心率
+        finger:
+          $ref: '#/components/schemas/Finger'
+        record_type:
+          $ref: '#/components/schemas/RecordType'
+        measurement_posture:      
+          $ref: '#/components/schemas/MeasurementPosture'    
+    Analysis:
+      type: object
+      properties:
+        cid:
+          type: integer
+          description: 测量流水号
+        analysis_session:
+          type: string
+          description: 智能分析会话信息（如果有问询需要在后续请求中填写该字段）
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+    Answer:
+      type: object
+      properties:
+        question_key:
+          type: string
+          description: 问题唯一标识
+        values:
+          type: array
+          description: 答案
+          items:
+            type: string
+            description: 答案的值
+    Question:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 问题的标识
+        title:
+          type: string
+          description: 问题标题
+        description:
+          type: string
+          description: 问题描述
+        tip:
+          type: string
+          description: 问题的提示信息
+        type:
+          type: string
+          description: 单选或多选 单选 single_choice 多选 multiple_choice
+        choices:
+          type: array
+          description: 问题的选项
+          items:
+            $ref: '#/components/schemas/QuestionChoiceItem'
+        default_keys:
+          type: array
+          description: 默认选中的 key 清单
+          items:
+            type: string
+            description: 选项的 key
+    QuestionChoiceItem:
+      type: object
+      description: 选择题问题的选项
+      properties:
+        key:
+          type: string
+          description: 选项的标识
+        name:
+          type: string
+          description: 选项显示的名称
+        value:
+          type: string
+          description: 选项的值
+        conflict_keys:
+          type: array
+          description: 冲突的选项的 key 清单
+          items:
+            type: string
+            description: 选项的 key
+    Questionnaire:
+      type: object
+      description: 智能分析问卷
+      properties:
+        title:
+          type: string
+          description: 问卷的标题
+        questions:
+          type: array
+          description: 问题列表
+          items:
+            $ref: '#/components/schemas/Question'
+        answers:
+          type: array
+          description: 答案列表
+          items:
+            $ref: '#/components/schemas/Answer'
+        created_at:
+          type: string
+          description: '问卷创建时间 2018-07-04T08:01:27Z 格式'
+          format: date-time
+    AnalysisReport:
+      type: object
+      description: 分析报告
+      required:
+        - report_version
+        - report_id
+        - content
+      properties:
+        report_version:
+          type: string
+          description: 分析报告版本. 当前仅支持 `1.0` 这个值.
+        report_id:
+          type: string
+          description: 分析报告 ID
+        content:
+          $ref: '#/components/schemas/AnalysisReportContent'
+    HealthDescriptions:
+      type: array
+      description: 健康描述
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportCCStrengthItem:
+      type: object
+      description: 经络强度 Item
+      properties:
+        key:
+          type: string
+          description: 解读项的标识 Key
+        label:
+          type: array
+          description: 经络强度标签
+          items:
+            $ref: '#/components/schemas/CCStrengthLabel'
+        disabled:
+          type: boolean
+          description: 是否已经弃用。
+        remark:
+          type: string
+          description: 备注
+    CCStrengthLabel:
+      type: object
+      description: 经络强度分析的项目的标签
+      properties:
+        label:
+          type: string
+          description: 文本标签，可以是HTML
+        CC:
+          type: string
+          description: 经络标识
+    ChannelsAndCollateralsStrength:
+      type: array
+      description: 经络强度
+      items:
+        $ref: '#/components/schemas/AnalysisReportCCStrengthItem'
+    BabyTips:
+      type: array
+      description: 宝宝提示
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    ConstitutionDifferentiationExplainNotices:
+      type: array
+      description: 体质判断注意事项
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    ChannelsAndCollateralsExplainNotices:
+      type: array
+      description: 经络检测注意事项
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    MeasurementTips:
+      type: array
+      description: 测量提示
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    DictionaryEntries:
+      type: array
+      description: 词条描述
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    FactorExplains:
+      type: array
+      description: 因子解读
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportContentLead:
+      type: array
+      description: 分析导语内容
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportContentUserProfile:
+      type: object
+      description: 分析报告的 UserProfile
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+        nickname:
+          type: string
+          description: 客户昵称
+        birthday:
+          type: string
+          description: 生日 UTC 格式 （可选）
+          format: date-time
+        age:
+          type: integer
+          description: 年龄
+          minimum: 0
+        gender:
+          $ref: '#/components/schemas/Gender'
+        height:
+          type: integer
+          description: 身高（必填）单位厘米
+          minimum: 0
+        weight:
+          type: integer
+          description: 体重（必填）单位厘米
+          minimum: 0
+        avatar_url:
+          type: string
+          description: 头像的url
+    AnalysisReportContentMeasurementResult:
+      type: object
+      description: 分析报告中的测量结果信息
+      properties:
+        finger:
+          $ref: '#/components/schemas/Finger'
+        c0:
+          type: integer
+          description: '心包经 位于区间[-10,10]内'
+        c1:
+          type: integer
+          description: '肝经 位于区间[-10,10]内'
+        c2:
+          type: integer
+          description: '肾经 位于区间[-10,10]内'
+        c3:
+          type: integer
+          description: '脾经 位于区间[-10,10]内'
+        c4:
+          type: integer
+          description: '肺经 位于区间[-10,10]内'
+        c5:
+          type: integer
+          description: '胃经 位于区间[-10,10]内'
+        c6:
+          type: integer
+          description: '胆经 位于区间[-10,10]内'
+        c7:
+          type: integer
+          description: '膀胱经 位于区间[-10,10]内'
+        heart_rate:
+          type: integer
+          description: 服务器返回的心率
+        app_heart_rate:
+          type: integer
+          description: App 测量的心率
+        app_highest_heart_rate:
+          type: integer
+          description: App 测的最高心率
+        app_lowest_heart_rate:
+          type: integer
+          description: App 测的最低心率
+        partial_pulse_wave:
+          type: array
+          items:
+            type: integer
+          description: 截取的波形数据
+    AnalysisReportContentTags:
+      type: array
+      description: 分析报告的选项标签
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportContentTipsForWoman:
+      type: array
+      description: 分析报告的女性提示（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportCCExplains:
+      type: array
+      description: 分析报告的经络解读
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportCDExplains:
+      type: array
+      description: 分析报告的体质判断
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportSDExplains:
+      type: array
+      description: 分析报告的脏腑判断
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    UterineHealthIndexes:
+      type: array
+      description: 分析报告的子宫健康指数（ZG）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    UterusAttentionPrompts:
+      type: array
+      description: 分析报告的子宫注意提示（ZGTS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    UterineHealthDescriptions:
+      type: array
+      description: 分析报告的子宫健康描述（ZGMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    MenstrualHealthValues:
+      type: array
+      description: 分析报告的月经健康数值（YJ）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    MenstrualHealthDescriptions:
+      type: array
+      description: 分析报告的月经健康描述（YJMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    GynecologicalInflammations:
+      type: array
+      description: 分析报告的妇科炎症（FK）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    GynecologicalInflammationDescriptions:
+      type: array
+      description: 分析报告的妇科炎症描述（FKMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastHealth:
+      type: array
+      description: 分析报告的乳腺健康（RX）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastHealthDescriptions:
+      type: array
+      description: 分析报告的乳腺健康描述（RXMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    EmotionalHealthIndexes:
+      type: array
+      description: 分析报告的情绪健康指数（QX）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    EmotionalHealthDescriptions:
+      type: array
+      description: 分析报告的情绪健康描述（QXMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    FacialSkins:
+      type: array
+      description: 分析报告的面部美肤（MB）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    FacialSkinDescriptions:
+      type: array
+      description: 分析报告的面部美肤描述（MBMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    ReproductiveAgeConsiderations:
+      type: array
+      description: 分析报告的生殖年龄注意事项（SZTS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    HormoneLevels:
+      type: array
+      description: 分析报告的激素水平（JS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastCancerOvarianCancers:
+      type: array
+      description: 分析报告的乳腺癌卵巢癌（BC）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastCancerOvarianCancerDescriptions:
+      type: array
+      description: 分析报告的乳腺癌卵巢癌描述（BCMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    LymphaticHealth:
+      type: array
+      description: 分析报告的淋巴健康（LB）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    LymphaticHealthDescriptions:
+      type: array
+      description: 分析报告的淋巴健康描述（LBMS）（α）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportGeneralExplainItem:
+      type: object
+      description: 标准解读 Item
+      properties:
+        key:
+          type: string
+          description: 解读项的标识 Key
+        label:
+          type: string
+          description: 解读项的文本标签。支持HTML。
+        content:
+          type: string
+          description: 解读项的正文内容。支持HTML。
+    AnalysisReportContent:
+      type: object
+      description: 分析报告的内容
+      properties:
+        user_profile:
+          $ref: '#/components/schemas/AnalysisReportContentUserProfile'
+        measurement_result:
+          $ref: '#/components/schemas/AnalysisReportContentMeasurementResult'
+        tags:
+          $ref: '#/components/schemas/AnalysisReportContentTags'
+        lead:
+          $ref: '#/components/schemas/AnalysisReportContentLead'
+        tips_for_woman:
+          $ref: '#/components/schemas/AnalysisReportContentTipsForWoman'
+        channels_and_collaterals_explains:
+          $ref: '#/components/schemas/AnalysisReportCCExplains'
+        constitution_differentiation_explains:
+          $ref: '#/components/schemas/AnalysisReportCDExplains'
+        syndrome_differentiation_explains:
+          $ref: '#/components/schemas/AnalysisReportSDExplains'
+        channels_and_collaterals_strength:
+          $ref: '#/components/schemas/ChannelsAndCollateralsStrength'
+        constitution_differentiation_explain_notices:
+          $ref: '#/components/schemas/ConstitutionDifferentiationExplainNotices'
+        channels_and_collaterals_explain_notices:
+          $ref: '#/components/schemas/ChannelsAndCollateralsExplainNotices'
+        measurement_tips:
+          $ref: '#/components/schemas/MeasurementTips'
+        dictionary_entries:
+          $ref: '#/components/schemas/DictionaryEntries'
+        factor_explains:
+          $ref: '#/components/schemas/FactorExplains'
+        baby_tips:
+          $ref: '#/components/schemas/BabyTips'
+        health_descriptions:
+          $ref: '#/components/schemas/HealthDescriptions'
+        uterine_health_indexes:
+          $ref: '#/components/schemas/UterineHealthIndexes'
+        uterus_attention_prompts:
+          $ref: '#/components/schemas/UterusAttentionPrompts'
+        uterine_health_descriptions:
+          $ref: '#/components/schemas/UterineHealthDescriptions'
+        menstrual_health_values:
+          $ref: '#/components/schemas/MenstrualHealthValues'
+        menstrual_health_descriptions:
+          $ref: '#/components/schemas/MenstrualHealthDescriptions'
+        gynecological_inflammations:
+          $ref: '#/components/schemas/GynecologicalInflammations'
+        gynecological_inflammation_descriptions:
+          $ref: '#/components/schemas/GynecologicalInflammationDescriptions'
+        breast_health:
+          $ref: '#/components/schemas/BreastHealth'
+        breast_health_descriptions:
+          $ref: '#/components/schemas/BreastHealthDescriptions'
+        emotional_health_indexes:
+          $ref: '#/components/schemas/EmotionalHealthIndexes'
+        emotional_health_descriptions:
+          $ref: '#/components/schemas/EmotionalHealthDescriptions'
+        facial_skins:
+          $ref: '#/components/schemas/FacialSkins'
+        facial_skin_descriptions:
+          $ref: '#/components/schemas/FacialSkinDescriptions'
+        reproductive_age_considerations:
+          $ref: '#/components/schemas/ReproductiveAgeConsiderations'
+        hormone_levels:
+          $ref: '#/components/schemas/HormoneLevels'
+        breast_cancer_ovarian_cancers:
+          $ref: '#/components/schemas/BreastCancerOvarianCancers'
+        breast_cancer_ovarian_cancer_descriptions:
+          $ref: '#/components/schemas/BreastCancerOvarianCancerDescriptions'
+        lymphatic_health:
+          $ref: '#/components/schemas/LymphaticHealth'
+        lymphatic_health_descriptions:
+          $ref: '#/components/schemas/LymphaticHealthDescriptions'
+        m0:
+          type: integer
+          description: 月经健康指数（α）
+          nullable: true
+        m1:
+          type: integer
+          description: 月经不调指数（α）
+          nullable: true
+        m2:
+          type: integer
+          description: 痛经指数 （α）
+          nullable: true
+        m3:
+          type: integer
+          description: 乳腺健康问答计分    （α）
+          nullable: true
+        display_options:
+          $ref: '#/components/schemas/DisplayOptions'
+        remark:
+          type: string
+          description: 评论
+        physical_therapy_explain:
+          $ref: '#/components/schemas/PhysicalTherapyExplain'
+        risk_estimate:
+          type: array
+          items:
+            $ref: '#/components/schemas/RiskEstimate'
+        risk_estimate_tips:
+          type: array
+          items:
+            type: string
+        treatment_advices:
+          type: array
+          items:
+            $ref: '#/components/schemas/TreatmentAdvice'
+        syndrome_differentiation_constitution:
+          type: string        
+        created_at:
+          type: string
+          description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+    PhysicalTherapyExplain:
+      type: object
+      properties:
+        f0:
+          type: integer
+          description: 阴指数
+        f1:
+          type: integer
+          description: 阳指数
+        f2:
+          type: integer
+          description: 湿气指数
+        f3:
+          type: integer
+          description: 淤血指数
+    MeasurementHistoryRecord:
+      type: object
+      properties:
+        record_id:
+          type: integer
+          description: 测量记录ID
+        created_at:
+          type: string
+          description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+        c0:
+          type: integer
+          description: '心包经 位于区间[-10,10]内'
+        c1:
+          type: integer
+          description: '肝经 位于区间[-10,10]内'
+        c2:
+          type: integer
+          description: '肾经 位于区间[-10,10]内'
+        c3:
+          type: integer
+          description: '脾经 位于区间[-10,10]内'
+        c4:
+          type: integer
+          description: '肺经 位于区间[-10,10]内'
+        c5:
+          type: integer
+          description: '胃经 位于区间[-10,10]内'
+        c6:
+          type: integer
+          description: '胆经 位于区间[-10,10]内'
+        c7:
+          type: integer
+          description: '膀胱经 位于区间[-10,10]内'
+        remark:
+          type: string
+          description: 备注
+        finger:
+          type: integer
+          description: |
+            - 0 - 左小姆
+            - 1 - 左无名指
+            - 2 - 左中指
+            - 3 - 左食指
+            - 4 - 左大拇
+            - 5 - 右大拇
+            - 6 - 右食指
+            - 7 - 右中指
+            - 8 - 右无名指
+            - 9 - 右小拇
+        app_heart_rate:
+          type: integer
+          description: App测的心率
+        record_type:
+          $ref: '#/components/schemas/RecordType'
+        cid:
+          type: string
+        heart_rate:
+          type: integer
+          description: 心率
+        tags:
+          $ref: '#/components/schemas/AnalysisReportContentTags'
+        labels:  
+          type: array
+          items:
+            $ref: '#/components/schemas/Label'
+    Label:
+      type: object
+      properties:
+        text: 
+          type: string
+          description: 内容
+        bg_color:  
+          type: string
+          description: 颜色
+        bg_alpha:
+          type: integer
+          format: float
+          description: 透明度
+    Remark:
+      type: object
+      description: 分析报告备注
+      properties:
+        user_id:
+          type: integer
+          description: UserID
+        remark:
+          type: string
+          description: 备注
+    Mac:
+      type: string
+      description: MAC 地址
+    DeviceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Device'
+    Device:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/Mac'
+    Measurement:
+      type: object
+      properties:
+        measurement:
+          $ref: '#/components/schemas/MeasurementData'
+    Version:
+      type: object
+      properties:
+        service_name:
+          type: string
+          description: 服务名
+        version:
+          type: string
+          description: 服务版本信息
+    Weekdays:
+      type: string
+      enum:
+        - '0'
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+      description: |
+        对应关系:
+        - `0` - Sunday,实际上为integer类型
+        - `1` - Monday,实际上为integer类型
+        - `2` - Tuesday,实际上为integer类型
+        - `3` - Wednesday,实际上为integer类型
+        - `4` - Thursday,实际上为integer类型
+        - `5` - Friday,实际上为integer类型
+        - `6` - Saturday,实际上为integer类型
+    LocalNotification:
+      type: object
+      properties:
+        title:
+          type: string
+          description: 消息推送时的标题信息
+        content:
+          type: string
+          description: 消息推送时的正文信息
+        schedule:
+          $ref: '#/components/schemas/Schedule'
+    Schedule:
+      type: object
+      properties: 
+        event_happen_at: 
+          type: string
+          description: 消息推送时间
+        timezone: 
+          type: string
+          description: 时区信息
+        repeat:
+          $ref: '#/components/schemas/RepeatSchedule'
+    RepeatSchedule:
+      type: object
+      properties:
+        frequency:
+          $ref: '#/components/schemas/Frequency'
+        interval:
+          type: integer  
+          description: |
+            frequency为FrequencyDaily时，interval表示以天为单位的推送间隔时间；
+            frequency为FrequencyWeekly时，interval表示以周为单位的推送间隔时间；
+            frequency为FrequencyMonthly时，interval表示以月为单位的推送间隔时间
+        weekdays:
+          type: array
+          items:
+            $ref: '#/components/schemas/Weekdays'
+          description: |
+            对应关系:
+            - `0` - Sunday
+            - `1` - Monday
+            - `2` - Tuesday  
+            - `3` - Wednesday
+            - `4` - Thursday
+            - `5` - Friday
+            - `6` - Saturday
+        month_days:
+          type: array   
+          items:
+            type: integer
+            minimum: 1
+            maximum: 31
+          description: |
+            以月为基本单位时，一个月的哪些天推送；
+            1代表1号，2代表2号，...，依此类推，31代表31号
+        max_notification_times:
+          type: integer
+          nullable: true
+          description: 最大推送次数
+        end_at:
+          type: string
+          nullable: true
+          description: 推送结束时间
+    DisplayOptions:
+      type: object
+      properties:
+        display_navbar:
+          type: boolean
+          description: 是否显示导航
+        display_tags:
+          type: boolean
+          description: 是否显示健康状态
+        display_partial_data:
+          type: boolean
+          description: 是否显示波形图数据
+        display_user_profile:
+          type: boolean
+          description: 是否显示用户信息
+        display_heart_rate:
+          type: boolean
+          description: 是否显示心率
+        display_cc_bar_chart:
+          type: boolean
+          description: 是否显示经络柱状图
+        display_cc_explain:
+          type: boolean
+          description: 是否显示脉诊数据
+        display_cd_explain:
+          type: boolean
+          description: 是否显示体质辩证
+        display_sd_explain:
+          type: boolean
+          description: 是否显示脏腑辩证
+        display_f0:
+          type: boolean
+          description: 是否显示阴指数
+        display_f1:
+          type: boolean
+          description: 是否显示阳指数
+        display_f2:
+          type: boolean
+          description: 是否显示湿气指数
+        display_f3:
+          type: boolean
+          description: 是否显示淤血指数
+        display_physical_therapy_explain:
+          type: boolean
+          description: 是否显示理疗
+        display_remark:
+          type: boolean
+          description: 是否显示评论
+        display_measurement_result:
+          type: boolean
+          description: 是否显示测量结果
+        display_baby_tips:
+          type: boolean
+          description: 是否显示宝宝提示
+        display_wh:
+          type: boolean
+          description: 是否显示女性健康  （α）
+    RecordTokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/RecordToken'
+    RecordToken:
+      type: object
+      properties:
+        token:
+          type: string
+          description: 分享记录的token
+        link:
+          type: string
+    ReadNotification:
+      type: object
+      properties:
+        pn_id:
+          type: integer
+          description: 通知ID
+    ReadNotificationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    Notification:
+      type: object
+      properties:
+        pn_id:
+          type: integer
+          description: 通知ID
+        pn_display_time:
+          type: string
+          description: 通知显示时间
+        pn_title:
+          type: string
+          description: 通知标题
+        pn_image_url:
+          type: string
+          description: 通知图片URL
+        pn_content_url:
+          type: string
+          description: 通知内容URL
+    GetNotificationsResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Notification'
+    GetBluetoothNamePrefixesResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NamePrefix'
+    ActivationCodeInfo:
+      type: object
+      properties:
+        max_user_count:
+          type: string
+          description: 最大人数 
+        contract_year:
+          type: string
+          description: 年限
+        subscription_type: 
+          type: string
+          description: |
+            账号的服务等级，支持以下字符串值：
+            - `Customized` - 定制化
+            - `Trial` - 试用版
+            - `Golden` - 黄金姆
+            - `Platinum` - 白金姆
+            - `Diamond` - 钻石姆
+            - `Gift` - 礼品版
+    ActivationCodeResponse:
+      type: object
+      properties:
+        user_subscription_status:
+          type: integer
+          description: 订阅状态
+        total_user_count:
+          type: integer
+          description: 总的用户人数 
+        max_user_count:
+          type: integer
+          description: 最大用户数量
+        expired_at: 
+          type: string
+          format: date-time
+          description: 过期时间
+        subscription_type:
+          type: string
+          description: 订阅类型
+
+    GetActivationCodeInfoResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ActivationCodeInfo'
+    UseSubscriptionActivationCodeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          # required:
+          #   - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ActivationCodeResponse'
+    Code:
+      type: object
+      properties:
+        code:
+          type: string
+          description: 激活码 
+    NamePrefix:
+        type: object
+        properties:
+          localNamePrefixs:
+            type: array
+            description: 名称前缀
+            items:
+             $ref: '#/components/schemas/Prefix'
+    Prefix:
+        type: string
+        description: 前缀
+    DeleteRecordResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    DeleteRecordBody:
+      type: object
+      description: 删除记录body 
+      properties:
+        record_id_list:
+          type: array
+          items:
+            type: integer
+    TreatmentAdvice:
+      type: object
+      description: 理疗建议 
+      properties:
+        treatment_name:
+          type: string
+          description: 理疗名称
+        weigth:
+          type: integer
+          description: 权重
+        advice:
+          type: string
+          description: 建议
+    RiskEstimate:
+      type: object
+      description: 风险预估
+      properties:
+        disease_name:
+          type: string
+          description: 疾病名称
+        status:
+          type: integer
+          description: 3重风险、2中风向、1轻风险、0正常
+    BindOldUserBody:
+      type: object
+      properties:
+        username:
+          type: string
+          description: 用户名
+        password_hash:
+          type: string
+          description: 密码 SHA256 encoded
+        seed:
+          type: string
+          description: 随机种子
+    BindOldUserResponse:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 老用户的 user_id
+        access_token:
+          type: string
+          description: 老用户的授权访问 Token
