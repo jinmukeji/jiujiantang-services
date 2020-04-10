@@ -90,8 +90,6 @@ services:
       - "--x_jwt_sign_in_key=jinmuhealth"
     environment:
       - LOG_FORMAT=logstash
-    # ports:
-    #   - "19002:19002"
     depends_on:
       - svc-biz-core
     networks:
