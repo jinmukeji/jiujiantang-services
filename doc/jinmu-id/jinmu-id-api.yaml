@@ -1,0 +1,3076 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/Leesingsing/jinmu_id_api/1.0.0
+info:
+  description: 金姆 ID WEB API
+  version: "1.0.0"
+  title: JINMU ID WEB API
+tags:
+  - name: version
+    description: 版本
+  - name: client
+    description: Web 客户端
+  - name: notification
+    description: 通知 
+  - name: sign in
+    description: 登录
+  - name: language
+    description: 语言
+  - name: user
+    description: 用户 
+  - name: preferences
+    description: 偏好
+  - name: subscription
+    description: 订阅
+  - name: sign up
+    description: 注册 
+  - name: device
+    description: 设备
+  - name: sign out  
+paths:
+  '/version':
+    get:
+      summary: 查看版本信息
+      operationId: getVersion
+      tags:
+        - version
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionResponse'
+              examples:
+                response:
+                  value:
+                    ok: true
+                    data:
+                      version: string
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/client/auth':
+    post:
+      tags:
+        - client
+      summary: 提交客户端授权
+      operationId: submitClientAuth
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientAuthResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Auth'
+        required: true
+  '/notification/sms':
+    post:
+      summary: 手机号获取信息  
+      operationId: sendSmsNotification
+      tags:
+        - notification
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SmsNotificationResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SmsNoticationBody'  
+
+  '/notification/email':
+    post:
+      summary: 邮件通知  
+      operationId: EmailNotification
+      tags:
+        - notification
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailNotificationResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailNotificationBody'
+              
+
+  '/user/{user_id}/notification_preferences':
+    post:
+      summary: 修改通知配置首选项  
+      operationId: modifyNotificationPreferences
+      tags:
+        - notification
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer   
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNotificationPreferencesResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetNotificationPreferencesBody'   
+
+    get:
+      summary: 获取通知配置首选项 
+      operationId: getNotificationRemindStatus
+      tags:
+        - notification
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer   
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetNotificationPreferencesBody'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+                  
+  '/signin':
+    post:
+      summary: 登录
+      operationId: signIn
+      tags:
+        - sign in
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string        
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignInResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignInBody'                 
+
+  '/wx/signin/qrcode':
+    post:
+      summary: 获取登录二维码
+      operationId: getSigninQRCode
+      tags:
+        - sign in
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string         
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignQRCodeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+                
+  '/user/{user_id}/language':
+    post:
+      summary: 设置显示语言  
+      operationId: setDisplayLanguage
+      tags:
+        - language
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string 
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer             
+      responses:  
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LanguageResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LanguageBody'
+    get:
+      summary: 得到显示语言  
+      operationId: getDisplayLanguage
+      tags:
+        - language
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string 
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer             
+      responses:  
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLanguageResponse'
+                
+  '/user/{user_id}/profile':
+    get:
+      tags:
+        - user
+      summary: 获取用户的个人档案
+      operationId: getUserProfile
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+    put:
+      tags:
+        - user
+      summary:  修改个人档案
+      operationId: modifyUserProfile
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 ID
+          required: true
+          schema:
+            type: integer
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfileResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        description: 客户档案
+        
+  '/user/{user_id}/safe_email':
+    post:
+      tags:
+        - user
+      summary: 用户设置安全邮箱
+      operationId: userSetEmail
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSetEmailResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafeEmailBody'
+  '/user/{user_id}/safe_email/delete':
+    post:
+      tags:
+        - user
+      summary: 用户解除设置安全邮箱
+      operationId: userUnsetEmail
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserUnsetEmailResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafeEmailBody'              
+  '/user/{user_id}/password':
+    post:
+      tags:
+        - user
+      summary: 用户设置密码 
+      operationId: userSetPassword
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSetPasswordResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetPasswordBody'
+    put:
+      tags:
+        - user
+      summary: 用户修改密码 
+      operationId: userModifyPassword
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserModifyPasswordResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyPasswordBody'
+  '/user/{user_id}/username':
+    post:
+      tags:
+        - user
+      summary: 用户设置用户名 
+      operationId: userSetUsername
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSetUsernameResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Username'
+
+  '/user/{user_id}/set_secure_question':
+    post:
+      summary: 用户首次设置密保问题
+      operationId: userSetSecureQuestion
+      tags:
+        - user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: 金姆ID
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSetQuestionsResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetSecureQuestionsRequest'
+
+
+  '/user/{user_id}/validate_question_before_modify':
+    post:
+      summary: 修改密保问题前验证原来的密保问题
+      operationId: validateSecureQuestionBeforeModifyQuestion
+      tags:
+        - user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: 金姆ID
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateSecureQuestionBeforeModifyQuestionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateQUestionBeforeModifyRequest'
+              
+  '/user/{user_id}/modify_secure_question':
+    post:
+      summary: 修改密保问题
+      operationId: modifySecureQuestion
+      tags:
+        - user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: 金姆ID
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifySecureQuestionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifySecureQuestionRequest'
+              
+  '/user/validate_username_or_phone':
+    post:
+      summary: 根据密保问题修改密码前验证手机号码或者用户名是否存在
+      operationId: ValidateUsernameOrPhone
+      tags:
+        - user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: X-Access-Token
+          in: header
+          description: 登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateUsernameOrPhoneRequestResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateUsernameOrPhoneRequest'
+              
+  '/user/validate_question_before_modify_password':
+    post:
+      summary: 根据密保问题修改密码前验证回答的密保问题是否正确
+      operationId: ValidateSecureQuestionBeforeModifyPassword
+      tags:
+        - user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateSecureQuestionBeforeModifyQuestionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateSecureQuestionBeforeModifyPasswordRequest'
+
+  '/user/modify_password_via_question':
+    post:
+      summary: 根据密保问题修改密码
+      operationId: ResetPasswordViaSecureQuestion
+      tags:
+        - user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateSecureQuestionBeforeModifyQuestionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordViaSecureQuestionRequest'
+
+  '/wx/user/{user_id}/connect/qrcode':
+    post:
+      summary: 获取绑定微信二维码     
+      operationId: userGetConnectWechatQrcode
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: 金姆ID
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string          
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserConnectWechatQrcodeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+    delete:
+      summary: 获取解绑微信二维码     
+      operationId: userGetDisconnectWechatQrcode
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: string
+          required: true
+          description: 金姆ID
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string          
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDisconnectWechatQrcodeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'         
+  '/user/{user_id}/preferences':
+    get:
+      tags:
+        - preferences
+      summary: 获取用户的首选项配置
+      operationId: getUserPreferences
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreferencesResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+                
+  '/user/{user_id}/device':
+    get:
+      tags:
+        - device
+      summary: 用户得到使用的device 
+      operationId: userGetDevice
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGetDeviceListResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+                
+  '/user/{user_id}/subscription':
+    get:
+      tags:
+        - subscription
+      summary: user 查询订阅
+      operationId: userGetSubscription
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGetSubscriptionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+                
+  '/signup/verification_number':
+    post:
+      summary: 使用验证号注册
+      operationId: signUpViaVerificationNumber
+      tags:
+        - sign up
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string        
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignUpVerificationNumberResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUpVerificationNumber'
+              
+  '/user/{user_id}/reset_password':
+    post:
+      tags:
+        - user
+      summary: 根据验证码重置密码 
+      operationId: userResetPasswordViaVC
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer    
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResetPasswordByVCResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordBody'          
+
+  '/user/{user_id}/secure_question_list':
+    get:
+      tags:
+        - user
+      summary: 获取所有密保问题列表
+      operationId: userGetSecureQuestionList
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGetSecureQuestionListResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/user/region':
+    post:
+      tags:    
+        - user
+      summary: 选择区域
+      operationId: userSelectRegion
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSelectRegionResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSelectRegionBody'
+  '/user/{user_id}/signin_phone':
+    post:
+      tags:
+        - user
+      summary: 设置登录手机号码
+      operationId: setSigninPhone
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer            
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetSigninPhoneResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SigninPhoneBody'
+    put:
+      tags:
+        - user
+      summary: 修改登录手机号码      
+      operationId: modifySigninPhone
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifySigninPhoneResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifySigninPhoneBody'
+              
+  '/validate_signin_phone':   
+    post:
+      tags:
+        - user
+      summary: 验证登录手机号码
+      operationId: validateSigninPhone
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token(修改手机号需要)
+          required: true
+          schema:
+            type: string    
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateSigninPhoneResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateSigninPhoneBody'
+
+  '/user/signout':
+    post:
+      tags:
+        - sign out 
+      summary: 注销用户登录
+      operationId: userSignOut
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignOutResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse' 
+  '/_debug/user/latest_verification_code':
+    post:
+      tags:
+        - user 
+      summary: 获取最新验证码
+      operationId: getLatestVerificationCode
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLatestVerificationCodeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse' 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetLatestVerificationCodeBody'
+
+  '/resource':
+    get:
+      tags:
+        - user 
+      summary: 获取资源列表 
+      operationId: getResList
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GerResourceListResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/user/validate_email_verification_code':
+    post:
+      tags:
+        - user 
+      summary: 验证邮箱验证码是否正确 
+      operationId: validateEmailVerificationCode
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidateEmailVerificationCodeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'     
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateEmailVerificationCodeBody'
+  '/user/validate_phone_verification_code':
+    post:
+      tags:
+        - user 
+      summary: 注册时验证手机验证码是否正确 
+      operationId: validatePhoneVerificationCode
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidatePhoneVerificationCodeResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'     
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidatePhoneVerificationCodeBody'
+
+
+  '/user/{user_id}/secure_question_to_modify':
+    get:
+      tags:
+        - user 
+      summary: 修改密保前获取已设置密保列表 
+      operationId: getSecureQuestionToModify
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer  
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSecureQuestionToModifyResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'    
+
+  '/user/find_username_by_email':
+    post:
+      tags:
+        - user
+      summary: 根据邮箱找回用户名
+      operationId: findUsernameBySecureEmail
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FindUsernameBySecureEmailResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafeEmailBody'   
+
+  '/user/secure_question':
+    post:
+      summary: 根据用户名或者手机号获取当前设置的密保问题
+      operationId: GetCurrentSecureQuestionList
+      tags:
+        - user
+      parameters:
+        - in: header
+          name: Authorization
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:     
+                $ref: '#/components/schemas/GetCurrentSecureQuestionListResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCurrentSecureQuestionListBody' 
+
+  '/user/{user_id}/modify_secure_email':
+    post:
+      tags:
+        - user
+      summary: 修改安全邮箱      
+      operationId: modifySecureEmail
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifySecureEmailResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifySecureEmailBody'
+
+  '/user/{user_id}/services':
+    get:
+      tags:
+        - user
+      summary: 得到正在使用的服务      
+      operationId: getUsingServices
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUsingServicesResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/user/{user_id}/sign_in_machines':
+    get:
+      tags:
+        - user
+      summary: 得到登录的机器      
+      operationId: getSignInMachines
+      parameters:
+        - in: header
+          name: Authorization
+          description: Client验证授权信息
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: X-Access-Token
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: user_id
+          description: 用户 id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSignInMachinesResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'                            
+              
+components:
+  schemas:
+    Region: &REGION
+      type: integer
+      enum:
+        - 0
+        - 1
+        - 2
+      description: |
+        区域:
+        - `0` - 中国大陆含港澳(默认值)
+        - `1` - 中国台湾
+        - `2` - 国外  
+    SubscriptionType: &SUBSCRIPTION_TYPE
+      type: string
+      enum:
+        - Customized
+        - Trial
+        - Golden
+        - Platinum
+        - Diamond
+        - Gift
+    Gender: &GENDER
+      type: integer
+      enum:
+        - 0
+        - 1
+      default: 0
+      description: |
+        性别:
+        - `0` - 男(默认值)
+        - `1` - 女
+    Language: &LANGUAGE
+      type: string
+      enum:
+        - zh-Hans
+        - zh-Hant
+        - en
+      default: zh-Hans
+    SignInMethod: &SIGN_IN_METHOD
+      type: string
+      enum:
+        - phone_mvc
+        - username_password
+        - phone_password
+      default: username_password
+      description: |
+        登录方式 :
+        - `phone_mvc` - 手机验证码登录  
+        - `username_password` - 用户名密码登录
+        - `phone_password` - 手机密码登录
+    VerificationType : &VERIFICATION_TYPE 
+      type: string
+      enum:
+        - phone
+        - email     
+    SmsNotificationType: &SMS_NOTIFICATION_TYPE
+      type: string
+      enum:
+        - sign_in
+        - sign_up
+        - reset_password
+        - set_phone
+        - modify_phone
+      default: sign_in
+      description: |
+        短信通知类型:
+        - `sign_in` - 登录短信验证   
+        - `sign_up` - 注册短信验证
+        - `reset_password` - 重置密码
+        - `set_phone` - 设置手机号码 
+        - `modify_phone` - 修改手机号
+    EmailNoticationType: &EMAIL_NOTIFICATION_TYPE
+      type: string
+      enum:
+        - set_secure_email
+        - unset_secure_email
+        - modify_secure_email
+        - find_username
+        - reset_password
+      description: |
+        邮件通知类型:
+        - `set_secure_email` - 设置安全邮箱   
+        - `unset_secure_email` - 解绑安全邮箱
+        - `modify_secure_email` - 修改安全邮箱 
+        - `find_username` - 找回用户名   
+        - `reset_password` - 找回/重置密码 
+    BasicResponse:
+      type: object
+      description: 标准Response消息体
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+          description: 请求是否成功
+        error:
+          $ref: '#/components/schemas/StandardErrorModel'
+    SimpleErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - error
+          properties:
+            error:
+              $ref: '#/components/schemas/StandardErrorModel'
+    VersionResponse:
+      description: Version 响应
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Version'
+    Version:
+      type: object
+      properties:
+        version:
+          type: string
+          description: 服务器版本信息
+    StandardErrorModel:
+      type: object
+      description: 标准错误消息
+      required:
+        - msg
+        - code
+      properties:
+        msg:
+          type: string
+          description: 错误信息
+          nullable: true
+        code:
+          type: integer
+          description: 错误码
+          nullable: true  
+    ClientAuthResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Authorization'
+    Authorization:
+      type: object
+      properties:
+        authorization:
+          type: string
+          description: Client验证授权信息
+        expired_at: 
+          type: string
+          format: date-time
+          description: 过期时间
+    Auth:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: 客户端ID
+        secret_key_hash:
+          type: string
+          description: 经过 SHA256 签名的 App 授权密钥
+        seed:
+          type: string
+          description: '随机种子。四个可读ASCII字符，例如：`a#B9`' 
+
+    SmsNotificationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SmsNotification'
+    SmsNotification:
+      type: object
+      properties:
+        serial_number:
+          type: string
+          description: 序列号
+        message:
+          type: string
+        acknowledged:
+          type: boolean
+   
+    SignInResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Client'
+    Client:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: 机构登录会话信息
+        user_id:
+          type: string
+          description: 用户ID
+        has_set_language:
+          type: string
+          description: 是否设置语言
+        has_set_region:
+          type: string
+          description: 是否设置区域
+        has_set_user_profile:
+          type: string
+          description: 是否设置用户信息
+        has_set_user_password:
+          type: string
+          description: 是否设置密码 
+        has_set_phone:
+          type: string
+          description: 是否设置手机号
+        is_profile_completed:
+          type: boolean
+          description: profile是否完整/完成初始化 0是完整 1是不完整
+        expired_at:
+          type: string
+          description: 到期时间
+          format: date-time
+    SignUp:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: 机构登录会话信息
+        user_id:
+          type: string
+          description: 用户ID      
+    SignQRCodeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/QRCode'
+    QRCode:
+      type: object
+      properties:
+        image_url:
+          type: string
+          description: 下载图片的url
+        raw_url:
+          type: string
+          description: 显示图片的url
+        expired_at:
+          type: string
+          description: 到期时间
+          format: date-time
+        scene_id:
+          type: integer
+          description: 场景ID 
+    LanguageBody:
+      type: object
+      properties:
+        language: *LANGUAGE
+    LanguageResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    NullAble:
+      type: object
+    UserPreferencesResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Preferences'
+    
+    SetNotificationPreferencesResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    
+    SetNotificationPreferencesBody:
+      type: object
+      properties:
+        notification_preferences:
+          $ref: '#/components/schemas/SetNotificationPreferences'
+          description: 通知及偏好
+      
+    SetNotificationPreferences:
+      type: object
+      properties:
+        phone_enabled:
+          type: boolean
+          description: 是否允许手机通知
+        wechat_enabled:
+          type: boolean
+          description: 是否允许微信通知
+        weibo_enabled:
+          type: boolean
+          description: 是否允许微博通知
+
+    EmailNotificationResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SuccessEmailNotificationResponse'
+              
+    SuccessEmailNotificationResponse:
+      allOf:
+        - type: object
+          properties:
+            serial_number:
+              type: string
+            acknowledged:
+              type: boolean
+              default: false
+              description: 发送邮件是否受理
+            message:
+              type: string
+              description: 发送邮件没有受理的原因
+    ReaseonOfNotSend:
+      type: array
+      $ref: '#/components/schemas/Reason'
+    Reason:
+      type:
+        string
+    Preferences:
+      type: object
+      properties:
+        enable_choose_status:
+          type: boolean
+          description: 是否开启选择状态
+        enable_comment:
+          type: boolean
+          description: 是否开启备注
+        enable_constitution_differentiation:
+          type: boolean
+          description: 是否开启中医体质判读
+        enable_heart_rate_chart:
+          type: boolean
+          description: 是否开启心率扇形图
+        enable_meridian_bar_graph:
+          type: boolean
+          description: 是否开启柱状图
+        enable_pulse_wave_chart:
+          type: boolean
+          description: 是否开启波形图
+        enable_syndrome_differentiation:
+          type: boolean
+          description: 是否开启中医脏腑判读
+        enable_warm_prompt:
+          type: boolean
+          description: 是否开启温馨提示
+        enable_western_medicine_analysis:
+          type: boolean
+          description: 是否开启西医判读
+        enable_health_trending:
+          type: boolean
+          description: 是否开启健康趋势
+        enable_location_notification:
+          type: boolean
+          description: 是否开启本地通知
+    UserProfileResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        user_profile:
+          $ref: '#/components/schemas/UserProfile'
+        has_set_password:
+          type: boolean
+          description: 是否设置密码
+        has_set_phone:
+          type: boolean
+          description: 是否设置手机号
+        has_set_email:
+          type: boolean
+          description: 是否设置邮箱
+        has_set_region:
+          type: boolean
+          description: 是否设置区域
+        has_set_username:
+          type: boolean
+          description: 是否设置用户名
+        has_set_secure_questions:
+          type: boolean
+          description: 是否设置安全问题
+        has_set_user_profile:
+          type: boolean
+          description: 是否设置用户详情
+        is_profile_completed: 
+          type: boolean
+          description: profile是否完整/完成初始化 0是完整 1是不完整           
+        signin_username:
+          type: string
+          description: 登录用户名                       
+        secure_email:
+          type: string
+          description: 安全邮箱(处理后的)
+        signin_phone:
+          type: string
+          description: 登录电话(处理后的)
+        region:
+          type: string
+          description: 区域
+        language:
+          type: string
+          description: 语言                                                                      
+    UserProfile:
+      type: object
+      properties:
+        nickname:
+          type: string
+          description: 客户昵称
+        birthday:
+          type: string
+          description: 生日 UTC 格式 （可选）
+          format: date-time
+        gender: *GENDER
+        height:
+          type: integer
+          description: 身高（必填）单位厘米
+          minimum: 0
+        weight:
+          type: integer
+          description: 体重（必填）单位厘米
+          minimum: 0
+    GetLanguageResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Language'
+
+    UserSetEmailResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'      
+    SetPasswordBody:
+      type: object
+      properties:
+        plain_password:
+          type: string
+          description: 明文密码
+    UserSetPasswordResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'      
+    Username:
+      type: object
+      properties:
+        username:
+          type: string
+          description: 用户名
+    UserSetUsernameResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    Mac:
+      type: string
+      description: MAC 地址
+    Sn:
+      type: string
+      description: SN              
+    DeviceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Device'              
+    Device:
+      type: object
+      properties:
+        mac:
+          $ref: '#/components/schemas/Mac'
+        sn:
+          $ref: '#/components/schemas/Sn'
+        model:
+          type: string
+        client_id:
+          type: string
+    UserGetDeviceListResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/DeviceList'
+              
+    SetSecureQuestionsRequest:
+      type: object
+      properties:
+        secure_questions:
+          $ref: '#/components/schemas/SecureQuestions'
+          description: 密保问题
+          
+    ValidateQUestionBeforeModifyRequest:
+      type: object
+      properties:
+        secure_questions:
+          $ref: '#/components/schemas/SecureQuestions'
+          description: 密保问题
+
+    SecureQuestions:
+      type: array
+      items:
+        type: object
+        properties:
+          question_key:
+            type: string
+            description: 问题的key  
+          answer:
+            type: string
+            description: 问题的答案
+    
+    UserSetQuestionsResponse:            
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/UserSetQuestionsResponseData'
+    UserSetQuestionsResponseData:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 设置结果
+        invalid_questions:
+          $ref: '#/components/schemas/InvalidQuestion'
+          description: 不符合设置规范的密保问题
+    
+    ValidateSecureQuestionBeforeModifyQuestionResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ValidateSecureQuestionBeforeModifyQuestionResponseData'
+    ValidateSecureQuestionBeforeModifyQuestionResponseData:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 验证结果
+        wrong_question_keys:
+          $ref: '#/components/schemas/WrongQuestion'
+          description: 回答错误的问题
+              
+    ModifySecureQuestionRequest:
+      properties:
+        old_secure_questions:
+          $ref: '#/components/schemas/SecureQuestions'
+          description: 旧的密保
+        new_secure_questions:
+          $ref: '#/components/schemas/SecureQuestions'
+          description: 新的密保
+    
+    ValidateUsernameOrPhoneRequest:
+      properties:
+        validation_type:
+          type: string
+          description: 验证方式
+          enum:
+           - phone 
+           - username
+        username:
+          type: string
+          description: 用户名，验证方式为用户名的时候不为空
+        phone:
+          type: string
+          description: 手机号，验证方式为手机号码的时候不为空
+        nation_code:
+          type: string
+          description: 区号，验证方式为手机号码的时候不为空
+    
+    ValidateSecureQuestionBeforeModifyPasswordRequest:
+      properties:
+        validation_type:
+          type: string
+          description: 验证方式
+          enum:
+           - phone 
+           - username
+        username:
+          type: string
+          description: 用户名，验证方式为用户名的时候不为空
+        phone:
+          type: string
+          description: 手机号，验证方式为手机号码的时候不为空
+        nation_code:
+          type: string
+          description: 区号，验证方式为手机号码的时候不为空
+        secure_questions:
+           $ref: '#/components/schemas/SecureQuestions'
+    
+    ResetPasswordViaSecureQuestionRequest:
+      properties:
+        validation_type:
+          type: string
+          description: 验证方式
+          enum:
+           - phone 
+           - username
+        username:
+          type: string
+          description: 用户名，验证方式为用户名的时候不为空
+        phone:
+          type: string
+          description: 手机号，验证方式为手机号码的时候不为空
+        nation_code:
+          type: string
+          description: 区号，验证方式为手机号码的时候不为空
+        password:
+          type: string
+          description: 新密码
+        secure_questions:
+           $ref: '#/components/schemas/SecureQuestions'
+      
+    
+    ValidateUsernameOrPhoneRequestResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/EmailInformation'
+    
+    EmailInformation:
+      type: object
+      properties:
+        secure_email:
+          type: string
+          description: 安全邮箱
+        has_set_secure_email:
+          type: boolean
+          description: 是否设置安全邮箱
+          
+    ModifySecureQuestionResponse:
+        allOf:
+          - $ref: '#/components/schemas/BasicResponse'
+          - type: object
+            required:
+              - data
+            properties:
+              data:
+                 $ref: '#/components/schemas/ModifySecureQuestionResponseData'
+    ModifySecureQuestionResponseData:
+      type: object
+      properties:
+        result:
+          type: boolean
+          description: 设置结果
+        wrong_secure_question_keys:
+          $ref: '#/components/schemas/WrongQuestion'
+          description: 回答错误的问题
+        reasons:
+          $ref: '#/components/schemas/InvalidQuestion'
+          description: 不符合设置规范的密保问题           
+              
+    InvalidQuestion:
+     type: array
+     items:
+      type: object
+      properties:
+        question_key:
+          type: string
+          description: 问题的key  
+        reasons:
+          $ref: '#/components/schemas/InvalidDescription'
+    
+    WrongQuestion:
+      type:
+        array
+      items:
+        type: string
+      description: 回答错误的问题的question_key
+            
+    InvalidDescription:
+      type: array
+      items: 
+        type: string
+      description: 用户违反的规则
+
+    UserGetSubscriptionResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SubscriptionInfo'
+    SubscriptionInfo:
+      type: object
+      properties:
+        created_at:
+          type: string
+          description: '测量日期 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+        total_user_count:
+          type: integer
+          description: 已经添加的用户数目
+        max_user_limits:
+          type: integer
+          description: 最大用户数目
+        subscription_type: *SUBSCRIPTION_TYPE
+        expired_at:
+          type: string
+          description: 到期时间
+          format: date-time
+        active:
+          type: boolean
+          description: 是否激活
+        expiration_status:  
+          type: integer
+          description: |
+            过期状态
+            - `0` 过期
+            - `1` 快要过期
+            - `2` 没有过期
+    SignUpVerificationNumber:
+      type: object
+      properties:
+        mvc:
+          type: string
+        phone:
+          type: string
+        verification_number:
+          type: string
+          description: 验证号
+        nation_code:
+          type: string
+          description: 国家代码 
+        plain_password:
+          type: string
+          description: 明文密码
+        user_profile:
+          $ref: '#/components/schemas/UserProfile'
+        language: *LANGUAGE
+
+    SignUpVerificationNumberResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SignUp'       
+
+    UserUnsetEmailResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    UserModifyPasswordResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    UserConnectWechatQrcodeResponse:              
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/QRCode'
+    UserDisconnectWechatQrcodeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/QRCode'
+    FindUsernameBySecureEmailResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/Username'
+
+    ResetPasswordBody:
+      type: object
+      properties:
+        plain_password:
+          type: string
+        verification_number:
+          type: string
+          description: 验证码
+        verification_type: *VERIFICATION_TYPE 
+
+    UserResetPasswordByVCResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+
+    UserGetSecureQuestionListResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SecureQuestionsLists'
+
+    GetSecureQuestionToModifyResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SecureQuestionsLists'
+    
+    SecureQuestionsLists:
+      type: array
+      items:
+        $ref: '#/components/schemas/SecureQuestionList'
+
+    VerificationNumber:
+      type: object
+      properties:
+        verification_number: 
+          type: string 
+          description: 验证号
+        user_id:
+          type: integer
+          description: 用户ID 
+    SecureQuestionList:
+      type: object
+      properties:
+        key:
+          type: string
+          description: 问题的Key
+        question:
+          type: string
+          description: 问题
+
+    SmsNoticationBody:
+      type: object
+      properties:
+        sms_notification_type: *SMS_NOTIFICATION_TYPE
+        phone:
+          type: string
+        language: *LANGUAGE
+        nation_code:
+          type: string
+        user_id:
+          type: integer
+        send_to_new_if_modify:
+          type: boolean
+          default: false
+          description: 是否是修改手机号时向新手机发送短信  
+          
+    EmailNotificationBody:
+      type: object
+      properties:
+        type: *EMAIL_NOTIFICATION_TYPE
+        email: 
+          type: string
+        language: *LANGUAGE
+        user_id:
+          type: integer
+        send_to_new_if_modify:
+          type: boolean
+          default: false
+          description: 是否是修改安全邮箱时向新邮箱发送邮件
+
+    SignInBody:
+      type: object
+      properties:
+        sign_in_method: *SIGN_IN_METHOD
+        username:
+          type: string
+          description: 用户名
+          nullable: true   
+        phone:
+          type: string
+          description: 手机号
+          nullable: true
+        mvc:
+          type: string
+          description: 验证码
+          nullable: true
+        hashed_password:
+          type: string
+          description: 密码 SHA256 encoded
+          nullable: true
+        seed:
+          type: string
+          description: '随机种子。四个可读ASCII字符，例如：`a#B9`'
+          nullable: true
+        serial_number:
+          type: string
+          description: 序列号
+          nullable: true
+        nation_code:
+          type: string
+          description: 国家代码 
+          nullable: true
+        sign_in_machine:
+          type: string
+          description: 登录设备 
+          nullable: true
+
+    SafeEmailBody:
+      type: object
+      properties:
+        verification_code:
+          type: string
+          description: 验证码
+        serial_number:
+          type:
+            string
+          description:
+            流水号
+        email:
+          type:
+            string
+          description:
+            邮箱
+    ModifyPasswordBody:
+      type: object
+      properties:
+        old_hashed_password: 
+          type: string
+        new_plain_password:
+          type: string
+        seed:
+          type: string
+    SignOutResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    GetCurrentSecureQuestionListResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SecureQuestionsLists'
+    GetCurrentSecureQuestionListBody:
+      properties:
+        validation_type:
+          type: string
+          description: 获取方式
+          enum:
+           - phone 
+           - username
+        username:
+          type: string
+        phone:
+          type: string
+        nation_code:
+          type: string
+          
+    UserSelectRegionResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'      
+    GetLatestVerificationCodeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/LatestVerificationCodes' 
+    LatestVerificationCodes:
+      type: array
+      items: 
+        $ref: '#/components/schemas/LatestVerificationCode'  
+
+    LatestVerificationCode:
+      type: object
+      properties:
+        email:
+          type: string
+          description: 用户名，发送途径为邮箱的时候不为空
+        phone:
+          type: string
+          description: 手机号，发送途径为手机号码的时候不为空
+        nation_code:
+          type: string
+          description: 手机号，发送途径为手机号码的时候不为空
+        verification_code:
+          type: string 
+          description: 验证码
+
+    GetLatestVerificationCodeBody:
+      type: object
+      properties:
+        send_information:
+          $ref: '#/components/schemas/GetLatestVerificationCodes'
+    GetLatestVerificationCodes:
+      type: array
+      items:
+        $ref: '#/components/schemas/SingleLatestVerificationCode'
+    SingleLatestVerificationCode:
+      type: object
+      properties:
+        send_via:
+          type: string
+          description: 发送途径
+          enum:
+           - phone 
+           - email
+        email:
+          type: string
+          description: 用户名，发送途径为邮箱的时候不为空
+        phone:
+          type: string
+          description: 手机号，发送途径为手机号码的时候不为空
+        nation_code:
+          type: string
+          description: 手机号，发送途径为手机号码的时候不为空
+
+    UserSelectRegionBody:
+      type: object
+      properties:
+        user_id:
+          type: integer
+        region: *REGION
+    SetSigninPhoneResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    SigninPhoneBody:
+      type: object
+      properties:
+        phone:
+          type: string
+        nation_code:
+          type: string
+        mvc:
+          type: string
+        serial_number:
+          type: string
+          
+    ModifySigninPhoneBody:
+      type: object
+      properties:
+        phone:
+          type: string
+        nation_code:
+          type: string
+        mvc:
+          type: string
+        serial_number:
+          type: string
+        old_phone:
+          type: string
+        old_nation_code:
+          type: string  
+        verification_number:
+          type: string
+          
+    ModifySecureEmailBody:
+      type: object
+      properties:
+        new_email:
+          type: string
+          description: 新的邮箱
+        new_verification_code:
+          type: string
+          description: 验证码
+        new_serial_number:
+          type: string
+          description: 序列号
+        old_email:
+          type: string
+          description: 旧的邮箱
+        old_verification_number:
+          type: string
+          description: 旧的邮箱验证号
+          
+    ModifySigninPhoneResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'  
+              
+    ModifySecureEmailResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'  
+          
+    ValidateSigninPhoneBody:
+      type: object
+      properties:
+        phone:
+          type: string
+        nation_code:
+          type: string
+        mvc:
+          type: string
+        serial_number:
+          type: string
+        verification_type:
+          type: string
+          enum:
+            - reset_password
+            - modify_phone  
+        
+    ValidateEmailVerificationCodeBody:
+      type: object
+      properties:
+        email:
+          type: string
+        verification_code:
+          type: string
+        serial_number:
+          type: string
+        verification_type:
+          type: string
+          enum:
+            - reset_password
+            - modify_secure_email
+
+    ValidatePhoneVerificationCodeBody:
+      type: object
+      properties:
+        phone:
+          type: string
+        nation_code:
+          type: string
+        mvc:
+          type: string
+        serial_number:
+          type: string
+            
+    ValidateSigninPhoneResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/VerificationNumber'
+              
+    ValidateEmailVerificationCodeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/VerificationNumber'
+              
+    ValidatePhoneVerificationCodeResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/PhoneVerificationNumber'      
+    GerResourceListResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/ResourceList'
+    Languages:
+      type: array
+      items:
+        type: string
+    Regions:
+      type: array
+      items:
+        type: string      
+    ResourceList:
+      type: object
+      properties:
+        languages:
+          $ref: '#/components/schemas/Languages'
+        regions:
+          $ref: '#/components/schemas/Regions'
+    GetUsingServicesResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/JinmuServiceList'
+    JinmuServiceList:
+      type: array
+      items:
+        $ref: '#/components/schemas/JinmuService'
+    JinmuService:
+      type: object
+      properties:
+        service:
+          type: string
+          description: 服务
+        service_descrption:
+          type: string            
+          description: 服务描述
+    GetSignInMachinesResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/SignInMachineList'
+    SignInMachineList:
+      type: array
+      items:
+        $ref: '#/components/schemas/SignInMachine'
+    SignInMachine:
+      type: object
+      properties:
+        sign_in_machine:
+          type: string
+          description: 登录机器
+        sign_in_time:
+          type: string
+          description: '登录时间 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+    PhoneVerificationNumber:
+      type: object
+      properties:
+        verification_number: 
+          type: string 
+          description: 验证号

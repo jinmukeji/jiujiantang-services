@@ -1,0 +1,160 @@
+# 登云服务端Application
+- client_id: "dengyun-10001"
+  # 允许通过的ip
+  allowed_ips:
+    - "0.0.0.0/0"
+  allowed_ip_countries:
+  allowed_mac_zones:
+    - "CN-X"
+  allowed_macs:
+  # 允许通过的mac地址
+  ignore_ip_checking_macs:
+
+# 康美服务器Application
+- client_id: "kangmei-10001"
+  allowed_ips:
+    - "0.0.0.0/0"
+  allowed_ip_countries:
+  allowed_mac_zones:
+    - "CN-X"
+  allowed_macs:
+  ignore_ip_checking_macs:
+
+# 金姆健康APP
+- client_id: "jm-10001"
+  # 允许通过的ip
+  allowed_ips:
+  allowed_ip_countries:
+  #东盟十三国
+    - "ID" # 印度尼西亚
+    - "MY" # 马来西亚
+    - "BN" # 文莱
+    - "KH" # 柬埔寨
+    - "LA" # 老挝
+    - "MM" # 缅甸
+    - "PH" # 菲律宾
+    - "SG" # 新加坡
+    - "TH" # 泰国
+    - "VN" # 越南
+    - "CN" # 中国
+    - "JP" # 日本
+    - "KR" # 韩国
+    - "HK" # 香港特别行政区
+    - "MO" # 澳门
+  allowed_mac_zones:
+    - "CN"
+  allowed_macs:
+    # 美国的MAC
+    - "38D269E87AC9"
+    # 英国的MAC
+    - "38D269ED717B"
+  ignore_ip_checking_macs:
+
+# 金姆健康一体机
+- client_id: "jm-10002"
+  allowed_ips:
+  allowed_ip_countries:
+    - "CN"
+  allowed_mac_zones:
+    - "CN"
+  allowed_macs:
+  ignore_ip_checking_macs:
+
+# 金姆健康APP Android工程测试工具
+- client_id: "jm-10003"
+  allowed_ips:
+    - "0.0.0.0/0"
+  # 工程工具不限制
+  allowed_ip_countries:
+  allowed_mac_zones:
+    - "CN"
+  allowed_macs:
+  ignore_ip_checking_macs:
+
+# 金姆健康APP
+- client_id: "jm-10004"
+  allowed_ips:
+  allowed_ip_countries:
+    - "ID"
+    - "MY"
+    - "BN"
+    - "KH"
+    - "LA"
+    - "MM"
+    - "PH"
+    - "SG"
+    - "TH"
+    - "VN"
+    - "CN"
+    - "JP"
+    - "KR"
+    - "HK"
+    - "MO"
+  allowed_mac_zones:
+    - "CN"
+  allowed_macs:
+    # 美国的MAC
+    - "38D269E87AC9"
+    # 英国的MAC
+    - "38D269ED717B"
+  ignore_ip_checking_macs:
+    - "BBC123456789"
+
+# 金姆健康APP
+- client_id: "jm-10005"
+  allowed_ips:
+  allowed_ip_countries:
+    - "ID"
+    - "MY"
+    - "BN"
+    - "KH"
+    - "LA"
+    - "MM"
+    - "PH"
+    - "SG"
+    - "TH"
+    - "VN"
+    - "CN"
+    - "JP"
+    - "KR"
+    - "HK"
+    - "MO"
+  allowed_mac_zones:
+    - "CN"
+  allowed_macs:
+    # 美国的MAC
+    - "38D269E87AC9"
+    # 英国的MAC
+    - "38D269ED717B"
+  ignore_ip_checking_macs:
+    
+
+# 魔爱服务端Application
+- client_id: "moai-10001"
+  allowed_ips:
+    - "0.0.0.0/0"
+  allowed_ip_countries:
+  allowed_mac_zones:
+    - "CN-X"
+  allowed_macs:
+  ignore_ip_checking_macs:
+
+# 弘经堂服务端Application
+- client_id: "hongjingtang-10001"
+  allowed_ips:
+    - "0.0.0.0/0"
+  allowed_ip_countries:
+  allowed_mac_zones:
+    - "CN-X"
+  allowed_macs:
+  ignore_ip_checking_macs:
+
+# seamlessiot服务端Application
+- client_id: "seamlessiot-10001"
+  allowed_ips:
+    - "0.0.0.0/0"
+  allowed_ip_countries:
+  allowed_mac_zones:
+    - "CN-X"
+  allowed_macs:
+  ignore_ip_checking_macs:

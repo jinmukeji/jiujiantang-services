@@ -1,0 +1,12 @@
+{
+    "Sort": [
+        "path",
+        "line",
+        "column",
+        "linter"
+    ],
+    "Aggregate": true,
+    "Skip": [
+        "proto"
+    ]
+}

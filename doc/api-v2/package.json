@@ -1,0 +1,23 @@
+{
+  "name": "api-doc",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "builtin-status-codes": "^3.0.0",
+    "inherits": "^2.0.3",
+    "readable-stream": "^3.4.0",
+    "to-arraybuffer": "^1.0.1",
+    "xtend": "^4.0.1"
+  },
+  "devDependencies": {
+    "redoc": "^2.0.0-rc.8-1",
+    "redoc-cli": "^0.6.4",
+    "styled-components": "^4.0.3"
+  },
+  "scripts": {
+    "doc": "redoc-cli serve -w api-v2-oas3.yaml",
+    "val": "openapi-generator validate -i api-v2-oas3.yaml --recommend",
+    "sdk": "./generate-sdk.sh"
+  },
+  "author": ""
+}

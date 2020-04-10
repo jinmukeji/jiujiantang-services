@@ -1,0 +1,250 @@
+{
+	"info": {
+		"name": "菜单",
+		"_postman_id": "7a170860-c2fb-cad1-3c43-80c4a7ddb2d2",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "获取token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "75302ef7-df2d-4030-af7b-e63f89e35564",
+						"type": "text/javascript",
+						"exec": [
+							"var resp = JSON.parse(responseBody);",
+							"var access_token = resp.access_token;",
+							"",
+							"postman.setEnvironmentVariable(\"ACCESS_TOKEN\", access_token);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={{APPID}}&secret={{APPSECRET}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weixin",
+						"qq",
+						"com"
+					],
+					"path": [
+						"cgi-bin",
+						"token"
+					],
+					"query": [
+						{
+							"key": "grant_type",
+							"value": "client_credential",
+							"equals": true
+						},
+						{
+							"key": "appid",
+							"value": "{{APPID}}",
+							"equals": true
+						},
+						{
+							"key": "secret",
+							"value": "{{APPSECRET}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "获取菜单",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://api.weixin.qq.com/cgi-bin/menu/get?access_token={{ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weixin",
+						"qq",
+						"com"
+					],
+					"path": [
+						"cgi-bin",
+						"menu",
+						"get"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "生成菜单",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n     \"button\":[\n      {\n           \"name\":\"关于金姆\",\n           \"sub_button\":[\n           {    \n               \"type\":\"view\",\n               \"name\":\"金姆知识问答\",\n               \"url\":\"https://ks.wjx.top/jq/25951067.aspx\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"王唯工\",\n               \"url\":\"http://www.jinmuhealth.com/aboutJinmu/brandStory.html\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"活动安排\",\n               \"url\":\"http://www.jinmuhealth.com/news-list/exhibition-list.html\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"公司新闻\",\n               \"url\":\"http://www.jinmuhealth.com/news-list/news-list.html\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"公司简介\",\n               \"url\":\"http://www.jinmuhealth.com/aboutJinmu/introduction.html\"\n            }]\n       },\n       {\n           \"name\":\"关于产品\",\n           \"sub_button\":[\n           {    \n               \"type\":\"view\",\n               \"name\":\"软件下载\",\n               \"url\":\"http://a.app.qq.com/o/simple.jsp?pkgname=com.jinmu.healthdlb\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"技术原理\",\n               \"url\":\"http://www.jinmuhealth.com/aboutProduct/technology.html\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"活动安排\",\n               \"url\":\"http://www.jinmuhealth.com/news-list/exhibition-list.html\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"理论\",\n               \"url\":\"http://www.jinmuhealth.com/news-list/news-list.html\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"公司简介\",\n               \"url\":\"http://www.jinmuhealth.com/aboutProduct/theory.html\"\n            }]\n       },\n       {\n           \"name\":\"产品订购\",\n           \"sub_button\":[\n           {    \n               \"type\":\"view_limited\",\n               \"name\":\"金姆淘宝\",\n               \"media_id\":\"b-Q91H-n3cmzsLT_ZpGZZNfeYR6H5nkQ3kwmsl91NYw\"\n        \n            },\n            {    \n               \"type\":\"click\",\n               \"name\":\"客服微信\",\n               \"key\":\"客服微信号：wutao706816774\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"常见问题\",\n               \"url\":\"http://www.jinmuhealth.com/support/faq.htmll\"\n            },\n            {    \n               \"type\":\"click\",\n               \"name\":\"商务合作\",\n               \"key\":\"商务合作：0519-81180075-816\"\n            },\n            {    \n               \"type\":\"view\",\n               \"name\":\"金姆脉诊仪\",\n               \"url\":\"http://mp.weixin.qq.com/bizmall/mallshelf?id=&t=mall/list&biz=MzI5OTYwNzAyOA==&shelf_id=1&showwxpaytitle=1#wechat_redirect\"\n            }]\n       }\n       \n       ]\n }"
+				},
+				"url": {
+					"raw": "https://api.weixin.qq.com/cgi-bin/menu/create?access_token={{ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weixin",
+						"qq",
+						"com"
+					],
+					"path": [
+						"cgi-bin",
+						"menu",
+						"create"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "删除菜单",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token={{ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weixin",
+						"qq",
+						"com"
+					],
+					"path": [
+						"cgi-bin",
+						"menu",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "上传素材",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n \"articles\":[{\n \"title\": 111,\n \"thumb_media_id\": \"b-Q91H-n3cmzsLT_ZpGZZDTaPyRoTwS2UfYslNo9tSw\",\n \"author\": \"liu\",\n \"show_cover_pic\": true,\n \"content\": \"shshsshhshshshhsh\",\n \"content_source_url\": \"http:\\/\\/mmbiz.qpic.cn\\/mmbiz_jpg\\/dHU3UTCHG6hw7MkPrXwsfB8Zzrsd8Npva53tRRmH2WichuyRaOZqWYohiauuZ8sXXHfDTCibuzBUms41Ju2DdHyHQ\\/0?wx_fmt=jpeg\"}]\n}"
+				},
+				"url": {
+					"raw": "https://api.weixin.qq.com/cgi-bin/material/add_news?access_token={{ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weixin",
+						"qq",
+						"com"
+					],
+					"path": [
+						"cgi-bin",
+						"material",
+						"add_news"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "获取素材",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\":\"news\",\n    \"offset\":0,\n    \"count\":1200\n}"
+				},
+				"url": {
+					"raw": "https://api.weixin.qq.com/cgi-bin/material/batchget_material?access_token={{ACCESS_TOKEN}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"weixin",
+						"qq",
+						"com"
+					],
+					"path": [
+						"cgi-bin",
+						"material",
+						"batchget_material"
+					],
+					"query": [
+						{
+							"key": "access_token",
+							"value": "{{ACCESS_TOKEN}}",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

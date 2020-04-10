@@ -1,0 +1,46 @@
+{
+    "ok": true,
+    "data": {
+        "cid": 123456,
+        "analysis_session": "xUJ4RqL27L79+THM3RQA=7f#$+o?3%m+",
+        "analysis_done": false,
+        "questionnaire": {
+            "title": "Q123456",
+            "questions": [{
+                "key": "Q.12.45.A",
+                "title": "问题1",
+                "description": "问题1 DDDDDDDD",
+                "tip": "XXXXXX",
+                "type": "multiple_choice",
+                "choices": [{
+                        "key": "Q.12.35.A-C1",
+                        "name": "A",
+                        "value": "A"
+                    },
+                    {
+                        "key": "Q.12.35.A-C2",
+                        "name": "B",
+                        "value": "B",
+                        "conflict_keys": ["Q.12.35.A-C1"]
+                    },
+                    {
+                        "key": "Q.12.35.A-C3",
+                        "name": "C",
+                        "value": "C"
+                    }
+                ],
+                "default_keys": [
+                    "A"
+                ]
+            }],
+            "answers": [{
+                "question_key": "Q.12.45.A",
+                "values": [
+                    "A", "C"
+                ]
+            }],
+            "create_at": "2018-07-04T11:13:57Z"
+        },
+        "analysis_report": null
+    }
+}

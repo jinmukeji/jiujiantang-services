@@ -1,0 +1,128 @@
+{
+	"info": {
+		"name": "JinmuHealth RPC Sidecar",
+		"_postman_id": "761db11a-cf21-a979-64cb-972c3798c8f0",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Registry - Get Services",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "{{sidecar-entrypoint}}/registry",
+					"host": [
+						"{{sidecar-entrypoint}}"
+					],
+					"path": [
+						"registry"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RPC - Jinmuhealth.GetVersion",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-My-Meta",
+						"value": "My metadata value"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "{{sidecar-entrypoint}}/{{service-name}}/Jinmuhealth/GetVersion",
+					"host": [
+						"{{sidecar-entrypoint}}"
+					],
+					"path": [
+						"{{service-name}}",
+						"Jinmuhealth",
+						"GetVersion"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RPC - Jinmuhealth.Echo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-My-Meta",
+						"value": "My metadata value"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"content\": \"Hello\"\n}"
+				},
+				"url": {
+					"raw": "{{sidecar-entrypoint}}/{{service-name}}/Jinmuhealth/Echo",
+					"host": [
+						"{{sidecar-entrypoint}}"
+					],
+					"path": [
+						"{{service-name}}",
+						"Jinmuhealth",
+						"Echo"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "RPC - Jinmuhealth.AccountLogin",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-My-Meta",
+						"value": "My metadata value"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"account_id\": 1,\n\t\"password\": \"release1\"\n}"
+				},
+				"url": {
+					"raw": "{{sidecar-entrypoint}}/{{service-name}}/Jinmuhealth/AccountLogin",
+					"host": [
+						"{{sidecar-entrypoint}}"
+					],
+					"path": [
+						"{{service-name}}",
+						"Jinmuhealth",
+						"AccountLogin"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

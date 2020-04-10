@@ -1,0 +1,828 @@
+openapi: 3.0.0
+info:
+  description: 金姆健康一体机API v1.0
+  version: "1.0.0-oas3"
+  title: JinmuWechat-API
+  termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
+  contact:
+    email: support@jinmuhealth.com
+tags:
+  - name: measurement
+    description: 测量
+paths:
+  '/wx/api/measurements':
+    get:
+      tags:
+        - measurement
+      summary: 查看测量历史记录
+      description: 测量历史记录.最新的结果会靠前
+      operationId: ownerQueryMeasurementList
+      parameters:
+        - name: open_id
+          in: query
+          description: 微信的OpenID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeasurementDataWithAnalysisResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/wx/api/measurements/{record_id}/analyze':
+    get:
+      tags:
+        - measurement
+      summary: 获取智能分析
+      operationId: ownerGetMeasurementAnalysis
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: Client验证授权信息
+          schema:
+            type: string
+        - name: record_id
+          in: path
+          required: true
+          description: 测量流水号
+          schema:
+            type: integer
+        - name: X-Access-Token
+          in: header
+          description: 用户登录 token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAnalysisResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+  '/wx/api/measurements/{record_id}/remark':
+    put:
+      tags:
+        - measurement
+      summary: 修改测量备注
+      description: 修改测量备注
+      operationId: ownerModifyMeasurementRemark
+      parameters:
+        - name: record_id
+          in: path
+          description: 测量记录ID
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemarkResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Remark'
+        required: true
+  '/wx/api/measurements/token/{token}/analyze':
+    get:
+      tags:
+        - measurement
+      summary: 得到分析报告
+      description: 得到分析报告
+      operationId: ownerGetAnalyzeResultByToken
+      parameters:
+        - name: token
+          in: path
+          description: 分享的token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAnalysisResponse'
+        default:
+          description: 失败响应
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimpleErrorResponse'
+servers:
+  - url: 'http://h5.jinmuhealth.com'
+    description: Production
+components:
+  schemas:
+    Gender:
+      type: integer
+      enum:
+        - 0
+        - 1
+      default: 0
+      description: |
+        性别:
+        - `0` - 男(默认值)
+        - `1` - 女  
+    Finger:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+      default: 4
+      description: |
+        手指:
+        - `1` - 左小姆
+        - `2` - 左无名指
+        - `3` - 左中指
+        - `4` - 左食指(默认值)
+        - `5` - 左大拇
+        - `6` - 右大拇
+        - `7` - 右食指
+        - `8` - 右中指
+        - `9` - 右无名指
+        - `10` - 右小拇
+    AnalysisReportContentTags:
+      type: array
+      description: 分析报告的选项标签
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    ChannelsAndCollateralsStrength:
+      type: array
+      description: 经络强度
+      items:
+        $ref: '#/components/schemas/AnalysisReportCCStrengthItem'
+    AnalysisReportCCStrengthItem:
+      type: object
+      description: 经络强度 Item
+      properties:
+        key:
+          type: string
+          description: 解读项的标识 Key
+        label:
+          type: array
+          description: 经络强度标签
+          items:
+            $ref: '#/components/schemas/CCStrengthLabel'
+        disabled:
+          type: boolean
+          description: 是否已经弃用。
+        remark:
+          type: string
+          description: 备注
+    CCStrengthLabel:
+      type: object
+      description: 经络强度分析的项目的标签
+      properties:
+        label:
+          type: string
+          description: 文本标签，可以是HTML
+        CC:
+          type: string
+          description: 经络标识
+    BabyTips:
+      type: array
+      description: 宝宝提示
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    ConstitutionDifferentiationExplainNotices:
+      type: array
+      description: 体质判断注意事项
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    ChannelsAndCollateralsExplainNotices:
+      type: array
+      description: 经络检测注意事项
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    MeasurementTips:
+      type: array
+      description: 测量提示
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    DictionaryEntries:
+      type: array
+      description: 词条描述
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    FactorExplains:
+      type: array
+      description: 因子解读
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportContentLead:
+      type: array
+      description: 分析导语内容
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportContentTipsForWoman:
+      type: array
+      description: 分析报告的女性提示
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportCCExplains:
+      type: array
+      description: 分析报告的经络解读
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportCDExplains:
+      type: array
+      description: 分析报告的体质判断
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportSDExplains:
+      type: array
+      description: 分析报告的脏腑判断
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    HealthDescriptions:
+      type: array
+      description: 健康描述
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    UterineHealthIndexes:
+      type: array
+      description: 分析报告的子宫健康指数（ZG）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    UterusAttentionPrompts:
+      type: array
+      description: 分析报告的子宫注意提示（ZGTS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    UterineHealthDescriptions:
+      type: array
+      description: 分析报告的子宫健康描述（ZGMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    MenstrualHealthValues:
+      type: array
+      description: 分析报告的月经健康数值（YJ）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    MenstrualHealthDescriptions:
+      type: array
+      description: 分析报告的月经健康描述（YJMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    GynecologicalInflammations:
+      type: array
+      description: 分析报告的妇科炎症（FK）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    GynecologicalInflammationDescriptions:
+      type: array
+      description: 分析报告的妇科炎症描述（FKMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastHealth:
+      type: array
+      description: 分析报告的乳腺健康（RX）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastHealthDescriptions:
+      type: array
+      description: 分析报告的乳腺健康描述（RXMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    EmotionalHealthIndexes:
+      type: array
+      description: 分析报告的情绪健康指数（QX）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    EmotionalHealthDescriptions:
+      type: array
+      description: 分析报告的情绪健康描述（QXMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    FacialSkins:
+      type: array
+      description: 分析报告的面部美肤（MB）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    FacialSkinDescriptions:
+      type: array
+      description: 分析报告的面部美肤描述（MBMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    ReproductiveAgeConsiderations:
+      type: array
+      description: 分析报告的生殖年龄注意事项（SZTS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    HormoneLevels:
+      type: array
+      description: 分析报告的激素水平（JS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastCancerOvarianCancers:
+      type: array
+      description: 分析报告的乳腺癌卵巢癌（BC）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    BreastCancerOvarianCancerDescriptions:
+      type: array
+      description: 分析报告的乳腺癌卵巢癌描述（BCMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    LymphaticHealth:
+      type: array
+      description: 分析报告的淋巴健康（LB）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    LymphaticHealthDescriptions:
+      type: array
+      description: 分析报告的淋巴健康描述（LBMS）
+      items:
+        $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+    AnalysisReportGeneralExplainItem:
+      type: object
+      description: 标准解读 Item
+      properties:
+        key:
+          type: string
+          description: 解读项的标识 Key
+        label:
+          type: string
+          description: 解读项的文本标签。支持HTML。
+        content:
+          type: string
+          description: 解读项的正文内容。支持HTML。
+    BasicResponse:
+      type: object
+      description: 标准Response消息体
+      required:
+        - ok
+      properties:
+        ok:
+          type: boolean
+          description: 请求是否成功
+        error:
+          $ref: '#/components/schemas/StandardErrorModel'
+    SimpleErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - error
+          properties:
+            error:
+              $ref: '#/components/schemas/StandardErrorModel'
+    StandardErrorModel:
+      type: object
+      description: 标准错误消息
+      required:
+        - msg
+        - code
+      properties:
+        msg:
+          type: string
+          description: 错误信息
+          nullable: true
+        code:
+          type: integer
+          description: 错误码
+          nullable: true
+    MeasurementDataWithAnalysisResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/MeasurementHistoryRecord'
+    MeasurementHistoryRecord:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+        cid:
+          type: integer
+          description: 上下文ID
+        transaction_no:
+          type: string
+          description: 测量流水号
+        record_id:
+          type: integer
+          description: 测量记录ID
+        c0:
+          type: integer
+          description: '心包经 位于区间[-10,10]内'
+        c1:
+          type: integer
+          description: '肝经 位于区间[-10,10]内'
+        c2:
+          type: integer
+          description: '肾经 位于区间[-10,10]内'
+        c3:
+          type: integer
+          description: '脾经 位于区间[-10,10]内'
+        c4:
+          type: integer
+          description: '肺经 位于区间[-10,10]内'
+        c5:
+          type: integer
+          description: '胃经 位于区间[-10,10]内'
+        c6:
+          type: integer
+          description: '胆经 位于区间[-10,10]内'
+        c7:
+          type: integer
+          description: '膀胱经 位于区间[-10,10]内'
+        app_heart_rate:
+          type: integer
+          description: App测的心率
+        remark:
+          type: string
+          description: 备注
+        created_at:
+          type: string
+          description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+        heart_rate:
+          type: integer
+          description: 算法服务器测的心率
+        finger:
+          $ref: '#/components/schemas/Finger'
+        record_type:
+          type: integer
+          description: 5是1.5版本，7是1.7以上版本(包括1.7)
+        tags:
+          type: array
+          description: 分析报告的选项标签
+          items:
+            $ref: '#/components/schemas/AnalysisReportGeneralExplainItem'
+        has_paid:
+          type: boolean
+          description: 是否完成支付
+        show_full_report:
+          type: boolean
+          description: 是否显示完整报告
+    DisplayOptions:
+      type: object
+      properties:
+        display_navbar:
+          type: boolean
+          description: 是否显示导航
+        display_tags:
+          type: boolean
+          description: 是否显示健康状态
+        display_partial_data:
+          type: boolean
+          description: 是否显示波形图数据
+        display_user_profile:
+          type: boolean
+          description: 是否显示用户信息
+        display_heart_rate:
+          type: boolean
+          description: 是否显示心率
+        display_cc_bar_chart:
+          type: boolean
+          description: 是否显示经络柱状图
+        display_cc_explain:
+          type: boolean
+          description: 是否显示脉诊数据
+        display_cd_explain:
+          type: boolean
+          description: 是否显示体质辩证
+        display_sd_explain:
+          type: boolean
+          description: 是否显示脏腑辩证
+        display_f0:
+          type: boolean
+          description: 是否显示阴指数
+        display_f1:
+          type: boolean
+          description: 是否显示阳指数
+        display_f2:
+          type: boolean
+          description: 是否显示湿气指数
+        display_f3:
+          type: boolean
+          description: 是否显示淤血指数
+        display_physical_therapy_explain:
+          type: boolean
+          description: 是否显示理疗
+        display_remark:
+          type: boolean
+          description: 是否显示评论
+        display_measurement_result:
+          type: boolean
+          description: 是否显示测量结果
+        display_baby_tips:
+          type: boolean
+          description: 是否显示宝宝提示
+        display_wh:
+          type: boolean
+          description: 是否显示女性健康
+    AnalysisReport:
+      type: object
+      description: 分析报告
+      required:
+        - report_version
+        - report_id
+        - content
+      properties:
+        report_version:
+          type: string
+          description: 分析报告版本. 当前仅支持 `1.0` 这个值.
+        report_id:
+          type: string
+          description: 分析报告 ID
+        content:
+          $ref: '#/components/schemas/AnalysisReportContent'
+    AnalysisReportContent:
+      type: object
+      description: 分析报告的内容
+      properties:
+        user_profile:
+          $ref: '#/components/schemas/AnalysisReportContentUserProfile'
+        measurement_result:
+          $ref: '#/components/schemas/AnalysisReportContentMeasurementResult'
+        tags:
+          $ref: '#/components/schemas/AnalysisReportContentTags'
+        lead:
+          $ref: '#/components/schemas/AnalysisReportContentLead'
+        tips_for_woman:
+          $ref: '#/components/schemas/AnalysisReportContentTipsForWoman'
+        channels_and_collaterals_explains:
+          $ref: '#/components/schemas/AnalysisReportCCExplains'
+        constitution_differentiation_explains:
+          $ref: '#/components/schemas/AnalysisReportCDExplains'
+        syndrome_differentiation_explains:
+          $ref: '#/components/schemas/AnalysisReportSDExplains'
+        channels_and_collaterals_strength:
+          $ref: '#/components/schemas/ChannelsAndCollateralsStrength'
+        constitution_differentiation_explain_notices:
+          $ref: '#/components/schemas/ConstitutionDifferentiationExplainNotices'
+        channels_and_collaterals_explain_notices:
+          $ref: '#/components/schemas/ChannelsAndCollateralsExplainNotices'
+        measurement_tips:
+          $ref: '#/components/schemas/MeasurementTips'
+        dictionary_entries:
+          $ref: '#/components/schemas/DictionaryEntries'
+        factor_explains:
+          $ref: '#/components/schemas/FactorExplains'
+        baby_tips:
+          $ref: '#/components/schemas/BabyTips'
+        health_descriptions:
+          $ref: '#/components/schemas/HealthDescriptions'
+        uterine_health_indexes:
+          $ref: '#/components/schemas/UterineHealthIndexes'
+        uterus_attention_prompts:
+          $ref: '#/components/schemas/UterusAttentionPrompts'
+        uterine_health_descriptions:
+          $ref: '#/components/schemas/UterineHealthDescriptions'
+        menstrual_health_values:
+          $ref: '#/components/schemas/MenstrualHealthValues'
+        menstrual_health_descriptions:
+          $ref: '#/components/schemas/MenstrualHealthDescriptions'
+        gynecological_inflammations:
+          $ref: '#/components/schemas/GynecologicalInflammations'
+        gynecological_inflammation_descriptions:
+          $ref: '#/components/schemas/GynecologicalInflammationDescriptions'
+        breast_health:
+          $ref: '#/components/schemas/BreastHealth'
+        breast_health_descriptions:
+          $ref: '#/components/schemas/BreastHealthDescriptions'
+        emotional_health_indexes:
+          $ref: '#/components/schemas/EmotionalHealthIndexes'
+        emotional_health_descriptions:
+          $ref: '#/components/schemas/EmotionalHealthDescriptions'
+        facial_skins:
+          $ref: '#/components/schemas/FacialSkins'
+        facial_skin_descriptions:
+          $ref: '#/components/schemas/FacialSkinDescriptions'
+        reproductive_age_considerations:
+          $ref: '#/components/schemas/ReproductiveAgeConsiderations'
+        hormone_levels:
+          $ref: '#/components/schemas/HormoneLevels'
+        breast_cancer_ovarian_cancers:
+          $ref: '#/components/schemas/BreastCancerOvarianCancers'
+        breast_cancer_ovarian_cancer_descriptions:
+          $ref: '#/components/schemas/BreastCancerOvarianCancerDescriptions'
+        lymphatic_health:
+          $ref: '#/components/schemas/LymphaticHealth'
+        lymphatic_health_descriptions:
+          $ref: '#/components/schemas/LymphaticHealthDescriptions'
+        m0:
+          type: integer
+          description: 月经健康指数
+          nullable: true
+        m1:
+          type: integer
+          description: 月经不调指数
+          nullable: true
+        m2:
+          type: integer
+          description: 痛经指数
+          nullable: true
+        m3:
+          type: integer
+          description: 乳腺健康问答计分
+          nullable: true
+        f100:
+          type: integer
+          description: 子宫健康指数
+        f101:
+          type: integer
+          description: 妇科疾病风险指数
+        f102:
+          type: integer
+          description: 妇科炎症指数
+        f103:
+          type: integer
+          description: 情绪健康指数
+        f104:
+          type: integer
+          description: 面部美肤指数
+        f105:
+          type: integer
+          description: 生殖年龄指数
+        f106:
+          type: integer
+          description: 激素水平指数
+        f107:
+          type: integer
+          description: 淋巴健康指数
+        display_options:
+          $ref: '#/components/schemas/DisplayOptions'
+        remark:
+          type: string
+          description: 评论
+        physical_therapy_explain:
+          $ref: '#/components/schemas/PhysicalTherapyExplain'
+        created_at:
+          type: string
+          description: '测量时间 utc 时区 2018-07-04T08:01:27Z 格式'
+          format: date-time
+    PhysicalTherapyExplain:
+      type: object
+      properties:
+        f0:
+          type: integer
+          description: 阴指数
+        f1:
+          type: integer
+          description: 阳指数
+        f2:
+          type: integer
+          description: 湿气指数
+        f3:
+          type: integer
+          description: 淤血指数
+    AnalysisReportContentUserProfile:
+      type: object
+      description: 分析报告的 UserProfile
+      properties:
+        user_id:
+          type: integer
+          description: 用户ID
+        nickname:
+          type: string
+          description: 客户昵称
+        birthday:
+          type: string
+          description: 生日 UTC 格式 （可选）
+          format: date-time
+        age:
+          type: integer
+          description: 年龄
+          minimum: 0
+        gender:
+          $ref: '#/components/schemas/Gender'
+        height:
+          type: integer
+          description: 身高（必填）单位厘米
+          minimum: 0
+        weight:
+          type: integer
+          description: 体重（必填）单位厘米
+          minimum: 0
+        avatar_url:
+          type: string
+          description: 头像
+    AnalysisReportContentMeasurementResult:
+      type: object
+      description: 分析报告中的测量结果信息
+      properties:
+        finger:
+          $ref: '#/components/schemas/Finger'
+        c0:
+          type: integer
+          description: '心包经 位于区间[-10,10]内'
+        c1:
+          type: integer
+          description: '肝经 位于区间[-10,10]内'
+        c2:
+          type: integer
+          description: '肾经 位于区间[-10,10]内'
+        c3:
+          type: integer
+          description: '脾经 位于区间[-10,10]内'
+        c4:
+          type: integer
+          description: '肺经 位于区间[-10,10]内'
+        c5:
+          type: integer
+          description: '胃经 位于区间[-10,10]内'
+        c6:
+          type: integer
+          description: '胆经 位于区间[-10,10]内'
+        c7:
+          type: integer
+          description: '膀胱经 位于区间[-10,10]内'
+        heart_rate:
+          type: integer
+          description: 服务器返回的心率
+        app_heart_rate:
+          type: integer
+          description: App 测量的心率
+        partial_pulse_wave:
+          type: array
+          items:
+            type: integer
+          description: 截取的波形数据
+        app_highest_heart_rate:
+          type: integer
+          description: app最大的心率
+        app_lowest_heart_rate:
+          type: integer
+          description: app最小的心率
+    GetAnalysisResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/AnalysisReport'
+    Remark:
+      type: object
+      description: 分析报告备注
+      properties:
+        user_id:
+          type: integer
+          description: UserID
+        remark:
+          type: string
+          description: 备注
+    RemarkResponse:
+      allOf:
+        - $ref: '#/components/schemas/BasicResponse'
+        - type: object
+          required:
+            - data
+          properties:
+            data:
+              $ref: '#/components/schemas/NullAble'
+    NullAble:
+      type: object
+
+  securitySchemes:    
+    cookieAuth:         
+      type: apiKey
+      in: cookie
+      name: sid
+
+security:
+  - cookieAuth: []       

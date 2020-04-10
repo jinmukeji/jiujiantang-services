@@ -1,0 +1,6 @@
+# ignore building outputs
+out/
+# ignore environment files
+*.env
+!template.*
+wxh5/

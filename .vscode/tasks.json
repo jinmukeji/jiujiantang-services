@@ -1,0 +1,48 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build - All Go Builds",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/go-build-all.sh",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build - All Docker Builds",
+            "type": "shell",
+            "command": "${workspaceFolder}/build/docker-build-all.sh",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Lint - Run gometalinter",
+            "type": "shell",
+            "command": "${workspaceFolder}/service/go-lint.sh",
+            "problemMatcher": {
+                "owner": "go",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/service"
+                ],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "Generate - Client SDK",
+            "type": "npm",
+            "script": "sdk",
+            "path": "doc/api-v2/",
+            "problemMatcher": []
+        }
+    ]
+}

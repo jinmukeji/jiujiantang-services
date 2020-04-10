@@ -1,0 +1,47 @@
+{
+    "transaction_id": "11",
+    "language": "zh-Hans",
+    "question_answers": {
+        "switch_pretreatment": [
+            {
+                "question_key": "Q0009",
+                "answer_keys": [
+                    "QC0038"
+                ]
+            },
+            {
+                "question_key": "Q0009",
+                "answer_keys": [
+                    "QC0038"
+                ]
+            }
+        ],
+        "breast_health": [
+            {
+                "question_key": "Q0008",
+                "answer_keys": [
+                    "QC0033"
+                ]
+            }
+        ]
+    },
+    "physical_dialectics": [
+        {
+            "key": "T0001"
+        },
+        {
+            "key": "T0002"
+        }
+    ],
+    "disease": [
+        {
+            "key": "JB0001",
+            "score": 1
+        }
+    ],
+    "dirty_dialectic": [
+        {
+            "key": "Z0001"
+        }
+    ]
+}
