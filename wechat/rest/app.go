@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/iris-contrib/middleware/cors"
-	r "github.com/jinmukeji/gf-api2/pkg/rest"
+	r "github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 )

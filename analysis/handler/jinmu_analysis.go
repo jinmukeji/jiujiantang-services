@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/jinmukeji/ae/v2/biz"
-	"github.com/jinmukeji/gf-api2/analysis/aws"
-	db "github.com/jinmukeji/gf-api2/analysis/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
+	db "github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 	"github.com/micro/go-micro/client"

@@ -13,14 +13,14 @@ import (
 	"github.com/micro/go-micro/transport"
 
 	ae "github.com/jinmukeji/ae-v1/core"
-	"github.com/jinmukeji/gf-api2/analysis/aws"
-	"github.com/jinmukeji/gf-api2/pkg/blocker"
-	logger "github.com/jinmukeji/gf-api2/pkg/rpc"
-	"github.com/jinmukeji/gf-api2/service/config"
-	handler "github.com/jinmukeji/gf-api2/service/handler"
-	"github.com/jinmukeji/gf-api2/service/mail"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
-	"github.com/jinmukeji/gf-api2/service/wechat"
+	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
+	"github.com/jinmukeji/jiujiantang-services/pkg/blocker"
+	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/service/config"
+	handler "github.com/jinmukeji/jiujiantang-services/service/handler"
+	"github.com/jinmukeji/jiujiantang-services/service/mail"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/wechat"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 )
 

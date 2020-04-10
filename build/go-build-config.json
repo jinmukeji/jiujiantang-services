@@ -4,91 +4,91 @@
         {
             "name": "svc-biz-core",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/service",
+            "package": "github.com/jinmukeji/jiujiantang-services/service",
             "enabled_cgo": false,
             "build_files": "../service"
         },
         {
             "name": "web-rest-api-v2",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/api-v2",
+            "package": "github.com/jinmukeji/jiujiantang-services/api-v2",
             "enabled_cgo": false,
             "build_files": "../api-v2"
         },
         {
             "name": "web-rest-api-l-v2",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/api-l-v2",
+            "package": "github.com/jinmukeji/jiujiantang-services/api-l-v2",
             "enabled_cgo": false,
             "build_files": "../api-l-v2"
         },
         {
             "name": "web-rest-wechat",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/wechat",
+            "package": "github.com/jinmukeji/jiujiantang-services/wechat",
             "enabled_cgo": false,
             "build_files": "../wechat"
         },
         {
             "name": "web-rest-websocket",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/websocket",
+            "package": "github.com/jinmukeji/jiujiantang-services/websocket",
             "enabled_cgo": false,
             "build_files": "../websocket"
         },
         {
             "name": "svc-sms-gw",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/sms",
+            "package": "github.com/jinmukeji/jiujiantang-services/sms",
             "enabled_cgo": false,
             "build_files": "../sms"
         },
         {
             "name": "svc-sem-gw",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/sem",
+            "package": "github.com/jinmukeji/jiujiantang-services/sem",
             "enabled_cgo": false,
             "build_files": "../sem"
         },
         {
             "name":"web-rest-jinmuid",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/api-jinmuid",
+            "package": "github.com/jinmukeji/jiujiantang-services/api-jinmuid",
             "enabled_cgo": false,
             "build_files": "../api-jinmuid"
         },
         {
             "name":"svc-jinmuid",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/jinmuid",
+            "package": "github.com/jinmukeji/jiujiantang-services/jinmuid",
             "enabled_cgo": false,
             "build_files": "../jinmuid"
         },
         {
             "name":"svc-subscription",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/subscription",
+            "package": "github.com/jinmukeji/jiujiantang-services/subscription",
             "enabled_cgo": false,
             "build_files": "../subscription"
         },
         {
             "name":"svc-device",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/device",
+            "package": "github.com/jinmukeji/jiujiantang-services/device",
             "enabled_cgo": false,
             "build_files": "../device"
         },
         {
             "name":"svc-analysis",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/analysis",
+            "package": "github.com/jinmukeji/jiujiantang-services/analysis",
             "enabled_cgo": false,
             "build_files": "../analysis"
         },
         {
             "name": "web-rest-sys",
             "version": "latest",
-            "package": "github.com/jinmukeji/gf-api2/api-sys",
+            "package": "github.com/jinmukeji/jiujiantang-services/api-sys",
             "enabled_cgo": false,
             "build_files": "../api-sys"
         }

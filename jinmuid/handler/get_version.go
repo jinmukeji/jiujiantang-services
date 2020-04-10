@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	"github.com/jinmukeji/gf-api2/jinmuid/config"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/config"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 )
 

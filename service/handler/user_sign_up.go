@@ -8,7 +8,7 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/gf-api2/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 )

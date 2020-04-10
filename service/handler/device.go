@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 )
 
 // macWithColon 返回由冒号分隔的 MAC 地址

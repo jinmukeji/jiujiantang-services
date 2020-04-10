@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	mysql "github.com/jinmukeji/gf-api2/service/mysqldb"
+	mysql "github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 )
 

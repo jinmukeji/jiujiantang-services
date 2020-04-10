@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/jinmukeji/gf-api2/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

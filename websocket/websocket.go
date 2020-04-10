@@ -20,7 +20,7 @@ func main() {
 // 	"syscall"
 // 	"time"
 
-// 	"github.com/jinmukeji/gf-api2/websocket/config"
+// 	"github.com/jinmukeji/jiujiantang-services/websocket/config"
 // 	websocket "github.com/kataras/iris/v12/websocket"
 // 	"github.com/kataras/iris/v12"
 // 	"github.com/micro/cli"

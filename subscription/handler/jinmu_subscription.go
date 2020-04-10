@@ -1,7 +1,7 @@
 package handler
 
 import (
-	db "github.com/jinmukeji/gf-api2/subscription/mysqldb"
+	db "github.com/jinmukeji/jiujiantang-services/subscription/mysqldb"
 )
 
 // SubscriptionService 订阅服务

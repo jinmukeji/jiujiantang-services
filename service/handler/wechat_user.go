@@ -9,7 +9,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/micro/go-micro/broker"
 
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"

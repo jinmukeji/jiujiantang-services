@@ -17,7 +17,7 @@ import (
 	"github.com/kataras/iris/v12/httptest"
 
 	"github.com/dgrijalva/jwt-go"
-	jwtmiddleware "github.com/jinmukeji/gf-api2/pkg/rest/jwt"
+	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
 )
 
 type Response struct {

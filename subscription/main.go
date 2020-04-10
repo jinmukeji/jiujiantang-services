@@ -3,11 +3,11 @@ package main
 import (
 	"os"
 
-	logger "github.com/jinmukeji/gf-api2/pkg/rpc"
-	"github.com/jinmukeji/gf-api2/subscription/config"
+	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/subscription/config"
 
-	handler "github.com/jinmukeji/gf-api2/subscription/handler"
-	"github.com/jinmukeji/gf-api2/subscription/mysqldb"
+	handler "github.com/jinmukeji/jiujiantang-services/subscription/handler"
+	"github.com/jinmukeji/jiujiantang-services/subscription/mysqldb"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 	"github.com/micro/cli"
 	micro "github.com/micro/go-micro"

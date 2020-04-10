@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/gf-api2/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	"github.com/kataras/iris/v12"

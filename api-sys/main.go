@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/jinmukeji/gf-api2/api-sys/config"
-	"github.com/jinmukeji/gf-api2/api-sys/rest"
+	"github.com/jinmukeji/jiujiantang-services/api-sys/config"
+	"github.com/jinmukeji/jiujiantang-services/api-sys/rest"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro/web"
 )

@@ -4,7 +4,7 @@ import (
 	"os"
 	"strconv"
 
-	db "github.com/jinmukeji/gf-api2/service/mysqldb"
+	db "github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	"github.com/joho/godotenv"
 )
 

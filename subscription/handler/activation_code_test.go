@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	ac "github.com/jinmukeji/gf-api2/subscription/activation-code"
+	ac "github.com/jinmukeji/jiujiantang-services/subscription/activation-code"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 	"github.com/micro/go-micro/client"

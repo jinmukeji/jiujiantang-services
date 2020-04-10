@@ -7,7 +7,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/ae/v2/biz"
-	"github.com/jinmukeji/gf-api2/analysis/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	"github.com/jinmukeji/plat-pkg/rpc/errors"
 	"github.com/jinmukeji/plat-pkg/rpc/errors/codes"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"

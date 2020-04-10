@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jinmukeji/gf-api2/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	ptypesv2 "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"

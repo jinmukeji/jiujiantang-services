@@ -1,8 +1,8 @@
 package handler
 
 import (
-	db "github.com/jinmukeji/gf-api2/sem/mysqldb"
-	sem "github.com/jinmukeji/gf-api2/sem/sem_client"
+	db "github.com/jinmukeji/jiujiantang-services/sem/mysqldb"
+	sem "github.com/jinmukeji/jiujiantang-services/sem/sem_client"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
 	"github.com/micro/go-micro/client"
 )

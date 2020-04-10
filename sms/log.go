@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/jinmukeji/gf-api2/api-v2/config"
+	"github.com/jinmukeji/jiujiantang-services/api-v2/config"
 	mlog "github.com/jinmukeji/go-pkg/log"
 	"github.com/sirupsen/logrus"
 )

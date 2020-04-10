@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/gf-api2/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	ptypesv2 "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"

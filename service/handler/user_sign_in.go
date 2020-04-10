@@ -6,7 +6,7 @@ import (
 	"math"
 	"time"
 
-	"github.com/jinmukeji/gf-api2/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/go-pkg/age"

@@ -12,8 +12,8 @@ import (
 
 	valid "github.com/asaskevich/govalidator"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/gf-api2/service/auth"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	"github.com/jinmukeji/go-pkg/age"
 	"github.com/jinmukeji/go-pkg/mac"
 	"github.com/jinmukeji/go-pkg/mathutil"

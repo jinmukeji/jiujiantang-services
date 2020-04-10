@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	"github.com/jinmukeji/gf-api2/analysis/config"
+	"github.com/jinmukeji/jiujiantang-services/analysis/config"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
 )
 

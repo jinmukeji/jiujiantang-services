@@ -10,7 +10,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/ae-v1/core"
-	"github.com/jinmukeji/gf-api2/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	ptypespb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v1"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"

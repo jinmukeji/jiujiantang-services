@@ -3,8 +3,8 @@ package handler
 import (
 	"os"
 
-	db "github.com/jinmukeji/gf-api2/sem/mysqldb"
-	sem "github.com/jinmukeji/gf-api2/sem/sem_client"
+	db "github.com/jinmukeji/jiujiantang-services/sem/mysqldb"
+	sem "github.com/jinmukeji/jiujiantang-services/sem/sem_client"
 	"github.com/joho/godotenv"
 )
 

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	r "github.com/jinmukeji/gf-api2/pkg/rest"
-	jwtmiddleware "github.com/jinmukeji/gf-api2/pkg/rest/jwt"
+	r "github.com/jinmukeji/jiujiantang-services/pkg/rest"
+	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
 
 	jwt "github.com/dgrijalva/jwt-go"
 

@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/jinmukeji/ae-v1/core"
-	"github.com/jinmukeji/gf-api2/pkg/rpc"
-	"github.com/jinmukeji/gf-api2/service/auth"
-	mysql "github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
+	mysql "github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"

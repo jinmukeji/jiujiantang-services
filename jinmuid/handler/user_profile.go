@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/jinmukeji/gf-api2/jinmuid/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 
 	"github.com/golang/protobuf/ptypes"

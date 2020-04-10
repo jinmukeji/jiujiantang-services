@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/gf-api2/device/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/device/mysqldb"
 	"github.com/jinmukeji/go-pkg/mac"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/jinmukeji/gf-api2/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	"github.com/kataras/iris/v12"
 	"github.com/micro/go-micro/metadata"
 )

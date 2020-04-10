@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/jinmukeji/gf-api2/analysis/aws"
+	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
 )
 
 const (

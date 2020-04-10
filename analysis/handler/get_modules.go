@@ -8,7 +8,7 @@ import (
 	any "github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/jinmukeji/ae/v2/engine/core"
-	"github.com/jinmukeji/gf-api2/analysis/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	"github.com/jinmukeji/plat-pkg/rpc/errors"
 	"github.com/jinmukeji/plat-pkg/rpc/errors/codes"
 	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"

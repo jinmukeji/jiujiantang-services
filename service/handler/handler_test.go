@@ -5,8 +5,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/jinmukeji/gf-api2/service/auth"
-	"github.com/jinmukeji/gf-api2/service/mail"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/mail"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	"github.com/joho/godotenv"
 )

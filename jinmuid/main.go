@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/jinmukeji/gf-api2/jinmuid/config"
-	handler "github.com/jinmukeji/gf-api2/jinmuid/handler"
-	jinmuMysql "github.com/jinmukeji/gf-api2/jinmuid/mysqldb"
-	logger "github.com/jinmukeji/gf-api2/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/config"
+	handler "github.com/jinmukeji/jiujiantang-services/jinmuid/handler"
+	jinmuMysql "github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
+	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
 	"github.com/jinmukeji/go-pkg/mysqldb"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"

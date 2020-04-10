@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jinmukeji/gf-api2/subscription/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/subscription/mysqldb"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 )
 

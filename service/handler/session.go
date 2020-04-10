@@ -8,7 +8,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 
 	"fmt"
 

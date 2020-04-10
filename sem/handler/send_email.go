@@ -9,8 +9,8 @@ import (
 
 	"fmt"
 
-	mysqldb "github.com/jinmukeji/gf-api2/sem/mysqldb"
-	sem "github.com/jinmukeji/gf-api2/sem/sem_client"
+	mysqldb "github.com/jinmukeji/jiujiantang-services/sem/mysqldb"
+	sem "github.com/jinmukeji/jiujiantang-services/sem/sem_client"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	sempb "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
 )
