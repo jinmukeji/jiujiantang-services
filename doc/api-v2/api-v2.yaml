@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  description: 喜马把脉健康平台 API v2
+  description: 喜马把脉平台 API v2
   version: 2.1.3-beta
-  title: 喜马把脉健康平台 API v2
+  title: 喜马把脉平台 API v2
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
   contact:
     email: support@jinmuhealth.com

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: 喜马把脉健康平台 API v2
+  description: 喜马把脉平台 API v2
   version: "2.1.0-beta-oas3"
   title: Jinmu-API
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'

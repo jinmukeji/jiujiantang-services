@@ -419,10 +419,10 @@ VALUES
 -- 更新client内容
 UPDATE `client`
     SET `remark` = CASE `client_id`
-        WHEN 'jm-10001' THEN '喜马把脉健康APP'
-        WHEN 'jm-10002' THEN '喜马把脉健康一体机'
-        WHEN 'jm-10004' THEN '喜马把脉健康APP'
-        WHEN 'jm-10005' THEN '喜马把脉健康APP'    
+        WHEN 'jm-10001' THEN '喜马把脉APP'
+        WHEN 'jm-10002' THEN '喜马把脉一体机'
+        WHEN 'jm-10004' THEN '喜马把脉APP'
+        WHEN 'jm-10005' THEN '喜马把脉APP'    
     END,
 	`usage` = CASE `client_id`
         WHEN 'jm-10001' THEN '家庭和机构的健康管家'

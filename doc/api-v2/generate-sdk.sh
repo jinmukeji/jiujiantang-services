@@ -86,7 +86,7 @@ function generateRestDoc()
     info "Generating ReDoc HTML documentation..."
     redoc-cli bundle $SPEC_FILE \
         -o $DEST/index.html \
-        --title "喜马把脉健康平台 API V2" \
+        --title "喜马把脉平台 API V2" \
         --options.theme.colors.main=#00b2a5 \
         --options.pathInMiddlePanel
     echo

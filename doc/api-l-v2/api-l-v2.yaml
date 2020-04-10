@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  description: 喜马把脉健康一体机API v1.0
+  description: 喜马把脉一体机API v1.0
   version: 1.11.3-beta
-  title: 喜马把脉健康一体机API v1.10+
+  title: 喜马把脉一体机API v1.10+
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
   contact:
     email: support@jinmuhealth.com

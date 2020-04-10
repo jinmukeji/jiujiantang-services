@@ -21,7 +21,7 @@ import (
 const (
 	defaultRegisterSource = "手机验证码注册"
 	defaultRegisterType   = "phone"
-	organizationName      = "喜马把脉健康科技有限公司"
+	organizationName      = "喜马把脉科技有限公司"
 	organizationStreet    = "江苏常州天宁区关河东路66号九洲环宇大厦1501室"
 	organizationPhone     = "0519-81180075"
 	organizationEmail     = "information@jinmuhealth.com"

@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: 喜马把脉健康一体机API v1.0
+  description: 喜马把脉一体机API v1.0
   version: "1.0.0-oas3"
   title: JinmuWechat-API
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
