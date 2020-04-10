@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	"github.com/jinmukeji/gf-api2/sms/config"
+	"github.com/jinmukeji/jiujiantang-services/sms/config"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
 )
 

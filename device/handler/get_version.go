@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	"github.com/jinmukeji/gf-api2/device/config"
+	"github.com/jinmukeji/jiujiantang-services/device/config"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
 )
 

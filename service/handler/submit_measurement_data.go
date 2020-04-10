@@ -12,11 +12,11 @@ import (
 
 	valid "github.com/asaskevich/govalidator"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/gf-api2/service/auth"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
 	"github.com/jinmukeji/go-pkg/age"
 	"github.com/jinmukeji/go-pkg/mac"
 	"github.com/jinmukeji/go-pkg/mathutil"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	"github.com/jinmukeji/plat-report/ptcodec"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
@@ -93,24 +93,6 @@ func (j *JinmuHealth) SubmitMeasurementInfo(ctx context.Context, req *corepb.Sub
 		return NewError(ErrInvalidDevice, fmt.Errorf("device [MAC:%s] is invalid", mac))
 	}
 
-	// 获取client
-	// clientInfo, _ := clientFromContext(ctx)
-	// zone := respGetDeviceByMac.Device.Zone
-	// clientBlocker := j.blockerPool.GetBlocker(clientInfo.ClientID)
-	// remoteClientIP := clientInfo.RemoteClientIP
-
-	// 根据不同的客户端对mac和ip过滤
-	// mac是否被限制
-	// if clientBlocker.IsMacBlocked(mac, zone) {
-	// 	return NewError(ErrBlockedMac, fmt.Errorf("mac %d is blocked within zone %s", mac, zone))
-	// }
-
-	// 如果mac未忽略ip限制,那么就判断ip是否被限制
-	// if !clientBlocker.IgnoreIPCheck(mac) {
-	// 	if clientBlocker.IsIPBlocked(remoteClientIP) {
-	// 		return NewError(ErrBlockedIP, fmt.Errorf("IP %s is blocked", remoteClientIP))
-	// 	}
-	// }
 	device := &mysqldb.Device{
 		DeviceID:       int(respGetDeviceByMac.Device.DeviceId),
 		CustomizedCode: respGetDeviceByMac.Device.CustomizedCode,

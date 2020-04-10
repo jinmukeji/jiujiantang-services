@@ -13,14 +13,13 @@ import (
 	"github.com/micro/go-micro/transport"
 
 	ae "github.com/jinmukeji/ae-v1/core"
-	"github.com/jinmukeji/gf-api2/analysis/aws"
-	"github.com/jinmukeji/gf-api2/pkg/blocker"
-	logger "github.com/jinmukeji/gf-api2/pkg/rpc"
-	"github.com/jinmukeji/gf-api2/service/config"
-	handler "github.com/jinmukeji/gf-api2/service/handler"
-	"github.com/jinmukeji/gf-api2/service/mail"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
-	"github.com/jinmukeji/gf-api2/service/wechat"
+	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
+	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/service/config"
+	handler "github.com/jinmukeji/jiujiantang-services/service/handler"
+	"github.com/jinmukeji/jiujiantang-services/service/mail"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/wechat"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 )
 
@@ -44,7 +43,7 @@ func main() {
 		micro.WrapHandler(logger.LogWrapper, authenticationWrapper.AuthWrapper(), authenticationWrapper.HandleWrapper()),
 
 		// Setup runtime flags
-		dbClientOptions(), mailClientOptions(), algorithmClientOptions(), awsClientOptions(), jinmuHealthOptions(), wechatOptions(), blockerOptions(),
+		dbClientOptions(), mailClientOptions(), algorithmClientOptions(), awsClientOptions(), jinmuHealthOptions(), wechatOptions(),
 
 		// Setup --version flag
 		micro.Flags(
@@ -102,12 +101,7 @@ func main() {
 	ae := newAE()
 	wx := newWechat()
 
-	blocker, err := newBlocker()
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	jinmuHealth := handler.NewJinmuHealth(db, mailClient, algorithmClient, awsClient, ae, wx, blocker, algorithmServerAddress)
+	jinmuHealth := handler.NewJinmuHealth(db, mailClient, algorithmClient, awsClient, ae, wx, algorithmServerAddress)
 	if err := proto.RegisterJinmuhealthAPIHandler(server, jinmuHealth); err != nil {
 		log.Fatalln(err)
 	}
@@ -428,26 +422,6 @@ func wechatOptions() micro.Option {
 	)
 }
 
-// blockerOptions 构建命令行启动参数
-func blockerOptions() micro.Option {
-	return micro.Flags(
-		cli.StringFlag{
-			Name:        "x_blocker_config_file",
-			Value:       "",
-			Usage:       "mac and ip blocker configuration file",
-			EnvVar:      "X_BLOCKER_CONFIG_FILE",
-			Destination: &blockerConfigFile,
-		},
-		cli.StringFlag{
-			Name:        "x_blocker_db_file",
-			Value:       "",
-			Usage:       "ip blocker database file",
-			EnvVar:      "X_BLOCKER_DB_FILE",
-			Destination: &blockerDBFile,
-		},
-	)
-}
-
 // newDbClient 创建一个 DbClient
 func newDbClient() (*mysqldb.DbClient, error) {
 	return mysqldb.NewDbClient(
@@ -523,18 +497,4 @@ func newWechat() *wechat.Wxmp {
 			JinmuH5ServerbaseV2_0: jinmuH5ServerbaseV2_0,
 			JinmuH5ServerbaseV2_1: jinmuH5ServerbaseV2_1,
 		})
-}
-
-func newBlocker() (*blocker.BlockerPool, error) {
-	// TODO: 当前 blocker 需要的数据包无法下载
-	// 且 JinmuHealth 的 BlockerPool 在 hander 层暂时用不到
-	// 后续需要时再处理
-
-	// configDoc, err := blocker.LoadConfig(path.Join(blockerConfigFile))
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// blockerPool, err := blocker.NewBlockerPool(configDoc, path.Join(blockerDBFile))
-	// return blockerPool, errs
-	return nil, nil
 }

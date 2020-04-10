@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 
-	logger "github.com/jinmukeji/gf-api2/pkg/rpc"
-	"github.com/jinmukeji/gf-api2/sms/config"
-	"github.com/jinmukeji/gf-api2/sms/mysqldb"
-	sms "github.com/jinmukeji/gf-api2/sms/sms_client"
+	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/sms/config"
+	"github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
+	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
 
-	handler "github.com/jinmukeji/gf-api2/sms/handler"
+	handler "github.com/jinmukeji/jiujiantang-services/sms/handler"
 	"github.com/micro/cli"
 	micro "github.com/micro/go-micro"
 )

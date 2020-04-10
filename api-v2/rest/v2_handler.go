@@ -1,7 +1,7 @@
 package rest
 
 import (
-	jwtmiddleware "github.com/jinmukeji/gf-api2/pkg/rest/jwt"
+	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
 	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	ac "github.com/jinmukeji/gf-api2/subscription/activation-code"
+	ac "github.com/jinmukeji/jiujiantang-services/subscription/activation-code"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 )
 

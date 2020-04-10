@@ -3,8 +3,8 @@ package handler
 import (
 	"os"
 
-	db "github.com/jinmukeji/gf-api2/sms/mysqldb"
-	sms "github.com/jinmukeji/gf-api2/sms/sms_client"
+	db "github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
+	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
 	"github.com/joho/godotenv"
 )
 

@@ -234,7 +234,7 @@ micro web
 godoc -http=:6060 -src -timestamps -index
 ```
 
-浏览器访问： http://localhost:6060/pkg/github.com/jinmukeji/gf-api2/
+浏览器访问： http://localhost:6060/pkg/github.com/jinmukeji/jiujiantang-services/
 
 ## 3 使用 Docker
 

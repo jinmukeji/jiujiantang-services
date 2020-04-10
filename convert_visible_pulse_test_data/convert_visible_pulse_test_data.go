@@ -9,8 +9,8 @@ import (
 	"os"
 	"strings"
 
-	awsTool "github.com/jinmukeji/gf-api2/analysis/aws"
-	handler "github.com/jinmukeji/gf-api2/analysis/handler"
+	awsTool "github.com/jinmukeji/jiujiantang-services/analysis/aws"
+	handler "github.com/jinmukeji/jiujiantang-services/analysis/handler"
 )
 
 var (

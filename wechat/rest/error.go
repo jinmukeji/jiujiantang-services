@@ -3,7 +3,7 @@ package rest
 import (
 
     "github.com/kataras/iris/v12"
-    r "github.com/jinmukeji/gf-api2/pkg/rest"
+    r "github.com/jinmukeji/jiujiantang-services/pkg/rest"
 )
 
 var codeToMsg = map[int]string{

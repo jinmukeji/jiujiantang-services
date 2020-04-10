@@ -3,7 +3,7 @@ package handler
 import (
 	"os"
 
-	db "github.com/jinmukeji/gf-api2/analysis/mysqldb"
+	db "github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	"github.com/joho/godotenv"
 )
 

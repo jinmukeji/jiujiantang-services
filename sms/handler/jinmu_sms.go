@@ -1,8 +1,8 @@
 package handler
 
 import (
-	db "github.com/jinmukeji/gf-api2/sms/mysqldb"
-	sms "github.com/jinmukeji/gf-api2/sms/sms_client"
+	db "github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
+	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
 )
 
 // SMSGateway 短信网关

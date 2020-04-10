@@ -9,9 +9,9 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/go-pkg/age"
 
-	"github.com/jinmukeji/gf-api2/pkg/rpc"
-	"github.com/jinmukeji/gf-api2/service/auth"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"

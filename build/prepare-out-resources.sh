@@ -22,16 +22,6 @@ fi
 mkdir -p ${OUT_DIR}/ae_data
 tar xzf ${ASSETS_DIR}/ae_data-v1.0.1.tar.gz -C ${OUT_DIR}/ae_data
 
-info "--> preparing blocker data..."
-if [ -d "${OUT_DIR}/blocker" ]; then
-    rm -rf ${OUT_DIR}/blocker
-fi
-mkdir -p ${OUT_DIR}/blocker
-# TODO: 这个包下载失败
-# sh ${ASSETS_DIR}/blocker_data/update-db.sh
-cp ${ASSETS_DIR}/blocker_data/config_doc.yml ${OUT_DIR}/blocker
-cp ${ASSETS_DIR}/blocker_data/GeoLite2-Country.mmdb.gz ${OUT_DIR}/blocker
-
 info "--> preparing sys config data..."
 if [ -d "${OUT_DIR}/sys" ]; then
     rm -rf ${OUT_DIR}/sys

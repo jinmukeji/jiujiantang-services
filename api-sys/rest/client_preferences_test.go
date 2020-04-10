@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/iris-contrib/httpexpect"
-	r "github.com/jinmukeji/gf-api2/api-sys/rest"
+	r "github.com/jinmukeji/jiujiantang-services/api-sys/rest"
 	"github.com/stretchr/testify/suite"
 )
 

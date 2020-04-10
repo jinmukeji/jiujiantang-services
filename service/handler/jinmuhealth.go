@@ -2,11 +2,11 @@ package handler
 
 import (
 	ae "github.com/jinmukeji/ae-v1/core"
-	"github.com/jinmukeji/gf-api2/analysis/aws"
-	"github.com/jinmukeji/gf-api2/pkg/blocker"
-	"github.com/jinmukeji/gf-api2/service/mail"
-	db "github.com/jinmukeji/gf-api2/service/mysqldb"
-	"github.com/jinmukeji/gf-api2/service/wechat"
+	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
+	"github.com/jinmukeji/jiujiantang-services/pkg/blocker"
+	"github.com/jinmukeji/jiujiantang-services/service/mail"
+	db "github.com/jinmukeji/jiujiantang-services/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/wechat"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
@@ -49,7 +49,6 @@ func NewJinmuHealth(
 	awsClient *aws.Client,
 	ae *ae.Engine,
 	wechat *wechat.Wxmp,
-	blockerPool *blocker.BlockerPool,
 	algorithmServerAddress string) *JinmuHealth {
 
 	j := &JinmuHealth{
@@ -64,7 +63,6 @@ func NewJinmuHealth(
 		subscriptionSvc:        subscriptionpb.NewSubscriptionManagerAPIService(subscriptionServiceName, client.DefaultClient),
 		deviceSvc:              devicepb.NewDeviceManagerAPIService(deviceServiceName, client.DefaultClient),
 		rpcAnalysisSvc:         analysispb.NewAnalysisManagerAPIService(rpcAnalysisServiceName, client.DefaultClient),
-		blockerPool:            blockerPool,
 		algorithmServerAddress: algorithmServerAddress,
 	}
 	return j

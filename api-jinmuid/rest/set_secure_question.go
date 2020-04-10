@@ -3,7 +3,7 @@ package rest
 import (
 	"fmt"
 
-	"github.com/jinmukeji/gf-api2/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	"github.com/kataras/iris/v12"
 )

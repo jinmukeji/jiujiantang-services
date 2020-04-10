@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/iris-contrib/httpexpect"
-	r "github.com/jinmukeji/gf-api2/api-v2/rest"
+	r "github.com/jinmukeji/jiujiantang-services/api-v2/rest"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

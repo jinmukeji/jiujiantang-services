@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 )
 

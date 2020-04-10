@@ -3,10 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/jinmukeji/gf-api2/device/config"
-	handler "github.com/jinmukeji/gf-api2/device/handler"
-	"github.com/jinmukeji/gf-api2/device/mysqldb"
-	logger "github.com/jinmukeji/gf-api2/pkg/rpc"
+	"github.com/jinmukeji/jiujiantang-services/device/config"
+	handler "github.com/jinmukeji/jiujiantang-services/device/handler"
+	"github.com/jinmukeji/jiujiantang-services/device/mysqldb"
+	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
 	"github.com/micro/cli"
 	micro "github.com/micro/go-micro"

@@ -7,7 +7,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/google/uuid"
-	"github.com/jinmukeji/gf-api2/jinmuid/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	crypto "github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
 	"github.com/jinmukeji/go-pkg/crypto/rand"
 	bizcorepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"

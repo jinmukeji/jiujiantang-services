@@ -3,8 +3,8 @@ package handler
 import (
 	"errors"
 
-	"github.com/jinmukeji/gf-api2/service/auth"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	"github.com/micro/go-micro/server"
 	"golang.org/x/net/context"
 )

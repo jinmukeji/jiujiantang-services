@@ -10,7 +10,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 
 	"github.com/google/uuid"
-	"github.com/jinmukeji/gf-api2/jinmuid/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	"github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
 	"github.com/jinmukeji/go-pkg/crypto/hash"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"

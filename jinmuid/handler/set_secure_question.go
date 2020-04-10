@@ -8,7 +8,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/jinmukeji/gf-api2/jinmuid/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 )
 

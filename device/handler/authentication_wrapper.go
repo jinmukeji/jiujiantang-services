@@ -3,7 +3,7 @@ package handler
 import (
 	"errors"
 
-	"github.com/jinmukeji/gf-api2/device/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/device/mysqldb"
 	"github.com/micro/go-micro/server"
 	"golang.org/x/net/context"
 )

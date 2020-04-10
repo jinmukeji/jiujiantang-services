@@ -1,7 +1,7 @@
 package handler
 
 import (
-	db "github.com/jinmukeji/gf-api2/jinmuid/mysqldb"
+	db "github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	bizcorepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	sempb "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"

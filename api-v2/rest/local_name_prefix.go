@@ -1,7 +1,7 @@
 package rest
 
 import (
-	"github.com/jinmukeji/gf-api2/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	"github.com/kataras/iris/v12"
 )
 

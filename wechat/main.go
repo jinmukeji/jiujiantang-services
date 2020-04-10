@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	"github.com/jinmukeji/gf-api2/wechat/config"
-	"github.com/jinmukeji/gf-api2/wechat/rest"
+	"github.com/jinmukeji/jiujiantang-services/wechat/config"
+	"github.com/jinmukeji/jiujiantang-services/wechat/rest"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro/web"
 )

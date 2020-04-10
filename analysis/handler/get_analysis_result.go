@@ -20,8 +20,8 @@ import (
 
 	"time"
 
-	"github.com/jinmukeji/gf-api2/analysis/aws"
-	"github.com/jinmukeji/gf-api2/analysis/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
+	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	"github.com/jinmukeji/go-pkg/crypto/rand"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"

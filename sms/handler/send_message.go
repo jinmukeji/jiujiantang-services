@@ -7,8 +7,8 @@ import (
 
 	"fmt"
 
-	mysqldb "github.com/jinmukeji/gf-api2/sms/mysqldb"
-	sms "github.com/jinmukeji/gf-api2/sms/sms_client"
+	mysqldb "github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
+	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	smspb "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
 )

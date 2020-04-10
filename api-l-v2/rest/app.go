@@ -4,12 +4,12 @@ import (
 	"errors"
 	"net/http"
 
-	r "github.com/jinmukeji/gf-api2/pkg/rest"
+	r "github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	"github.com/kataras/iris/v12/context"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/iris-contrib/middleware/cors"
-	jwtmiddleware "github.com/jinmukeji/gf-api2/pkg/rest/jwt"
+	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/middleware/logger"
 )

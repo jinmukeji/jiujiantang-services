@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	valid "github.com/asaskevich/govalidator"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 )

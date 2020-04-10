@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jinmukeji/gf-api2/service/auth"
-	"github.com/jinmukeji/gf-api2/service/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/service/auth"
+	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 )

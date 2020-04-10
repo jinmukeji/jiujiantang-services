@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	r "github.com/jinmukeji/gf-api2/pkg/rest"
-	jwtmiddleware "github.com/jinmukeji/gf-api2/pkg/rest/jwt"
+	r "github.com/jinmukeji/jiujiantang-services/pkg/rest"
+	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
 )
