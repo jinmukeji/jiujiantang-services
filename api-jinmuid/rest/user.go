@@ -18,7 +18,7 @@ type ModifyUserPasswordBody struct {
 	NewPlainPassword  string `json:"new_plain_password"`
 }
 
-// JinmuService 金姆服务
+// JinmuService 喜马把脉服务
 type JinmuService struct {
 	Service           string `json:"service"`
 	ServiceDescrption string `json:"service_descrption"`

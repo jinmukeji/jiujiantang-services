@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: 金姆健康一体机API v1.0
+  description: 喜马把脉一体机API v1.0
   version: "1.11.4-beta-oas3"
   title: JinmuL-API
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
@@ -318,7 +318,7 @@ paths:
     post:
       tags:
         - res
-      summary: 获取金姆资源的baseURL
+      summary: 获取喜马把脉资源的baseURL
       operationId: getJMResBaseURL
       responses:
         '200':
@@ -958,7 +958,7 @@ components:
           type: string
           description: |
             注册类型，支持以下字符串值：
-            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `legacy` - 传统（兼容喜马把脉1.x账号）. 默认值.
             - `username` - 用户名
             - `email` - 邮箱
             - `phone` - 手机

@@ -6,7 +6,7 @@ import (
 	"github.com/kataras/iris/v12"
 )
 
-// JMRes 金姆资源的获取条件
+// JMRes 喜马把脉资源的获取条件
 type JMRes struct {
 	AppVersion string `json:"app_version"`
 }
@@ -18,7 +18,7 @@ type BaseURL struct {
 	QuestionnaireURL string `json:"questionnaire_url"`
 }
 
-// GetJMResBaseURL 获取金姆资源的baseURL
+// GetJMResBaseURL 获取喜马把脉资源的baseURL
 func (h *v2Handler) GetJMResBaseURL(ctx iris.Context) {
 	var jMRes JMRes
 	err := ctx.ReadJSON(&jMRes)

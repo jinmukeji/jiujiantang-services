@@ -32,7 +32,7 @@ func (suite *LocalNotificationTestSuite) TestCreateLocalNotification() {
 	req := new(proto.CreateLocalNotificationRequest)
 	resp := new(proto.CreateLocalNotificationResponse)
 	req.LocalNotification = &proto.LocalNotification{
-		Content: "金姆宝宝提醒您，又到检查时间啦！",
+		Content: "喜马宝宝提醒您，又到检查时间啦！",
 		Schedule: &proto.Schedule{
 			EventHappenAt: "2018-10-10T20:00:00",
 			Timezone:      "local",

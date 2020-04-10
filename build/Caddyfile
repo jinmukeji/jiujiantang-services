@@ -9,5 +9,6 @@
       allow_credentials true
       allowed_headers *
       exposed_headers *
+      origin_regexp     .+\.jinmuhealth\.com$
     }
 }

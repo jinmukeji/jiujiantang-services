@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -25,7 +25,7 @@ func (suite *LanguageTestSuite) SetupSuite() {
 	suite.Account = newTestingAccountFromEnvFile(envFilepath)
 }
 
-// TestSetJinmuIDWebLanguage 测试设置金姆ID语言
+// TestSetJinmuIDWebLanguage 测试设置喜马把脉ID语言
 func (suite *UserTestSuite) TestSetJinmuIDWebLanguage() {
 	t := suite.T()
 	ctx := context.Background()
@@ -39,7 +39,7 @@ func (suite *UserTestSuite) TestSetJinmuIDWebLanguage() {
 	assert.NoError(t, err)
 }
 
-// TestSetJinmuIDWebLanguageUserIdIsNull 测试设置金姆ID语言
+// TestSetJinmuIDWebLanguageUserIdIsNull 测试设置喜马把脉ID语言
 func (suite *UserTestSuite) TestSetJinmuIDWebLanguageUserIdIsNull() {
 	t := suite.T()
 	ctx := context.Background()
@@ -51,7 +51,7 @@ func (suite *UserTestSuite) TestSetJinmuIDWebLanguageUserIdIsNull() {
 	assert.NoError(t, err)
 }
 
-// TestGetJinmuIDWebLanguage 测试得到金姆ID语言
+// TestGetJinmuIDWebLanguage 测试得到喜马把脉ID语言
 func (suite *UserTestSuite) TestGetJinmuIDWebLanguage() {
 	t := suite.T()
 	ctx := context.Background()
@@ -65,7 +65,7 @@ func (suite *UserTestSuite) TestGetJinmuIDWebLanguage() {
 	assert.Equal(t, generalpb.Language_LANGUAGE_SIMPLIFIED_CHINESE, resp.Language)
 }
 
-// TestGetJinmuIDWebLanguageUserIdIsError  测试得到金姆ID语言
+// TestGetJinmuIDWebLanguageUserIdIsError  测试得到喜马把脉ID语言
 func (suite *UserTestSuite) TestGetJinmuIDWebLanguageUserIdIsError() {
 	t := suite.T()
 	ctx := context.Background()

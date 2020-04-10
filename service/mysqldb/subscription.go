@@ -9,7 +9,7 @@ import (
 type Subscription struct {
 	SubscriptionID   int        `gorm:"primary_key"` // 订阅ID
 	OrganizationID   int        // 组织ID
-	SubscriptionType int        // 0 定制化 1 试用版 2 黄金姆 3 白金姆 4 钻石姆 5 礼品版
+	SubscriptionType int        // 0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版
 	MaxUserLimits    int        // 组织下最大用户数量
 	Active           int        // 是否激活
 	CustomizedCode   string     // 自定义代码

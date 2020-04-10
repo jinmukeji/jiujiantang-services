@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  description: 金姆健康一体机API v1.0
+  description: 喜马把脉一体机API v1.0
   version: 1.11.3-beta
-  title: 金姆健康一体机API v1.10+
+  title: 喜马把脉一体机API v1.10+
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
   contact:
     email: support@jinmuhealth.com
@@ -310,7 +310,7 @@ paths:
     post:
       tags:
         - res
-      summary: 获取金姆资源的baseURL 
+      summary: 获取喜马把脉资源的baseURL 
       operationId: getJMResBaseURL
       consumes:
         - application/json
@@ -593,7 +593,7 @@ definitions:
     #   - legacy
     description: |
       注册类型，支持以下字符串值：
-      - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+      - `legacy` - 传统（兼容喜马把脉1.x账号）. 默认值.
       - `username` - 用户名
       - `email` - 邮箱
       - `phone` - 手机

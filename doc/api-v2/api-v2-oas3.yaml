@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  description: 金姆健康平台 API v2
+  description: 喜马把脉平台 API v2
   version: "2.1.0-beta-oas3"
   title: Jinmu-API
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
@@ -1113,7 +1113,7 @@ paths:
     post:
       tags:
         - res
-      summary: 获取金姆资源的baseURL
+      summary: 获取喜马把脉资源的baseURL
       operationId: getJMResBaseURL
       parameters:
         - in: header
@@ -2628,7 +2628,7 @@ components:
           type: string
           description: |
             注册类型，支持以下字符串值：
-            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `legacy` - 传统（兼容喜马把脉1.x账号）. 默认值.
             - `username` - 用户名
             - `email` - 邮箱
             - `phone` - 手机
@@ -2743,7 +2743,7 @@ components:
           type: string
           description: |
             注册类型，支持以下字符串值：
-            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `legacy` - 传统（兼容喜马把脉1.x账号）. 默认值.
             - `username` - 用户名
             - `email` - 邮箱
             - `phone` - 手机
@@ -2817,8 +2817,8 @@ components:
                 账号的服务等级，支持以下字符串值：
                 - `Customized` - 定制化
                 - `Trial` - 试用版
-                - `Golden` - 黄金姆
-                - `Platinum` - 白金姆
+                - `Golden` - 黄喜马把脉
+                - `Platinum` - 白喜马把脉
                 - `Diamond` - 钻石姆
                 - `Gift` - 礼品版
     SubscriptionResponse:
@@ -2849,8 +2849,8 @@ components:
             账号的服务等级，支持以下字符串值：
             - `Customized` - 定制化
             - `Trial` - 试用版
-            - `Golden` - 黄金姆
-            - `Platinum` - 白金姆
+            - `Golden` - 黄喜马把脉
+            - `Platinum` - 白喜马把脉
             - `Diamond` - 钻石姆
             - `Gift` - 礼品版
         expired_at:
@@ -2946,8 +2946,8 @@ components:
             账号的服务等级，支持以下字符串值：
             - `Customized` - 定制化
             - `Trial` - 试用版
-            - `Golden` - 黄金姆
-            - `Platinum` - 白金姆
+            - `Golden` - 黄喜马把脉
+            - `Platinum` - 白喜马把脉
             - `Diamond` - 钻石姆
             - `Gift` - 礼品版
         expired_at:
@@ -3257,7 +3257,7 @@ components:
           type: string
           description: |
             注册类型，支持以下字符串值：
-            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `legacy` - 传统（兼容喜马把脉1.x账号）. 默认值.
             - `username` - 用户名
             - `email` - 邮箱
             - `phone` - 手机
@@ -3275,7 +3275,7 @@ components:
           type: string
           description: |
             注册类型，支持以下字符串值：
-            - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+            - `legacy` - 传统（兼容喜马把脉1.x账号）. 默认值.
             - `username` - 用户名
             - `email` - 邮箱
             - `phone` - 手机
@@ -4210,8 +4210,8 @@ components:
             账号的服务等级，支持以下字符串值：
             - `Customized` - 定制化
             - `Trial` - 试用版
-            - `Golden` - 黄金姆
-            - `Platinum` - 白金姆
+            - `Golden` - 黄喜马把脉
+            - `Platinum` - 白喜马把脉
             - `Diamond` - 钻石姆
             - `Gift` - 礼品版
     ActivationCodeResponse:

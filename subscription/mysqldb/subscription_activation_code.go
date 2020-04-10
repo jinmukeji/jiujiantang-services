@@ -14,7 +14,7 @@ type SubscriptionActivationCode struct {
 	SubscriptionID   int32            `gorm:"column:subscription_id"`   // 订阅ID
 	MaxUserLimits    int32            `gorm:"column:max_user_limits"`   // 组织下最大用户数量
 	ContractYear     int32            `gorm:"column:contract_year"`     // 年限
-	SubscriptionType SubscriptionType `gorm:"column:subscription_type"` // 0 定制化 1 试用版 2 黄金姆 3 白金姆 4 钻石姆 5 礼品版
+	SubscriptionType SubscriptionType `gorm:"column:subscription_type"` // 0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版
 	Checksum         string           `gorm:"column:checksum"`          // 校验位
 	Activated        bool             `gorm:"column:activated"`         // 是否激活
 	ActivatedAt      *time.Time       `gorm:"column:activated_at"`      // 激活时间

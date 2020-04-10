@@ -47,20 +47,20 @@ type SingleTemplateParam struct {
 
 // 简体版邮件模板参数
 var simplifiedChineseVariable = map[TemplateAction][]string{
-	FindResetPassword: {"重置金姆ID密码", "金姆平台", "重置金姆ID密码"},   // 找回/重置密码
-	FindUsername:      {"找回金姆ID用户名", "金姆平台", "找回金姆ID用户名"}, // 找回用户名
-	SetSecureEmail:    {"修改您的安全邮箱", "金姆平台", "修改金姆ID安全邮箱"}, // 设置安全邮箱
-	ModifySecureEmail: {"修改您的安全邮箱", "金姆平台", "修改金姆ID安全邮箱"}, // 修改安全邮箱
-	UnsetSecureEmail:  {"修改您的安全邮箱", "金姆平台", "修改金姆ID安全邮箱"}, // 解绑安全邮箱
+	FindResetPassword: {"重置喜马把脉ID密码", "喜马把脉平台", "重置喜马把脉ID密码"},   // 找回/重置密码
+	FindUsername:      {"找回喜马把脉ID用户名", "喜马把脉平台", "找回喜马把脉ID用户名"}, // 找回用户名
+	SetSecureEmail:    {"修改您的安全邮箱", "喜马把脉平台", "修改喜马把脉ID安全邮箱"},   // 设置安全邮箱
+	ModifySecureEmail: {"修改您的安全邮箱", "喜马把脉平台", "修改喜马把脉ID安全邮箱"},   // 修改安全邮箱
+	UnsetSecureEmail:  {"修改您的安全邮箱", "喜马把脉平台", "修改喜马把脉ID安全邮箱"},   // 解绑安全邮箱
 }
 
 // 繁体版邮件模板参数
 var traditionalChineseVariable = map[TemplateAction][]string{
-	FindResetPassword: {"重置金姆ID密碼", "金姆平台", "重置金姆ID密碼"},   // 找回/重置密码
-	FindUsername:      {"找回金姆ID用户名", "金姆平台", "找回金姆ID用戶名"}, // 找回用户名
-	SetSecureEmail:    {"修改您的安全郵箱", "金姆平台", "修改金姆ID安全郵箱"}, // 设置安全邮箱
-	ModifySecureEmail: {"修改您的安全郵箱", "金姆平台", "修改金姆ID安全郵箱"}, // 修改安全邮箱
-	UnsetSecureEmail:  {"修改您的安全郵箱", "金姆平台", "修改金姆ID安全郵箱"}, // 解绑安全邮箱
+	FindResetPassword: {"重置喜马把脉ID密碼", "喜马把脉平台", "重置喜马把脉ID密碼"},   // 找回/重置密码
+	FindUsername:      {"找回喜马把脉ID用户名", "喜马把脉平台", "找回喜马把脉ID用戶名"}, // 找回用户名
+	SetSecureEmail:    {"修改您的安全郵箱", "喜马把脉平台", "修改喜马把脉ID安全郵箱"},   // 设置安全邮箱
+	ModifySecureEmail: {"修改您的安全郵箱", "喜马把脉平台", "修改喜马把脉ID安全郵箱"},   // 修改安全邮箱
+	UnsetSecureEmail:  {"修改您的安全郵箱", "喜马把脉平台", "修改喜马把脉ID安全郵箱"},   // 解绑安全邮箱
 }
 
 // 英文版邮件模板参数

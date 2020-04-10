@@ -15,7 +15,7 @@ func generateLocalNotification() *LocalNotification {
 	now := time.Now()
 	return &LocalNotification{
 		Title:         "",
-		Content:       "金姆宝宝提醒您，又到检查时间啦！",
+		Content:       "喜马宝宝提醒您，又到检查时间啦！",
 		EventHappenAt: "2018-01-01T20:00:00",
 		Timezone:      "local",
 		Frequency:     "FrequencyDaily",

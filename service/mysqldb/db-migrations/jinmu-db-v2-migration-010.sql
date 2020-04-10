@@ -23,8 +23,8 @@ SELECT
 	O.organization_id,
 	CASE
 		WHEN C.max_client < 100 THEN '5' -- 礼品版
-		WHEN C.max_client >= 100 AND C.contract_year = 1 THEN '2' -- 黄金姆
-		WHEN C.max_client >= 100 AND C.contract_year = 2 THEN '3' -- 白金姆
+		WHEN C.max_client >= 100 AND C.contract_year = 1 THEN '2' -- 黄喜马把脉
+		WHEN C.max_client >= 100 AND C.contract_year = 2 THEN '3' -- 白喜马把脉
 		WHEN C.max_client >= 100 AND C.contract_year = 5 THEN '4' -- 钻石姆
 		WHEN C.max_client >= 100 AND C.contract_year = 100 THEN '4' -- 钻石姆
 		ELSE '0' -- 定制版

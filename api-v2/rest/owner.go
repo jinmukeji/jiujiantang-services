@@ -7,8 +7,8 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	age "github.com/jinmukeji/go-pkg/age"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	"github.com/kataras/iris/v12"
 )
@@ -18,10 +18,10 @@ const (
 	CustomizedVersion = "定制化"
 	// TrialVersion 试用版
 	TrialVersion = "试用版"
-	// GoldenVersion 黄金姆
-	GoldenVersion = "黄金姆"
-	// PlatinumVersion 白金姆
-	PlatinumVersion = "白金姆"
+	// GoldenVersion 黄喜马把脉
+	GoldenVersion = "黄喜马把脉"
+	// PlatinumVersion 白喜马把脉
+	PlatinumVersion = "白喜马把脉"
 	// DiamondVersion 钻石姆
 	DiamondVersion = "钻石姆"
 	// GiftVersion 礼品版

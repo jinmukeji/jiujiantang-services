@@ -45,7 +45,7 @@ DROP TABLE IF EXISTS `wechat_user`;
 CREATE TABLE `wechat_user` (
   `open_id` varchar(255)  NOT NULL COMMENT '微信OpenID',
   `union_id` varchar(255)  NOT NULL COMMENT '微信UnionID',
-  `user_id` int(10) unsigned  COMMENT '金姆用户ID',
+  `user_id` int(10) unsigned  COMMENT '喜马把脉用户ID',
   `origin_id` varchar(255)  NOT NULL COMMENT '公众号原始ID',
   `nickname` varchar(255) NOT NULL DEFAULT '' COMMENT '用户昵称',
   `avatar_image_url` varchar(255) NOT NULL DEFAULT '' COMMENT '头像图片URL',

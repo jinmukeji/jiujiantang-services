@@ -187,7 +187,7 @@ func (client *AliyunSMSClient) getSortQueryStringTmp(phoneNumber, templateCode, 
 		"Version":          "2017-05-25",
 		"RegionId":         "cn-hangzhou",
 		"PhoneNumbers":     phoneNumber,
-		"SignName":         "金姆平台",
+		"SignName":         "喜马把脉平台",
 		"TemplateParam":    templateParamJSON,
 		"TemplateCode":     templateCode,
 	}

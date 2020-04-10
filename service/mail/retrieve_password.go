@@ -26,9 +26,9 @@ type InfoRetrievePassword struct {
 func (c *Client) MailContentRetrievePassword(info InfoRetrievePassword) (string, error) {
 	buf := bytes.NewBufferString("")
 	tpl, err := template.New("mailContent").Parse(`<h3>尊敬的 {{.AccountName}}</h3><p>您好，系统已收到您的找回密码申请，以下为你的脉诊仪账户所需要的重要信息，请注意保密。</p><p>您的脉诊仪账号密码为：{{.Password}}</p>
-		<p align='center'><img width= '200pt' height ='200pt' src= 'http://www.jinmuhealth.com/assets/img/QRcode/wechatQRcode.jpg',  alt='金姆健康科技'/></p>
-		<p align='center'>扫一扫关注“金姆健康科技”</p>
-		<p>请注意，该邮件地址不接收回复邮件，请联系金姆客服进行咨询</p>
+		<p align='center'><img width= '200pt' height ='200pt' src= 'http://www.jinmuhealth.com/assets/img/QRcode/wechatQRcode.jpg',  alt='喜马把脉科技'/></p>
+		<p align='center'>扫一扫关注“喜马把脉科技”</p>
+		<p>请注意，该邮件地址不接收回复邮件，请联系喜马把脉客服进行咨询</p>
 		<p>客服电话：0519-81180075</p>
 		<p>E-mail:information@jinmuhealth.com</p>`)
 	if err != nil {

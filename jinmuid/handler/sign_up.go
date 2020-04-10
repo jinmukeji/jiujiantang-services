@@ -7,9 +7,9 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/google/uuid"
-	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	crypto "github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
 	"github.com/jinmukeji/go-pkg/crypto/rand"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	bizcorepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 
@@ -21,7 +21,7 @@ import (
 const (
 	defaultRegisterSource = "手机验证码注册"
 	defaultRegisterType   = "phone"
-	organizationName      = "金姆健康科技有限公司"
+	organizationName      = "喜马把脉科技有限公司"
 	organizationStreet    = "江苏常州天宁区关河东路66号九洲环宇大厦1501室"
 	organizationPhone     = "0519-81180075"
 	organizationEmail     = "information@jinmuhealth.com"

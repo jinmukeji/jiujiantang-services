@@ -27,7 +27,7 @@ const (
 	FaqURL2_1 = "https://res-cdn.jinmuhealth.com/app/jinmu_v2_1/faq"
 )
 
-// GetJMResBaseUrl 获取金姆资源的baseURL
+// GetJMResBaseUrl 获取喜马把脉资源的baseURL
 func (j *JinmuHealth) GetJMResBaseUrl(ctx context.Context, req *proto.GetJMResBaseUrlRequest, resp *proto.GetJMResBaseUrlResponse) error {
 	switch req.AppVersion {
 	case AppVersion1_9:
