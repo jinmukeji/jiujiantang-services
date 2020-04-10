@@ -2,8 +2,8 @@ package rest
 
 import (
 	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
-	devicepb "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	devicepb "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
 	"github.com/micro/go-micro/client"
 )
 
@@ -14,8 +14,8 @@ type webHandler struct {
 }
 
 const (
-	rpcServiceName       = "com.jinmuhealth.srv.svc-jinmuid"
-	rpcDeviceServiceName = "com.jinmuhealth.srv.svc-device"
+	rpcServiceName       = "com.xima.srv.svc-jinmuid"
+	rpcDeviceServiceName = "com.xima.srv.svc-device"
 )
 
 func newWebHandler(jwtMiddleware *jwtmiddleware.Middleware) *webHandler {

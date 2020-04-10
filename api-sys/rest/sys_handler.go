@@ -14,7 +14,7 @@ type sysHandler struct {
 }
 
 const (
-	rpcServiceName = "com.jinmuhealth.srv.svc-biz-core"
+	rpcServiceName = "com.xima.srv.svc-biz-core"
 )
 
 func newSysHandler(configFile string) *sysHandler {

@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 
+	"github.com/jinmukeji/go-pkg/mysqldb"
 	"github.com/jinmukeji/jiujiantang-services/jinmuid/config"
 	handler "github.com/jinmukeji/jiujiantang-services/jinmuid/handler"
 	jinmuMysql "github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
-	"github.com/jinmukeji/go-pkg/mysqldb"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	semProto "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
 	smsProto "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
@@ -19,11 +19,11 @@ import (
 )
 
 const (
-	rpcSmsServiceName       = "com.jinmuhealth.srv.svc-sms-gw"
-	rpcSemServiceName       = "com.jinmuhealth.srv.svc-sem-gw"
-	rpcServiceName          = "com.jinmuhealth.srv.svc-jinmuid"
-	rpcBizServiceName       = "com.jinmuhealth.srv.svc-biz-core"
-	subscriptionServiceName = "com.jinmuhealth.srv.svc-subscription"
+	rpcSmsServiceName       = "com.xima.srv.svc-sms-gw"
+	rpcSemServiceName       = "com.xima.srv.svc-sem-gw"
+	rpcServiceName          = "com.xima.srv.svc-jinmuid"
+	rpcBizServiceName       = "com.xima.srv.svc-biz-core"
+	subscriptionServiceName = "com.xima.srv.svc-subscription"
 )
 
 func main() {

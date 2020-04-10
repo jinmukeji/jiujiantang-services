@@ -6,7 +6,7 @@
 
 - **API** 类型的微服务使用命名空间 `com.jinmuhealth.api`
 
-- **SRV** 类型的微服务使用命名空间 `com.jinmuhealth.srv`
+- **SRV** 类型的微服务使用命名空间 `com.xima.srv`
 
 - **WEB** 类型的微服务使用命名空间 `com.jinmuhealth.web`
 
@@ -21,7 +21,7 @@ Docker Image 命名：
 | -------------- | ------------------- | ---- | ------------------------- | ------- |
 | rest-api-l-v2  | com.jinmuhealth.api | API  | jm-app/web-rest-api-l-v2  |         |
 | rest-api-v2    | com.jinmuhealth.api | API  | jm-app/web-rest-api-v2    |         |
-| svc-biz-core   | com.jinmuhealth.srv | SRV  | jm-app/svc-biz-core       |         |
+| svc-biz-core   | com.xima.srv | SRV  | jm-app/svc-biz-core       |         |
 | rest-websocket | com.jinmuhealth.web | WEB  | jm-app/web-rest-websocket |         |
 | rest-wechat    | com.jinmuhealth.web | WEB  | jm-app/web-rest-wechat    |         |
 

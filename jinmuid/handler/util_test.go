@@ -5,21 +5,21 @@ import (
 	"fmt"
 	"path/filepath"
 
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	sempb "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
 	smspb "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
 	"github.com/micro/go-micro/client"
 )
 
 const (
-	rpcSmsServiceName       = "com.jinmuhealth.srv.svc-sms-gw"
-	rpcSemServiceName       = "com.jinmuhealth.srv.svc-sem-gw"
-	rpcServiceName          = "com.jinmuhealth.srv.svc-jinmuid"
-	rpcBizServiceName       = "com.jinmuhealth.srv.svc-biz-core"
-	subscriptionServiceName = "com.jinmuhealth.srv.svc-subscription"
+	rpcSmsServiceName       = "com.xima.srv.svc-sms-gw"
+	rpcSemServiceName       = "com.xima.srv.svc-sem-gw"
+	rpcServiceName          = "com.xima.srv.svc-jinmuid"
+	rpcBizServiceName       = "com.xima.srv.svc-biz-core"
+	subscriptionServiceName = "com.xima.srv.svc-subscription"
 )
 
 // 初始化
