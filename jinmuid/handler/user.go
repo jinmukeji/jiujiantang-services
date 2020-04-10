@@ -7,16 +7,16 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	"github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
 	crypto "github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
 	"github.com/jinmukeji/go-pkg/crypto/hash"
 	"github.com/jinmukeji/go-pkg/crypto/rand"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 )
 
 var (
-	// 金姆ID密码格式
+	// 喜马把脉ID密码格式
 	validPassword = regexp.MustCompile(`^[A-Za-z0-9]{8,20}$`)
 )
 

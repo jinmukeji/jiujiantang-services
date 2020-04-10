@@ -3,7 +3,7 @@ servers:
   - description: SwaggerHub API Auto Mocking
     url: https://virtserver.swaggerhub.com/Leesingsing/jinmu_id_api/1.0.0
 info:
-  description: 金姆 ID WEB API
+  description: 喜马把脉 ID WEB API
   version: "1.0.0"
   title: JINMU ID WEB API
 tags:
@@ -686,7 +686,7 @@ paths:
           schema:
             type: string
           required: true
-          description: 金姆ID
+          description: 喜马把脉ID
       responses:
         '200':
           description: 成功响应
@@ -732,7 +732,7 @@ paths:
           schema:
             type: string
           required: true
-          description: 金姆ID
+          description: 喜马把脉ID
       responses:
         '200':
           description: 成功响应
@@ -777,7 +777,7 @@ paths:
           schema:
             type: string
           required: true
-          description: 金姆ID
+          description: 喜马把脉ID
       responses:
         '200':
           description: 成功响应
@@ -915,7 +915,7 @@ paths:
           schema:
             type: string
           required: true
-          description: 金姆ID
+          description: 喜马把脉ID
         - in: header
           name: Authorization
           description: Client验证授权信息
@@ -952,7 +952,7 @@ paths:
           schema:
             type: string
           required: true
-          description: 金姆ID
+          description: 喜马把脉ID
         - in: header
           name: Authorization
           description: Client验证授权信息

@@ -305,7 +305,7 @@ CREATE TABLE `subscription_activation_code` (
     `code` VARCHAR(255) NOT NULL COMMENT '激活码',
     `user_id` INT(10) UNSIGNED DEFAULT NULL COMMENT '使用激活码的用户ID',
     `subscription_id` INT(10) UNSIGNED DEFAULT NULL COMMENT '激活生成的订阅ID',
-    `subscription_type` tinyint(4) DEFAULT '0' COMMENT '0 定制化 1 试用版 2 黄金姆 3 白金姆 4 钻石姆 5 礼品版',
+    `subscription_type` tinyint(4) DEFAULT '0' COMMENT '0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版',
     `max_user_limits` INT(11) DEFAULT NULL COMMENT '最大用户（常客）数量',
     `contract_year` SMALLINT(6) DEFAULT NULL COMMENT '订阅合同年限',
     `checksum` VARCHAR(255) NOT NULL COMMENT '校验位',
@@ -342,7 +342,7 @@ ALTER TABLE subscription RENAME legacy_subscription;
 -- 初始化subscription
 CREATE TABLE `subscription` (
   `subscription_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订阅ID',
-  `subscription_type` tinyint(4) DEFAULT '0' COMMENT '0 定制化 1 试用版 2 黄金姆 3 白金姆 4 钻石姆 5 礼品版',
+  `subscription_type` tinyint(4) DEFAULT '0' COMMENT '0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版',
   `customized_code` varchar(255) DEFAULT '' COMMENT '自定义代码',
   `activated` tinyint(4) DEFAULT '0' COMMENT '是否激活 0未激活 1已激活',
   `activated_at` DATETIME NULL DEFAULT NULL COMMENT '激活时间',
@@ -414,15 +414,15 @@ CREATE TABLE `user_used_device` (
 ALTER table client ADD COLUMN `usage` varchar(255) NOT NULL COMMENT '用途' AFTER `remark`;
 INSERT INTO `client` ( `client_id`, `secret_key`, `name`, `zone`,`customized_code`, `remark`,`usage`,`created_at`, `updated_at`, `deleted_at` )
 VALUES
-	( 'jm-10006', 'CHSnHWkepLThkmPw8IUX', 'JinmuHealth-web', 'CN', '' , '金姆ID官方网站','随时随地管理金姆帐号', @now, @now, NULL );
+	( 'jm-10006', 'CHSnHWkepLThkmPw8IUX', 'JinmuHealth-web', 'CN', '' , '喜马把脉ID官方网站','随时随地管理喜马把脉帐号', @now, @now, NULL );
 
 -- 更新client内容
 UPDATE `client`
     SET `remark` = CASE `client_id`
-        WHEN 'jm-10001' THEN '金姆健康APP'
-        WHEN 'jm-10002' THEN '金姆健康一体机'
-        WHEN 'jm-10004' THEN '金姆健康APP'
-        WHEN 'jm-10005' THEN '金姆健康APP'    
+        WHEN 'jm-10001' THEN '喜马把脉健康APP'
+        WHEN 'jm-10002' THEN '喜马把脉健康一体机'
+        WHEN 'jm-10004' THEN '喜马把脉健康APP'
+        WHEN 'jm-10005' THEN '喜马把脉健康APP'    
     END,
 	`usage` = CASE `client_id`
         WHEN 'jm-10001' THEN '家庭和机构的健康管家'

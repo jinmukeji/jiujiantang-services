@@ -221,7 +221,7 @@ DROP TABLE IF EXISTS `subscription`;
 CREATE TABLE `subscription` (
   `subscription_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订阅ID',
   `organization_id` int(10) unsigned DEFAULT NULL COMMENT '组织ID',
-  `subscription_type` tinyint(4) DEFAULT '0' COMMENT '0 定制化 1 试用版 2 黄金姆 3 白金姆 4 钻石姆 5 礼品版',
+  `subscription_type` tinyint(4) DEFAULT '0' COMMENT '0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版',
   `active` tinyint(4) DEFAULT '0' COMMENT '是否激活 0未激活 1已激活',
   `activated_at` DATETIME NULL DEFAULT NULL COMMENT '激活时间',
   `expired_at` DATETIME NULL DEFAULT NULL COMMENT '到期时间',

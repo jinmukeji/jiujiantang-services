@@ -50,7 +50,7 @@ func (suite *LocalNotificationTestSuite) TestGetLocalNotifications() {
 	headers["X-Access-Token"] = token
 	e.GET("/v2-api/configuration/local_notification").
 		WithHeaders(headers).
-		Expect().Body().Contains("content").Contains("金姆宝宝提醒您，又到检查时间啦！")
+		Expect().Body().Contains("content").Contains("喜马宝宝提醒您，又到检查时间啦！")
 }
 
 func TestLocalNotificationTestSuite(t *testing.T) {

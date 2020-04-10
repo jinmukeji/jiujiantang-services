@@ -17,7 +17,7 @@ const (
 	// kangmeiClient 康美的client
 	kangmeiClient = "kangmei-10001"
 	// AssistantName 提示助手的名字
-	AssistantName = "金姆宝宝"
+	AssistantName = "喜马宝宝"
 )
 
 // getAnalysisOptionsByClientID 根据客户端 ID 获得对应的分析引擎的开关

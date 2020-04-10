@@ -20,7 +20,7 @@
   allowed_macs:
   ignore_ip_checking_macs:
 
-# 金姆健康APP
+# 喜马把脉健康APP
 - client_id: "jm-10001"
   # 允许通过的ip
   allowed_ips:
@@ -662,7 +662,7 @@
     - "38D269E88E2B"
     - "38D269E87454"
 
-# 金姆健康一体机
+# 喜马把脉健康一体机
 - client_id: "jm-10002"
   allowed_ips:
     - "0.0.0.0/0"
@@ -675,7 +675,7 @@
     - "30451143D99A"
   ignore_ip_checking_macs:
 
-# 金姆健康APP Android工程测试工具
+# 喜马把脉健康APP Android工程测试工具
 - client_id: "jm-10003"
   allowed_ips:
     - "0.0.0.0/0"
@@ -686,7 +686,7 @@
   allowed_macs:
   ignore_ip_checking_macs:
 
-# 金姆健康APP
+# 喜马把脉健康APP
 - client_id: "jm-10004"
   allowed_ips:
   allowed_ip_countries:
@@ -1325,7 +1325,7 @@
     - "38D269E88E2B"
     - "38D269E87454"
 
-# 金姆健康APP
+# 喜马把脉健康APP
 - client_id: "jm-10005"
   allowed_ips:
   allowed_ip_countries:

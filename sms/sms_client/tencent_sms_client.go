@@ -135,7 +135,7 @@ func (client *TencentYunSMSClient) SendSms(phoneNumber, nationCode string, templ
 	// 转化成阿里云短信模版
 	id := convertTemplateActionTX(nationCode, templateAction, language)
 	now := time.Now().UTC().Unix()
-	Sign := "金姆平台"
+	Sign := "喜马把脉平台"
 	if language == English {
 		Sign = "Jinmu"
 	}

@@ -3530,10 +3530,10 @@ SET `zone` = 'CN-X', `customized_code` = 'custom_dengyun', `tags` = 'dengyun', `
 WHERE `sn` LIKE 'D%';
 
 -- 清理脏数据：
--- 金姆某批次生产缺少MAC地址信息的产品
+-- 喜马把脉某批次生产缺少MAC地址信息的产品
 -- 将缺失MAC信息的数据统一设定为 `FFFFFFFF0000` 地址
 UPDATE `device`
-SET `tags` = 'missing_mac', `remarks` = '金姆某批次生产缺少MAC地址信息的产品'
+SET `tags` = 'missing_mac', `remarks` = '喜马把脉某批次生产缺少MAC地址信息的产品'
 WHERE  mac = X'FFFFFFFF0000';
 
 SET FOREIGN_KEY_CHECKS = 1;

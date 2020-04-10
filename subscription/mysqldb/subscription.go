@@ -12,9 +12,9 @@ const (
 	SubscriptionTypeCustomizedVersion = 0
 	// 试用版
 	SubscriptionTypeTrialVersion = 1
-	// 黄金姆
+	// 黄喜马把脉
 	SubscriptionTypeGoldenVersion = 2
-	// 白金姆
+	// 白喜马把脉
 	SubscriptionTypePlatinumVersion = 3
 	// 钻石姆
 	SubscriptionTypeDiamondVersion = 4
@@ -25,7 +25,7 @@ const (
 // Subscription 订阅
 type Subscription struct {
 	SubscriptionID      int32            `gorm:"primary_key;column:subscription_id"` // 订阅ID
-	SubscriptionType    SubscriptionType `gorm:"column:subscription_type"`           // 0 定制化 1 试用版 2 黄金姆 3 白金姆 4 钻石姆 5 礼品版
+	SubscriptionType    SubscriptionType `gorm:"column:subscription_type"`           // 0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版
 	MaxUserLimits       int32            `gorm:"column:max_user_limits"`             // 组织下最大用户数量
 	Activated           bool             `gorm:"column:activated"`                   // 是否激活
 	CustomizedCode      string           `gorm:"column:customized_code"`             // 自定义代码

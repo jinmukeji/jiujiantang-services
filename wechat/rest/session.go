@@ -20,7 +20,7 @@ type Session struct {
 	State      string // 微信 OAuth 验证的 state
 	WxOpenID   string // 微信 OpenID
 	WxUnionID  string // 微信 UnionID
-	UserID     int64  // 金姆 ID
+	UserID     int64  // 喜马把脉 ID
 	Authorized bool   // 是否已经验证通过
 	IsExpired  bool   // 是否已经到期
 }

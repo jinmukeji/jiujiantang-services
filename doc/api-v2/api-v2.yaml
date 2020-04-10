@@ -1,8 +1,8 @@
 swagger: '2.0'
 info:
-  description: 金姆健康平台 API v2
+  description: 喜马把脉健康平台 API v2
   version: 2.1.3-beta
-  title: 金姆健康平台 API v2
+  title: 喜马把脉健康平台 API v2
   termsOfService: 'http://www.jinmuhealth.com/legalProvisions/developer-agreement.html'
   contact:
     email: support@jinmuhealth.com
@@ -1273,7 +1273,7 @@ paths:
     post:
       tags:
         - res
-      summary: 获取金姆资源的baseURL 
+      summary: 获取喜马把脉资源的baseURL 
       operationId: getJMResBaseURL
       consumes:
         - application/json
@@ -1491,7 +1491,7 @@ definitions:
     #   - legacy
     description: |
       注册类型，支持以下字符串值：
-      - `legacy` - 传统（兼容金姆1.x账号）. 默认值.
+      - `legacy` - 传统（兼容喜马把脉1.x账号）. 默认值.
       - `username` - 用户名
       - `email` - 邮箱
       - `phone` - 手机
@@ -1510,8 +1510,8 @@ definitions:
       账号的服务等级，支持以下字符串值：
       - `Customized` - 定制化
       - `Trial` - 试用版
-      - `Golden` - 黄金姆
-      - `Platinum` - 白金姆
+      - `Golden` - 黄喜马把脉
+      - `Platinum` - 白喜马把脉
       - `Diamond` - 钻石姆
       - `Gift` - 礼品版
   # Enum: 性别
