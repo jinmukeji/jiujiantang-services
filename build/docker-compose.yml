@@ -4,6 +4,7 @@ services:
   calc:
     image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/calc:0.2.5
     command:
+      - "--registry=mdns"
       - "--server_address=:50051"
     ports:
       - "50051:50051"
@@ -45,7 +46,7 @@ services:
       - "--x_mail_address=smtp.exmail.qq.com"
       - "--x_mail_username=passwordservice@jinmuhealth.com"
       - "--x_mail_password=${X_MAIL_PASSWORD}"
-      - "--x_mail_sender_nickname=喜马把脉健康"
+      - "--x_mail_sender_nickname=喜马把脉"
       - "--x_mail_port=465"
       - "--x_mail_charset=UTF-8"
       - "--x_mail_reply=information@jinmuhealth.com"
