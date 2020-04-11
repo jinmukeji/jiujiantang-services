@@ -17,7 +17,7 @@ type SEMGateway struct {
 
 const (
 	// rpcServiceName RPC服务名称
-	rpcServiceName = "com.jinmuhealth.srv.svc-sem-gw"
+	rpcServiceName = "com.himalife.srv.svc-sem-gw"
 )
 
 // NewSEMGateway 构建SEMGateway

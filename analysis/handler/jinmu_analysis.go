@@ -20,8 +20,8 @@ type AnalysisManagerService struct {
 }
 
 const (
-	jinmuidServiceName      = "com.jinmuhealth.srv.svc-jinmuid"
-	subscriptionServiceName = "com.jinmuhealth.srv.svc-subscription"
+	jinmuidServiceName      = "com.himalife.srv.svc-jinmuid"
+	subscriptionServiceName = "com.himalife.srv.svc-subscription"
 )
 
 // NewAnalysisManagerService 构建AnalysisManagerService

@@ -34,7 +34,7 @@ func (suite *VersionTestSuite) SetupSuite() {
 
 // TestGetVersion 版本
 func (suite *VersionTestSuite) TestGetVersion() {
-	suite.Expect.GET("/v2-api/version").Expect().Body().Contains("com.jinmuhealth.srv.svc-biz-core")
+	suite.Expect.GET("/v2-api/version").Expect().Body().Contains("com.himalife.srv.svc-biz-core")
 }
 
 func TestVersionTestSuite(t *testing.T) {

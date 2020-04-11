@@ -18,7 +18,7 @@ const (
 	ServiceName = "rest-api-jinmuid"
 
 	// ServiceNamespace 是微服务的命名空间
-	ServiceNamespace = "com.jinmuhealth.api"
+	ServiceNamespace = "com.himalife.api"
 )
 
 // FullServiceName 返回微服务的全名

@@ -5,14 +5,14 @@ import (
 	"path/filepath"
 	"testing"
 
-	devicepb "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	devicepb "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
 	"github.com/micro/go-micro/client"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
 
-const rpcJinmuidServiceName = "com.jinmuhealth.srv.svc-jinmuid"
+const rpcJinmuidServiceName = "com.himalife.srv.svc-jinmuid"
 
 type Account struct {
 	account      string

@@ -17,11 +17,11 @@ import (
 )
 
 const (
-	rpcServiceName          = "com.jinmuhealth.srv.svc-biz-core"
-	jinmuidServiceName      = "com.jinmuhealth.srv.svc-jinmuid"
-	subscriptionServiceName = "com.jinmuhealth.srv.svc-subscription"
-	deviceServiceName       = "com.jinmuhealth.srv.svc-device"
-	rpcAnalysisServiceName  = "com.jinmuhealth.srv.svc-analysis"
+	rpcServiceName          = "com.himalife.srv.svc-biz-core"
+	jinmuidServiceName      = "com.himalife.srv.svc-jinmuid"
+	subscriptionServiceName = "com.himalife.srv.svc-subscription"
+	deviceServiceName       = "com.himalife.srv.svc-device"
+	rpcAnalysisServiceName  = "com.himalife.srv.svc-analysis"
 )
 
 // JinmuHealth 实现了 JinmuhealthHandler

@@ -4,11 +4,11 @@
 
 命名空间：
 
-- **API** 类型的微服务使用命名空间 `com.jinmuhealth.api`
+- **API** 类型的微服务使用命名空间 `com.himalife.api`
 
-- **SRV** 类型的微服务使用命名空间 `com.jinmuhealth.srv`
+- **SRV** 类型的微服务使用命名空间 `com.himalife.srv`
 
-- **WEB** 类型的微服务使用命名空间 `com.jinmuhealth.web`
+- **WEB** 类型的微服务使用命名空间 `com.himalife.web`
 
 Docker Image 命名：
 
@@ -19,11 +19,11 @@ Docker Image 命名：
 
 | Service Name   | Nacmespace          | Type | Docker Image Name         | Remarks |
 | -------------- | ------------------- | ---- | ------------------------- | ------- |
-| rest-api-l-v2  | com.jinmuhealth.api | API  | jm-app/web-rest-api-l-v2  |         |
-| rest-api-v2    | com.jinmuhealth.api | API  | jm-app/web-rest-api-v2    |         |
-| svc-biz-core   | com.jinmuhealth.srv | SRV  | jm-app/svc-biz-core       |         |
-| rest-websocket | com.jinmuhealth.web | WEB  | jm-app/web-rest-websocket |         |
-| rest-wechat    | com.jinmuhealth.web | WEB  | jm-app/web-rest-wechat    |         |
+| rest-api-l-v2  | com.himalife.api | API  | jm-app/web-rest-api-l-v2  |         |
+| rest-api-v2    | com.himalife.api | API  | jm-app/web-rest-api-v2    |         |
+| svc-biz-core   | com.himalife.srv | SRV  | jm-app/svc-biz-core       |         |
+| rest-websocket | com.himalife.web | WEB  | jm-app/web-rest-websocket |         |
+| rest-wechat    | com.himalife.web | WEB  | jm-app/web-rest-wechat    |         |
 
 
 

@@ -13,7 +13,7 @@ CONFIG_DIR="$CUR/openapi-generator-config"
 TEMPLATE_DIR="$CUR/templates"
 API_VERSION=`yq --raw-output '.info.version' $SPEC_FILE `
 OUT_DIR="$CUR/sdk_out/$API_VERSION"
-GROUP_ID="com.jinmuhealth.api"
+GROUP_ID="com.himalife.api"
 
 function info() {
     echo -e "\033[33m$1\033[0m"

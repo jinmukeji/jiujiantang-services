@@ -18,7 +18,7 @@ const (
 	ServiceName = "rest-wechat"
 
 	// ServiceNamespace 是微服务的命名空间
-	ServiceNamespace = "com.jinmuhealth.web"
+	ServiceNamespace = "com.himalife.web"
 )
 
 // FullServiceName 返回微服务的全名

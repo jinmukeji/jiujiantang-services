@@ -22,7 +22,7 @@ type SubscriptionActivationCodeTestSuite struct {
 	jinmuidSrv          jinmuidpb.UserManagerAPIService
 }
 
-const rpcJinmuidServiceName = "com.jinmuhealth.srv.svc-jinmuid"
+const rpcJinmuidServiceName = "com.himalife.srv.svc-jinmuid"
 
 // SetupSuite 初始化测试
 func (suite *SubscriptionActivationCodeTestSuite) SetupSuite() {

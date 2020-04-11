@@ -10,7 +10,7 @@ const (
 	ServiceName = "svc-analysis"
 
 	// ServiceNamespace 是微服务的命名空间
-	ServiceNamespace = "com.jinmuhealth.srv"
+	ServiceNamespace = "com.himalife.srv"
 
 	// DefaultRegisterTTL specifies how long a registration should exist in
 	// discovery after which it expires and is removed
