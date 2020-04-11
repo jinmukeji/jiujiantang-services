@@ -6,8 +6,8 @@ import (
 
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/kataras/iris/v12"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/metadata"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 )
 
 type handler struct {
-	rpcSvc               proto.JinmuhealthAPIService
+	rpcSvc               proto.XimaAPIService
 	WxCallbackServerBase string
 	WxH5ServerBase       string
 }
@@ -29,7 +29,7 @@ const (
 
 func newHandler(ops *Options) *handler {
 	return &handler{
-		rpcSvc:               proto.NewJinmuhealthAPIService(rpcServiceName, client.DefaultClient),
+		rpcSvc:               proto.NewXimaAPIService(rpcServiceName, client.DefaultClient),
 		WxCallbackServerBase: ops.WxCallbackServerBase,
 		WxH5ServerBase:       ops.WxH5ServerBase,
 	}

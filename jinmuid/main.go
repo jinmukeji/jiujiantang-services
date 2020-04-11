@@ -8,14 +8,14 @@ import (
 	handler "github.com/jinmukeji/jiujiantang-services/jinmuid/handler"
 	jinmuMysql "github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
-	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	semProto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
 	smsProto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
 	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	"github.com/micro/cli"
-	micro "github.com/micro/go-micro"
-	"github.com/micro/go-micro/client"
+	micro "github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/client"
 )
 
 const (
@@ -87,7 +87,7 @@ func main() {
 	smsSvc := smsProto.NewSmsAPIService(rpcSmsServiceName, client.DefaultClient)
 	semSvc := semProto.NewSemAPIService(rpcSemServiceName, client.DefaultClient)
 	rpcUserManagerSvc := jinmuidpb.NewUserManagerAPIService(rpcServiceName, client.DefaultClient)
-	bizSvc := corepb.NewJinmuhealthAPIService(rpcBizServiceName, client.DefaultClient)
+	bizSvc := corepb.NewXimaAPIService(rpcBizServiceName, client.DefaultClient)
 	subscriptionSvc := subscriptionpb.NewSubscriptionManagerAPIService(subscriptionServiceName, client.DefaultClient)
 	jinmuIDService := handler.NewJinmuIDService(db, smsSvc, semSvc, rpcUserManagerSvc, bizSvc, subscriptionSvc, encryptKey)
 	if err := jinmuidpb.RegisterUserManagerAPIHandler(server, jinmuIDService); err != nil {

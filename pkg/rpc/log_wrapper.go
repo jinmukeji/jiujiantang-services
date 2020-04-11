@@ -5,7 +5,7 @@ import (
 	"time"
 
 	mlog "github.com/jinmukeji/go-pkg/log"
-	"github.com/micro/go-micro/server"
+	"github.com/micro/go-micro/v2/server"
 	"github.com/sirupsen/logrus"
 )
 

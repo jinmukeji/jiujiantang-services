@@ -8,7 +8,7 @@ import (
 	"time"
 
 	idgen "github.com/jinmukeji/go-pkg/id-gen"
-	microclient "github.com/micro/go-micro/client"
+	microclient "github.com/micro/go-micro/v2/client"
 
 	valid "github.com/asaskevich/govalidator"
 	"github.com/golang/protobuf/ptypes"

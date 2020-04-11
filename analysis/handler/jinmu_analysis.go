@@ -6,7 +6,7 @@ import (
 	db "github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
-	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/v2/client"
 )
 
 // AnalysisManagerService 设备关联srv

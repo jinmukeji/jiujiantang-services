@@ -6,7 +6,7 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/api-jinmuid/config"
 	"github.com/jinmukeji/jiujiantang-services/api-jinmuid/rest"
 	"github.com/micro/cli"
-	"github.com/micro/go-micro/web"
+	"github.com/micro/go-micro/v2/web"
 )
 
 var (

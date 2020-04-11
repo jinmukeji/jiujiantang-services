@@ -5,11 +5,11 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/api-sys/preference"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
-	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/v2/client"
 )
 
 type sysHandler struct {
-	rpcSvc            proto.JinmuhealthAPIService
+	rpcSvc            proto.XimaAPIService
 	clientPreferences preference.ClientPreferences
 }
 
@@ -19,7 +19,7 @@ const (
 
 func newSysHandler(configFile string) *sysHandler {
 	return &sysHandler{
-		rpcSvc:            proto.NewJinmuhealthAPIService(rpcServiceName, client.DefaultClient),
+		rpcSvc:            proto.NewXimaAPIService(rpcServiceName, client.DefaultClient),
 		clientPreferences: preference.NewClientPreferences(path.Join(configFile)),
 	}
 }

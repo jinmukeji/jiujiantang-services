@@ -11,7 +11,7 @@ import (
 
 	handler "github.com/jinmukeji/jiujiantang-services/sms/handler"
 	"github.com/micro/cli"
-	micro "github.com/micro/go-micro"
+	micro "github.com/micro/go-micro/v2"
 )
 
 func main() {

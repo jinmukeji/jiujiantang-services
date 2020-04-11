@@ -10,7 +10,7 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/kataras/iris/v12"
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/metadata"
 )
 
 func init() {

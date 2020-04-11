@@ -5,7 +5,7 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	"github.com/micro/go-micro/server"
+	"github.com/micro/go-micro/v2/server"
 	"golang.org/x/net/context"
 )
 

@@ -3,7 +3,7 @@ package handler
 import (
 	db "github.com/jinmukeji/jiujiantang-services/device/mysqldb"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/device/v1"
-	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/v2/client"
 )
 
 // DeviceManagerService 设备关联srv

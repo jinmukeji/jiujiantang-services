@@ -13,7 +13,7 @@ import (
 	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	"github.com/joho/godotenv"
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/metadata"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"golang.org/x/net/context"

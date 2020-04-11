@@ -10,7 +10,7 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/subscription/mysqldb"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 	"github.com/micro/cli"
-	micro "github.com/micro/go-micro"
+	micro "github.com/micro/go-micro/v2"
 )
 
 func main() {

@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"path/filepath"
 
-	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	sempb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
 	smspb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
 	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
-	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/v2/client"
 )
 
 const (
@@ -33,7 +33,7 @@ func newJinmuIDServiceForTest() *JinmuIDService {
 	smsSvc := smspb.NewSmsAPIService(rpcSmsServiceName, client.DefaultClient)
 	semSvc := sempb.NewSemAPIService(rpcSemServiceName, client.DefaultClient)
 	rpcUserManagerSvc := jinmuidpb.NewUserManagerAPIService(rpcServiceName, client.DefaultClient)
-	bizSvc := corepb.NewJinmuhealthAPIService(rpcBizServiceName, client.DefaultClient)
+	bizSvc := corepb.NewXimaAPIService(rpcBizServiceName, client.DefaultClient)
 	subscriptionSvc := subscriptionpb.NewSubscriptionManagerAPIService(subscriptionServiceName, client.DefaultClient)
 	return NewJinmuIDService(db, smsSvc, semSvc, rpcUserManagerSvc, bizSvc, subscriptionSvc, encryptKey)
 }

@@ -13,7 +13,7 @@ import (
 	"unsafe"
 
 	"github.com/google/uuid"
-	"github.com/micro/go-micro/broker"
+	"github.com/micro/go-micro/v2/broker"
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/util"
 )

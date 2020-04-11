@@ -6,11 +6,11 @@ import (
 
 	calcpb "github.com/jinmukeji/proto/v3/gen/micro/idl/platform/calc/v2"
 	"github.com/micro/cli"
-	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/broker"
-	"github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/config/cmd"
-	"github.com/micro/go-micro/transport"
+	"github.com/micro/go-micro/v2"
+	"github.com/micro/go-micro/v2/broker"
+	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/v2/config/cmd"
+	"github.com/micro/go-micro/v2/transport"
 
 	ae "github.com/jinmukeji/ae-v1/core"
 	"github.com/jinmukeji/jiujiantang-services/analysis/aws"

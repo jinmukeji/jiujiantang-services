@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/micro/go-micro/broker"
+	"github.com/micro/go-micro/v2/broker"
 
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 

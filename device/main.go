@@ -9,7 +9,7 @@ import (
 	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/device/v1"
 	"github.com/micro/cli"
-	micro "github.com/micro/go-micro"
+	micro "github.com/micro/go-micro/v2"
 )
 
 func main() {

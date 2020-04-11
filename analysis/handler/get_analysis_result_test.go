@@ -6,7 +6,7 @@ import (
 
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/metadata"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
