@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 )
 
 // DeleteUsersFromSubscription 将用户从订阅中删除

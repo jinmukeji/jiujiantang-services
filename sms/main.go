@@ -7,7 +7,7 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/sms/config"
 	"github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
 	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
 
 	handler "github.com/jinmukeji/jiujiantang-services/sms/handler"
 	"github.com/micro/cli"

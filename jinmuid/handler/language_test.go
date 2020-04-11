@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

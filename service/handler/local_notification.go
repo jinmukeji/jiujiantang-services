@@ -8,8 +8,8 @@ import (
 
 	valid "github.com/asaskevich/govalidator"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // CreateLocalNotification 新建本地消息推送

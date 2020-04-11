@@ -10,9 +10,9 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	"github.com/jinmukeji/plat-pkg/rpc/errors"
 	"github.com/jinmukeji/plat-pkg/rpc/errors/codes"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // GetAnalyzeResultByRecordID 根据 record_id 得到分析结果

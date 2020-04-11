@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	calcpb "github.com/jinmukeji/proto/gen/micro/idl/platform/calc/v2"
+	calcpb "github.com/jinmukeji/proto/v3/gen/micro/idl/platform/calc/v2"
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/broker"
@@ -20,7 +20,7 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/service/mail"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	"github.com/jinmukeji/jiujiantang-services/service/wechat"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 )
 
 func main() {
@@ -102,7 +102,7 @@ func main() {
 	wx := newWechat()
 
 	jinmuHealth := handler.NewJinmuHealth(db, mailClient, algorithmClient, awsClient, ae, wx, algorithmServerAddress)
-	if err := proto.RegisterJinmuhealthAPIHandler(server, jinmuHealth); err != nil {
+	if err := proto.RegisterXimaAPIHandler(server, jinmuHealth); err != nil {
 		log.Fatalln(err)
 	}
 	// 设置认证 handlerWrapper 的数据库

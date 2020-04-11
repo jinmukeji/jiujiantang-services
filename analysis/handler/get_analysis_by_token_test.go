@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/ptypes"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	"github.com/micro/go-micro/metadata"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"

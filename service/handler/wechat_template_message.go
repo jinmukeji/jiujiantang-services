@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 )
 
 // WechatSendViewReportTemplateMessage 发送模版

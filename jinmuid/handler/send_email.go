@@ -11,8 +11,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	"github.com/jinmukeji/go-pkg/crypto/rand"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	sempb "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	sempb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
 )
 
 var (

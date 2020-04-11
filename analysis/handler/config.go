@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	ptypesv2 "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jinmukeji/jiujiantang-services/device/config"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/device/v1"
 )
 
 // GetVersion 获取服务版本信息

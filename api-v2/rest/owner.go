@@ -9,7 +9,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	age "github.com/jinmukeji/go-pkg/age"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/kataras/iris/v12"
 )
 

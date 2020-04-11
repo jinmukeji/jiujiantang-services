@@ -2,10 +2,10 @@ package rest
 
 import (
 	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 	"github.com/micro/go-micro/client"
 )
 

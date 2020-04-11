@@ -7,7 +7,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
 	age "github.com/jinmukeji/go-pkg/age"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 )
 
 func getAnalysisAskQuestions(resp *analysispb.GetAnalyzeResultResponse) map[string]Questions {

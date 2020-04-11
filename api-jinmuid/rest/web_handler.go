@@ -2,8 +2,8 @@ package rest
 
 import (
 	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	devicepb "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	devicepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/device/v1"
 	"github.com/micro/go-micro/client"
 )
 

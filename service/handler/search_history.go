@@ -13,8 +13,8 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/pkg/rpc"
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	pulsetestinfopb "github.com/jinmukeji/proto/gen/micro/idl/jm/pulsetestinfo/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	pulsetestinfopb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/pulsetestinfo/v1"
 	context "golang.org/x/net/context"
 )
 

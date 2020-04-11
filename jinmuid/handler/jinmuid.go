@@ -2,11 +2,11 @@ package handler
 
 import (
 	db "github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	bizcorepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	sempb "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
-	smspb "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
-	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	bizcorepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	sempb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
+	smspb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
+	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 )
 
 // JinmuIDService 喜马把脉ID Service

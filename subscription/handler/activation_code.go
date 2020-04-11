@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	ac "github.com/jinmukeji/jiujiantang-services/subscription/activation-code"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 )
 
 // UseSubscriptionActivationCode 使用激活码

@@ -9,7 +9,7 @@ import (
 	"github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
 	"github.com/jinmukeji/go-pkg/crypto/hash"
 	. "github.com/jinmukeji/go-pkg/with"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // BindOldUser 绑定老用户

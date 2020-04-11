@@ -8,7 +8,7 @@ import (
 
 	handler "github.com/jinmukeji/jiujiantang-services/subscription/handler"
 	"github.com/jinmukeji/jiujiantang-services/subscription/mysqldb"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 	"github.com/micro/cli"
 	micro "github.com/micro/go-micro"
 )

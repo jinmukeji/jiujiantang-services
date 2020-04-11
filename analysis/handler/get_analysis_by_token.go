@@ -10,9 +10,9 @@ import (
 	"github.com/jinmukeji/ae/v2/engine/core"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	"github.com/jinmukeji/go-pkg/age"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	ptypesv2 "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // GetAnalyzeResultByToken 根据分享 token 得到分析结果

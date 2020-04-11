@@ -3,7 +3,7 @@ package rest
 import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	"github.com/kataras/iris/v12"
 )
 
@@ -11,7 +11,7 @@ func (h *v2Handler) GetV2AnalyzeReportByRecordID(ctx iris.Context) {
 	recordID, _ := ctx.Params().GetInt("record_id")
 	req := new(analysispb.GetAnalyzeResultByRecordIDRequest)
 	req.RecordId = int32(recordID)
-	req.Cid = rest.GetCidFromContext(ctx)
+	// req.Cid = rest.GetCidFromContext(ctx)
 	resp, err := h.rpcAnalysisSvc.GetAnalyzeResultByRecordID(
 		newRPCContext(ctx), req,
 	)

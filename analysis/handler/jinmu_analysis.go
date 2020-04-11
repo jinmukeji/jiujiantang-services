@@ -4,8 +4,8 @@ import (
 	"github.com/jinmukeji/ae/v2/biz"
 	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
 	db "github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 	"github.com/micro/go-micro/client"
 )
 

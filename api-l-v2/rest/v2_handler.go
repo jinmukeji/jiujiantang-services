@@ -2,7 +2,7 @@ package rest
 
 import (
 	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/micro/go-micro/client"
 )
 

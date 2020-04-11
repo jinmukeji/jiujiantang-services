@@ -9,7 +9,7 @@ import (
 	handler "github.com/jinmukeji/jiujiantang-services/analysis/handler"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	"github.com/micro/cli"
 	micro "github.com/micro/go-micro"
 )

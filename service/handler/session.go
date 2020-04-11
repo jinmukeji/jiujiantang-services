@@ -12,7 +12,7 @@ import (
 
 	"fmt"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 )
 
 // SessionDuration Session的期限

@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	ac "github.com/jinmukeji/jiujiantang-services/subscription/activation-code"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 	"github.com/micro/go-micro/client"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"

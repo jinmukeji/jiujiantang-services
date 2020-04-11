@@ -11,8 +11,8 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	"github.com/jinmukeji/plat-pkg/rpc/errors"
 	"github.com/jinmukeji/plat-pkg/rpc/errors/codes"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	ptypesv2 "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // getModulesFromAEOutput 解析引擎输出的Output，获得与引擎相关的输出模块，用于单次测量

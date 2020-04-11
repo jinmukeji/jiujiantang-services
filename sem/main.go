@@ -7,7 +7,7 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/sem/config"
 	"github.com/jinmukeji/jiujiantang-services/sem/mysqldb"
 	sem "github.com/jinmukeji/jiujiantang-services/sem/sem_client"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
 
 	handler "github.com/jinmukeji/jiujiantang-services/sem/handler"
 	"github.com/micro/cli"
