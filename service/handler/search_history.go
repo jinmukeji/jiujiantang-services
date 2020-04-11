@@ -61,8 +61,8 @@ func (j *JinmuHealth) SearchHistory(ctx context.Context, req *corepb.SearchHisto
 		records = r
 	}
 
-    var recordsReply []*corepb.RecordHistory
-    
+	var recordsReply []*corepb.RecordHistory
+
 	for _, record := range records {
 		//TODO:增加显示
 		createAt, _ := ptypes.TimestampProto(record.CreatedAt)
@@ -109,7 +109,7 @@ func (j *JinmuHealth) SearchHistory(ctx context.Context, req *corepb.SearchHisto
 		body := record.AnalyzeBody
 		var physicalDialectics []string
 		if body != "" {
-            var analysisReportRequestBody AnalysisReportRequestBody
+			var analysisReportRequestBody AnalysisReportRequestBody
 			errUnmarshal := json.Unmarshal([]byte(body), &analysisReportRequestBody)
 			if errUnmarshal != nil {
 				continue
@@ -167,7 +167,7 @@ func (j *JinmuHealth) SearchHistory(ctx context.Context, req *corepb.SearchHisto
 			HasStressState:     record.HasStressState,
 			PhysicalDialectics: physicalDialectics,
 		})
-    }
+	}
 	resp.RecordHistories = recordsReply
 	return nil
 }

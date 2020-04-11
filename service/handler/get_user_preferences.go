@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 )
 
 // GetUserPreferences 得到用户的偏好
@@ -13,7 +13,7 @@ func (j *JinmuHealth) GetUserPreferences(ctx context.Context, req *corepb.GetUse
 	reqGetUserPreferences.UserId = req.UserId
 	respGetUserPreferences, errGetUserPreferences := j.jinmuidSvc.GetUserPreferences(ctx, reqGetUserPreferences)
 	if errGetUserPreferences != nil {
-        log.Errorf("failed to get user preferences")
+		log.Errorf("failed to get user preferences")
 		return errGetUserPreferences
 	}
 	resp.Preferences = &corepb.Preferences{

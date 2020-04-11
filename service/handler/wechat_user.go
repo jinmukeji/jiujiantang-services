@@ -11,9 +11,9 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 
+	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 )
 
 // 创建默认微信用户的默认属性

@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	"github.com/jinmukeji/go-pkg/crypto/rand"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	smspb "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
 )

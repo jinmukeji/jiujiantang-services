@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-    "github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
-    "github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
+	"github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
+	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 
 	"fmt"
 

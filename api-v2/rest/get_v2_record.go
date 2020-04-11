@@ -11,7 +11,6 @@ func (h *v2Handler) GetV2AnalyzeReportByRecordID(ctx iris.Context) {
 	recordID, _ := ctx.Params().GetInt("record_id")
 	req := new(analysispb.GetAnalyzeResultByRecordIDRequest)
 	req.RecordId = int32(recordID)
-	req.Cid = rest.GetCidFromContext(ctx)
 	resp, err := h.rpcAnalysisSvc.GetAnalyzeResultByRecordID(
 		newRPCContext(ctx), req,
 	)

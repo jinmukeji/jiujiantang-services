@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -24,7 +24,7 @@ func (suite *UserSigninTestSuite) SetupSuite() {
 	envFilepath := filepath.Join("testdata", "local.svc-biz-core.env")
 	db, _ := newTestingDbClientFromEnvFile(envFilepath)
 	suite.Account = newTestingAccountFromEnvFile(envFilepath)
-	suite.jinmuHealth = NewJinmuHealth(db, nil, nil, nil, nil, nil, nil,"")
+	suite.jinmuHealth = NewJinmuHealth(db, nil, nil, nil, nil, nil, nil, "")
 }
 
 // TestUserSiginin 测试用户登录

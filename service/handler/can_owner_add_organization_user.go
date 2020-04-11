@@ -6,8 +6,8 @@ import (
 	"fmt"
 
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
 	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
 )
 

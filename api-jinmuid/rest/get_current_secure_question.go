@@ -28,8 +28,8 @@ func (h *webHandler) GetSecureQuestionsByPhoneOrUsername(ctx iris.Context) {
 	if errmapRestValidationTypeToProto != nil {
 		writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestValidationTypeToProto), false)
 		return
-    }
-    req.ValidationType = validationType
+	}
+	req.ValidationType = validationType
 	req.Username = reqGetSecureQuestion.Username
 	req.Phone = reqGetSecureQuestion.Phone
 	req.NationCode = reqGetSecureQuestion.NationCode

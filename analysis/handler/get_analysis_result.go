@@ -20,9 +20,9 @@ import (
 
 	"time"
 
+	"github.com/jinmukeji/go-pkg/crypto/rand"
 	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
-	"github.com/jinmukeji/go-pkg/crypto/rand"
 	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
 	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
 	pulsetestinfopb "github.com/jinmukeji/proto/gen/micro/idl/jm/pulsetestinfo/v1"
