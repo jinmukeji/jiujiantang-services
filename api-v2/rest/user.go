@@ -7,10 +7,10 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes"
+	age "github.com/jinmukeji/go-pkg/v2/age"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	age "github.com/jinmukeji/go-pkg/age"
-	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	"github.com/kataras/iris/v12"
 )

@@ -35,7 +35,7 @@ func (suite *RecordTestSuite) TestFindValidRecordByID() {
 	ctx := context.Background()
 	db := suite.db
 	const testRecordID = 1
-	record, err := db.FindValidRecordByID(ctx, testRecordID)
+	record, err := db.GetDB(ctx).FindValidRecordByID(ctx, testRecordID)
 	assert.NoError(t, err)
 	assert.NotNil(t, record)
 	assert.Equal(t, testRecordID, record.RecordID)
@@ -47,7 +47,7 @@ func (suite *RecordTestSuite) TestFindValidRecordByIDFailed() {
 	db := suite.db
 	ctx := context.Background()
 	notExistedRecordID := 0
-	record, err := db.FindValidRecordByID(ctx, notExistedRecordID)
+	record, err := db.GetDB(ctx).FindValidRecordByID(ctx, notExistedRecordID)
 
 	assert.Error(t, err)
 	assert.Nil(t, record)
@@ -59,8 +59,8 @@ func (suite *RecordTestSuite) TestUpdateCommentByRecordID() {
 	ctx := context.Background()
 	testRecordID := 1
 	randomComment := uuid.New().String()
-	assert.NoError(t, suite.db.UpdateRemarkByRecordID(ctx, testRecordID, randomComment))
-	updatedRecord, _ := suite.db.FindValidRecordByID(ctx, testRecordID)
+	assert.NoError(t, suite.db.GetDB(ctx).UpdateRemarkByRecordID(ctx, testRecordID, randomComment))
+	updatedRecord, _ := suite.db.GetDB(ctx).FindValidRecordByID(ctx, testRecordID)
 	assert.Equal(t, randomComment, updatedRecord.Remark)
 }
 
@@ -75,9 +75,9 @@ func (suite *RecordTestSuite) TestCreateRecord() {
 		UpdatedAt: now.UTC(),
 		IsValid:   1,
 	}
-	assert.NoError(t, suite.db.CreateRecord(ctx, record))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateRecord(ctx, record))
 	assert.NotEqual(t, 0, record.RecordID)
-	createdRecord, _ := suite.db.FindValidRecordByID(ctx, record.RecordID)
+	createdRecord, _ := suite.db.GetDB(ctx).FindValidRecordByID(ctx, record.RecordID)
 	assert.Equal(t, record.C0, createdRecord.C0)
 }
 
@@ -87,7 +87,7 @@ func (suite *RecordTestSuite) TestCheckUserRecordAssociated() {
 	ctx := context.Background()
 	var testUserID int32 = 1
 	var testRecordID int32 = 1
-	res, err := suite.db.CheckUserHasRecord(ctx, testUserID, testRecordID)
+	res, err := suite.db.GetDB(ctx).CheckUserHasRecord(ctx, testUserID, testRecordID)
 	assert.NoError(t, err)
 	assert.True(t, res)
 }

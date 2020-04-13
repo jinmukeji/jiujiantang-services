@@ -6,9 +6,9 @@ import (
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
-	"github.com/jinmukeji/go-pkg/crypto/hash"
-	. "github.com/jinmukeji/go-pkg/with"
+	"github.com/jinmukeji/go-pkg/v2/crypto/encrypt/legacy"
+	"github.com/jinmukeji/go-pkg/v2/crypto/hash"
+	. "github.com/jinmukeji/go-pkg/v2/with"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 

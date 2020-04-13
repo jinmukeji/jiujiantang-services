@@ -7,8 +7,8 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/google/uuid"
-	crypto "github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
-	"github.com/jinmukeji/go-pkg/crypto/rand"
+	crypto "github.com/jinmukeji/go-pkg/v2/crypto/encrypt/legacy"
+	"github.com/jinmukeji/go-pkg/v2/crypto/rand"
 	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
 	bizcorepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"

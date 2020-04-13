@@ -21,5 +21,5 @@ func (q ScannedQRCodeRecord) TableName() string {
 
 // CreateScannedQRCodeRecord 创建二维码扫码记录
 func (db *DbClient) CreateScannedQRCodeRecord(ctx context.Context, record *ScannedQRCodeRecord) error {
-	return db.Create(record).Error
+	return db.GetDB(ctx).Create(record).Error
 }

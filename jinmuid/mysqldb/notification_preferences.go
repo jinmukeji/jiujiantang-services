@@ -21,20 +21,20 @@ type NotificationPreferences struct {
 
 // CreateNotificationPreferences 新增通知配置首选项
 func (db *DbClient) CreateNotificationPreferences(ctx context.Context, notificationPreferences *NotificationPreferences) error {
-	return db.DB(ctx).Create(notificationPreferences).Error
+	return db.GetDB(ctx).Create(notificationPreferences).Error
 }
 
 // HasUserSetNotificationPreferences 查看用户是否设置通知配置首选项
 func (db *DbClient) HasUserSetNotificationPreferences(ctx context.Context, userID int32) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&NotificationPreferences{}).Where("user_id = ?", userID).Count(&count).Error
+	err := db.GetDB(ctx).Model(&NotificationPreferences{}).Where("user_id = ?", userID).Count(&count).Error
 	return count == 1, err
 }
 
 // GetNotificationPreferences 获取通知配置首选项
 func (db *DbClient) GetNotificationPreferences(ctx context.Context, UserID int32) (*NotificationPreferences, error) {
 	var notificationPreferences NotificationPreferences
-	if err := db.DB(ctx).First(&notificationPreferences, "( user_id = ? AND deleted_at IS NULL) ", UserID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&notificationPreferences, "( user_id = ? AND deleted_at IS NULL) ", UserID).Error; err != nil {
 		return nil, err
 	}
 	return &notificationPreferences, nil
@@ -42,7 +42,7 @@ func (db *DbClient) GetNotificationPreferences(ctx context.Context, UserID int32
 
 // UpdateNotificationPreferences 更新通知配置首选项
 func (db *DbClient) UpdateNotificationPreferences(ctx context.Context, notificationPreferences *NotificationPreferences) error {
-	return db.DB(ctx).Model(&NotificationPreferences{}).Where("user_id = ?", notificationPreferences.UserID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&NotificationPreferences{}).Where("user_id = ?", notificationPreferences.UserID).Updates(map[string]interface{}{
 		"phone_enabled":             notificationPreferences.PhoneEnabled,
 		"wechat_enabled":            notificationPreferences.WechatEnabled,
 		"weibo_enabled":             notificationPreferences.WeiboEnabled,

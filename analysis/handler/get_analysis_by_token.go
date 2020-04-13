@@ -8,10 +8,10 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/ae/v2/biz"
 	"github.com/jinmukeji/ae/v2/engine/core"
+	"github.com/jinmukeji/go-pkg/v2/age"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
-	"github.com/jinmukeji/go-pkg/age"
-	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 

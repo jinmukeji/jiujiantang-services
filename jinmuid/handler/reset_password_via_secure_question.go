@@ -7,9 +7,9 @@ import (
 
 	"fmt"
 
+	crypto "github.com/jinmukeji/go-pkg/v2/crypto/encrypt/legacy"
+	"github.com/jinmukeji/go-pkg/v2/crypto/rand"
 	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
-	crypto "github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
-	"github.com/jinmukeji/go-pkg/crypto/rand"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 

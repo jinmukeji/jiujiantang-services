@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/go-pkg/age"
+	"github.com/jinmukeji/go-pkg/v2/age"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )

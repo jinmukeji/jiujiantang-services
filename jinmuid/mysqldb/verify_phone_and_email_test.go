@@ -1,11 +1,12 @@
 package mysqldb
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
-	"context"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -30,7 +31,7 @@ func (suite *VerifyPhoneAndEmailTestSuite) TestVerifyVerificationNumber() {
 	verificationType := VerificationPhone
 	verificationNumber := os.Getenv("X_TEST_VERIFICATION_NUMBER")
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
-	isValid, err := suite.db.VerifyVerificationNumber(ctx, verificationType, verificationNumber, int32(userID))
+	isValid, err := suite.db.GetDB(ctx).VerifyVerificationNumber(ctx, verificationType, verificationNumber, int32(userID))
 	assert.NoError(t, err)
 	assert.Equal(t, false, isValid)
 }
@@ -41,7 +42,7 @@ func (suite *VerifyPhoneAndEmailTestSuite) TestSetVerificationNumberAsUsed() {
 	ctx := context.Background()
 	verificationType := VerificationPhone
 	verificationNumber := os.Getenv("X_TEST_VERIFICATION_NUMBER")
-	err := suite.db.SetVerificationNumberAsUsed(ctx, verificationType, verificationNumber)
+	err := suite.db.GetDB(ctx).SetVerificationNumberAsUsed(ctx, verificationType, verificationNumber)
 	assert.NoError(t, err)
 }
 
@@ -52,7 +53,7 @@ func (suite *VerifyPhoneAndEmailTestSuite) TestVerifyVerificationNumberByPhone()
 	var verificationNumber = os.Getenv("X_TEST_VERIFICATION_NUMBER")
 	var phone = os.Getenv("X_TEST_PHONE")
 	var nationCode = os.Getenv("X_TEST_NATION_CODE")
-	isValid, err := suite.db.VerifyVerificationNumberByPhone(ctx, verificationNumber, phone, nationCode)
+	isValid, err := suite.db.GetDB(ctx).VerifyVerificationNumberByPhone(ctx, verificationNumber, phone, nationCode)
 	assert.NoError(t, err)
 	assert.Equal(t, false, isValid)
 }
@@ -63,7 +64,7 @@ func (suite *VerifyPhoneAndEmailTestSuite) TestVerifyVerificationNumberByEmail()
 	ctx := context.Background()
 	var verificationNumber = os.Getenv("X_TEST_VERIFICATION_NUMBER")
 	var email = os.Getenv("X_TEST_EMAIL")
-	isValid, err := suite.db.VerifyVerificationNumberByEmail(ctx, verificationNumber, email)
+	isValid, err := suite.db.GetDB(ctx).VerifyVerificationNumberByEmail(ctx, verificationNumber, email)
 	assert.NoError(t, err)
 	assert.Equal(t, false, isValid)
 }

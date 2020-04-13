@@ -42,9 +42,9 @@ func (suite *FeedbackTestSuite) TestCreateFeedback() {
 	t := suite.T()
 	ctx := context.Background()
 	feedback := generateRandomFeedback(userID)
-	assert.NoError(t, suite.db.CreateFeedback(ctx, feedback))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateFeedback(ctx, feedback))
 	assert.NotZero(t, feedback.FeedbackID)
-	feedbackFound, _ := suite.db.FindFeedbackByFeedBackID(ctx, feedback.FeedbackID)
+	feedbackFound, _ := suite.db.GetDB(ctx).FindFeedbackByFeedBackID(ctx, feedback.FeedbackID)
 	assert.Equal(t, feedback.Content, feedbackFound.Content)
 }
 

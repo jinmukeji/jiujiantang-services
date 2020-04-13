@@ -9,8 +9,10 @@ import (
 	handler "github.com/jinmukeji/jiujiantang-services/analysis/handler"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
 	logger "github.com/jinmukeji/jiujiantang-services/pkg/rpc"
+	dbutilmysql "github.com/jinmukeji/plat-pkg/v2/dbutil/mysql"
+	storemysql "github.com/jinmukeji/plat-pkg/v2/store/mysql"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
-	"github.com/micro/cli"
+	"github.com/micro/cli/v2"
 	micro "github.com/micro/go-micro/v2"
 )
 
@@ -35,23 +37,19 @@ func main() {
 		dbClientOptions(), aeOptions(), awsClientOptions(),
 
 		// Setup --version flag
-		micro.Flags(
-			cli.BoolFlag{
-				Name:  "version",
-				Usage: "Show version information",
-			},
-		),
+		defaultVersionFlags(),
 
 		// Setup metadata
 		micro.Metadata(versionMeta),
 	)
 	// optionally setup command line usage
 	service.Init(
-		micro.Action(func(c *cli.Context) {
+		micro.Action(func(c *cli.Context) error {
 			if c.Bool("version") {
 				config.PrintFullVersionInfo()
 				os.Exit(0)
 			}
+			return nil
 		}),
 	)
 	log.Infof("Starting service: %s", config.FullServiceName())
@@ -94,44 +92,53 @@ var (
 	dbMaxConns  = 1
 )
 
+func defaultVersionFlags() micro.Option {
+	return micro.Flags(
+		&cli.BoolFlag{
+			Name:  "version",
+			Usage: "Show version information",
+		},
+	)
+}
+
 // dbClientOptions 构建命令行启动参数
 func dbClientOptions() micro.Option {
 	return micro.Flags(
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_address",
 			Value:       "localhost:3306",
 			Usage:       "MySQL instance `ADDRESS` - [host]:[port]",
-			EnvVar:      "X_DB_ADDRESS",
+			EnvVars:     []string{"X_DB_ADDRESS"},
 			Destination: &dbAddress,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_username",
 			Usage:       "MySQL login `USERNAME`",
-			EnvVar:      "X_DB_USERNAME",
+			EnvVars:     []string{"X_DB_USERNAME"},
 			Destination: &dbUsername,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_password",
 			Usage:       "MySQL login `PASSWORD`",
-			EnvVar:      "X_DB_PASSWORD",
+			EnvVars:     []string{"X_DB_PASSWORD"},
 			Destination: &dbPassword,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_database",
 			Usage:       "MySQL database name",
-			EnvVar:      "X_DB_DATABASE",
+			EnvVars:     []string{"X_DB_DATABASE"},
 			Destination: &dbDatabase,
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:        "x_db_enable_log",
 			Usage:       "Enable MySQL client log",
-			EnvVar:      "X_DB_ENABLE_LOG",
+			EnvVars:     []string{"X_DB_ENABLE_LOG"},
 			Destination: &dbEnableLog,
 		},
-		cli.IntFlag{
+		&cli.IntFlag{
 			Name:        "x_db_max_connections",
 			Usage:       "Max connections of MySQL client",
-			EnvVar:      "X_DB_MAX_CONNECTIONS",
+			EnvVars:     []string{"X_DB_MAX_CONNECTIONS"},
 			Value:       1,
 			Destination: &dbMaxConns,
 		},
@@ -149,38 +156,39 @@ var (
 
 // aeOptions 构建AE命令行启动参数
 func aeOptions() micro.Option {
-	return micro.Flags(
-		cli.StringFlag{
+	flags := []cli.Flag{
+		&cli.StringFlag{
 			Name:        "x_lua_src_path",
 			Usage:       "AE LuaSrcPath",
-			EnvVar:      "X_LUA_SRC_PATH",
+			EnvVars:     []string{"X_LUA_SRC_PATH"},
 			Destination: &luaSrcPath,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_templates_dir",
 			Usage:       "AE TemplatesDir",
-			EnvVar:      "X_TEMPLATES_DIR",
+			EnvVars:     []string{"X_TEMPLATES_DIR"},
 			Destination: &templatesDir,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_question_dir",
 			Usage:       "AE QuestionDir",
-			EnvVar:      "X_QUESTION_DIR",
+			EnvVars:     []string{"X_QUESTION_DIR"},
 			Destination: &questionDir,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_presets_file_path",
 			Usage:       "AE PresetsFilePath",
-			EnvVar:      "X_PRESETS_FILE_PATH",
+			EnvVars:     []string{"X_PRESETS_FILE_PATH"},
 			Destination: &presetsFilePath,
 		},
-		cli.BoolTFlag{
+		&cli.BoolFlag{
 			Name:        "x_production_ae_log",
 			Usage:       "Log Mode Of AE",
-			EnvVar:      "X_PRODUCTION_AE_LOG",
+			EnvVars:     []string{"X_PRODUCTION_AE_LOG"},
 			Destination: &productionAELog,
 		},
-	)
+	}
+	return micro.Flags(flags...)
 }
 
 // aws 存储桶连接信息
@@ -195,44 +203,45 @@ var (
 
 // awsClientOptions 构建命令行启动参数
 func awsClientOptions() micro.Option {
-	return micro.Flags(
-		cli.StringFlag{
+	flags := []cli.Flag{
+		&cli.StringFlag{
 			Name:        "x_aws_bucket_name",
 			Usage:       "aws bucket name",
-			EnvVar:      "X_AWS_BUCKET_NAME",
+			EnvVars:     []string{"X_AWS_BUCKET_NAME"},
 			Destination: &awsBucketName,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_aws_access_key",
 			Usage:       "aws access key",
-			EnvVar:      "X_AWS_ACCESS_KEY",
+			EnvVars:     []string{"X_AWS_ACCESS_KEY"},
 			Destination: &awsAccessKey,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_aws_secret_key",
 			Usage:       "aws secret key",
-			EnvVar:      "X_AWS_SECRET_KEY",
+			EnvVars:     []string{"X_AWS_SECRET_KEY"},
 			Destination: &awsSecretKey,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_aws_region",
 			Usage:       "aws region",
-			EnvVar:      "X_AWS_REGION",
+			EnvVars:     []string{"X_AWS_REGION"},
 			Destination: &awsRegion,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_wave_data_key_prefix",
 			Usage:       "S3 prefix key for wave data",
-			EnvVar:      "X_WAVE_DATA_KEY_PREFIX",
+			EnvVars:     []string{"X_WAVE_DATA_KEY_PREFIX"},
 			Destination: &pulseTestRawDataEnvironmentS3KeyPrefix,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_pulse_test_raw_data_s3_key_prefix",
 			Usage:       "pulse test raw data s3 key prefix",
-			EnvVar:      "X_PULSE_TEST_RAW_DATA_S3_KEY_PREFIX",
+			EnvVars:     []string{"X_PULSE_TEST_RAW_DATA_S3_KEY_PREFIX"},
 			Destination: &pulseTestRawDataS3KeyPrefix,
 		},
-	)
+	}
+	return micro.Flags(flags...)
 }
 
 // newAWSClient 创建一个 aws 连接
@@ -249,14 +258,20 @@ func newAWSClient() (*aws.Client, error) {
 
 // newDbClient 创建一个 DbClient
 func newDbClient() (*mysqldb.DbClient, error) {
-	return mysqldb.NewDbClient(
-		mysqldb.Address(dbAddress),
-		mysqldb.Username(dbUsername),
-		mysqldb.Password(dbPassword),
-		mysqldb.Database(dbDatabase),
-		mysqldb.EnableLog(dbEnableLog),
-		mysqldb.MaxConnections(dbMaxConns),
+	cfg := dbutilmysql.NewConfig()
+	cfg.User = dbUsername
+	cfg.Passwd = dbPassword
+	cfg.Net = "tcp"
+	cfg.Addr = dbAddress
+	cfg.DBName = dbDatabase
+	db, err := dbutilmysql.OpenGormDB(
+		dbutilmysql.WithMySQLConfig(cfg),
 	)
+	if err != nil {
+		return nil, err
+	}
+
+	return mysqldb.NewDbClient(*storemysql.NewStore(db))
 }
 
 func newBizEngineManager() *biz.BizEngineManager {

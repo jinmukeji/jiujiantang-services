@@ -6,7 +6,7 @@ import (
 
 	"fmt"
 
-	"github.com/jinmukeji/go-pkg/crypto/hash"
+	"github.com/jinmukeji/go-pkg/v2/crypto/hash"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 )
 

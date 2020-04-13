@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/jinmukeji/go-pkg/crypto/rand"
+	"github.com/jinmukeji/go-pkg/v2/crypto/rand"
 	"gopkg.in/chanxuehong/wechat.v2/mp/jssdk"
 )
 

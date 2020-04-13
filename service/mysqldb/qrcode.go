@@ -26,7 +26,7 @@ func (q QRCode) TableName() string {
 
 // CreateQRCode 创建二维码信息
 func (db *DbClient) CreateQRCode(ctx context.Context, qrcode *QRCode) (*QRCode, error) {
-	if err := db.Create(qrcode).Error; err != nil {
+	if err := db.GetDB(ctx).Create(qrcode).Error; err != nil {
 		return nil, err
 	}
 	return qrcode, nil
@@ -34,7 +34,7 @@ func (db *DbClient) CreateQRCode(ctx context.Context, qrcode *QRCode) (*QRCode, 
 
 // UpdateQRCode 更新二维码信息
 func (db *DbClient) UpdateQRCode(ctx context.Context, qrcode *QRCode) error {
-	return db.Model(&QRCode{}).Where("scene_id = ?", qrcode.SceneID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&QRCode{}).Where("scene_id = ?", qrcode.SceneID).Updates(map[string]interface{}{
 		"raw_url":      qrcode.RawURL,
 		"ticket":       qrcode.Ticket,
 		"account":      qrcode.Account,
@@ -48,7 +48,7 @@ func (db *DbClient) UpdateQRCode(ctx context.Context, qrcode *QRCode) error {
 // FindQRCodeBySceneID 通过SceneID拿到QRCode
 func (db *DbClient) FindQRCodeBySceneID(ctx context.Context, SceneID int32) (*QRCode, error) {
 	var qrcode QRCode
-	err := db.First(&qrcode, "scene_id = ? ", SceneID).Error
+	err := db.GetDB(ctx).First(&qrcode, "scene_id = ? ", SceneID).Error
 	if err != nil {
 		return nil, err
 	}

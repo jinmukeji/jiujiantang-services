@@ -31,7 +31,7 @@ func (u UserPreferences) TableName() string {
 // GetUserPreferencesByUserID 返回数据库中的用户偏好
 func (db *DbClient) GetUserPreferencesByUserID(ctx context.Context, userID int32) (*UserPreferences, error) {
 	var u UserPreferences
-	if err := db.First(&u, "user_id = ? ", userID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&u, "user_id = ? ", userID).Error; err != nil {
 		return nil, err
 	}
 	return &u, nil

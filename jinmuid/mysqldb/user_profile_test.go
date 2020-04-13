@@ -1,12 +1,13 @@
 package mysqldb
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
 	"time"
-	"context"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -39,7 +40,7 @@ func (suite *UserProfileTestSuite) TestModifyUserProfile() {
 		Weight:   int32(weight),
 	}
 	ctx := context.Background()
-	err := suite.db.ModifyUserProfile(ctx, profile)
+	err := suite.db.GetDB(ctx).ModifyUserProfile(ctx, profile)
 	assert.NoError(t, err)
 }
 
@@ -49,7 +50,7 @@ func (suite *UserProfileTestSuite) TestFindUserProfile() {
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	nickname := os.Getenv("X_TEST_NICKNAME")
 	ctx := context.Background()
-	u, err := suite.db.FindUserProfile(ctx, int32(userID))
+	u, err := suite.db.GetDB(ctx).FindUserProfile(ctx, int32(userID))
 	assert.NoError(t, err)
 	assert.Equal(t, nickname, u.Nickname)
 }

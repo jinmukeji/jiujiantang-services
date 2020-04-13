@@ -2,9 +2,10 @@ package mysqldb
 
 import (
 	"context"
+	"math/rand"
 	"path/filepath"
 	"testing"
-	"math/rand"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -29,12 +30,12 @@ func (suite *DeleteSubscriptionUsersTestSuite) TestDeleteSubscriptionUsers() {
 	var userIDList = []int32{userID}
 	var subscriptionID = int32(77)
 	ctx := context.Background()
-	errCreateUserSubscriptionSharing := suite.db.CreateUserSubscriptionSharing(ctx, &UserSubscriptionSharing{
+	errCreateUserSubscriptionSharing := suite.db.GetDB(ctx).CreateUserSubscriptionSharing(ctx, &UserSubscriptionSharing{
 		SubscriptionID: subscriptionID,
 		UserID:         userID,
 	})
 	assert.NoError(t, errCreateUserSubscriptionSharing)
-	errDeleteSubscriptionUsers := suite.db.DeleteSubscriptionUsers(ctx, userIDList, subscriptionID)
+	errDeleteSubscriptionUsers := suite.db.GetDB(ctx).DeleteSubscriptionUsers(ctx, userIDList, subscriptionID)
 	assert.NoError(t, errDeleteSubscriptionUsers)
 }
 

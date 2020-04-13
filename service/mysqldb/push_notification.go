@@ -26,7 +26,7 @@ func (pn PushNotification) TableName() string {
 // GetPnsByUserID 通过userID拿到未读通知记录，按时间倒序
 func (db *DbClient) GetPnsByUserID(ctx context.Context, UserID int32, size int32) ([]PushNotification, error) {
 	var pns []PushNotification
-	err := db.Raw(`Select 
+	err := db.GetDB(ctx).Raw(`Select 
 		PN.pn_id,
 		PN.pn_title,
 		PN.pn_display_time,

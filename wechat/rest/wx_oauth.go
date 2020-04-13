@@ -3,7 +3,7 @@ package rest
 import (
 	"fmt"
 
-	"github.com/jinmukeji/go-pkg/crypto/rand"
+	"github.com/jinmukeji/go-pkg/v2/crypto/rand"
 	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/kataras/iris/v12"
 

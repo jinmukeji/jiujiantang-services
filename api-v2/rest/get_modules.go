@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/golang/protobuf/ptypes/any"
-	age "github.com/jinmukeji/go-pkg/age"
+	age "github.com/jinmukeji/go-pkg/v2/age"
 	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 )
 

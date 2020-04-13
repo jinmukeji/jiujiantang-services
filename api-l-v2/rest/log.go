@@ -3,7 +3,7 @@ package rest
 import (
 	"time"
 
-	mlog "github.com/jinmukeji/go-pkg/log"
+	mlog "github.com/jinmukeji/go-pkg/v2/log"
 	"github.com/sirupsen/logrus"
 )
 

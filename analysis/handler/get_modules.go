@@ -9,8 +9,8 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/jinmukeji/ae/v2/engine/core"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
-	"github.com/jinmukeji/plat-pkg/rpc/errors"
-	"github.com/jinmukeji/plat-pkg/rpc/errors/codes"
+	"github.com/jinmukeji/plat-pkg/v2/micro/errors"
+	"github.com/jinmukeji/plat-pkg/v2/micro/errors/codes"
 	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )

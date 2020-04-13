@@ -21,13 +21,13 @@ func (o OrganizationOwner) TableName() string {
 
 // CreateOrganizationOwner 在 organization_owner 新增一条记录
 func (db *DbClient) CreateOrganizationOwner(ctx context.Context, o *OrganizationOwner) error {
-	return db.Create(o).Error
+	return db.GetDB(ctx).Create(o).Error
 }
 
 // CheckOrganizationOwner 检查用户是否为组织的拥有者
 func (db *DbClient) CheckOrganizationOwner(ctx context.Context, userID int, organizationID int) (bool, error) {
 	var count int
-	if err := db.Raw("select count(*) from organization_owner where owner_id = ? AND organization_id = ? AND deleted_at IS NULL", userID, organizationID).Count(&count).Error; err != nil {
+	if err := db.GetDB(ctx).Raw("select count(*) from organization_owner where owner_id = ? AND organization_id = ? AND deleted_at IS NULL", userID, organizationID).Count(&count).Error; err != nil {
 		return false, err
 	}
 	return count != 0, nil
@@ -36,7 +36,7 @@ func (db *DbClient) CheckOrganizationOwner(ctx context.Context, userID int, orga
 // CheckUserOwnerBelongToSameOrganization 检查用户和拥有这是否处于相同的组织下
 func (db *DbClient) CheckUserOwnerBelongToSameOrganization(ctx context.Context, userID int32, ownerID int32) (bool, error) {
 	var count int
-	if err := db.Raw(`SELECT COUNT(OU1.organization_id) FROM organization_user AS OU1 
+	if err := db.GetDB(ctx).Raw(`SELECT COUNT(OU1.organization_id) FROM organization_user AS OU1 
 	INNER JOIN organization_user AS OU2 ON OU1.organization_id = OU2.organization_id 
     AND OU2.user_id = ? AND OU2.deleted_at IS NULL WHERE OU1.user_id = ? AND OU1.deleted_at IS NULL`, userID, ownerID).Count(&count).Error; err != nil {
 		return false, err
@@ -47,7 +47,7 @@ func (db *DbClient) CheckUserOwnerBelongToSameOrganization(ctx context.Context, 
 // GetOwnerIDByOrganizationID 根据组织的ID获取组织拥有者的ID
 func (db *DbClient) GetOwnerIDByOrganizationID(ctx context.Context, organizationID int) ([]int, error) {
 	var organizationOwner []OrganizationOwner
-	db.Raw(`SELECT
+	db.GetDB(ctx).Raw(`SELECT
         owner_id
     FROM 
         organization_owner

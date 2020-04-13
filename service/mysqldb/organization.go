@@ -34,13 +34,13 @@ func (o Organization) TableName() string {
 
 // CreateOrganization 创建组织
 func (db *DbClient) CreateOrganization(ctx context.Context, o *Organization) error {
-	return db.Create(o).Error
+	return db.GetDB(ctx).Create(o).Error
 }
 
 // FindFirstOrganizationByOwner 查找指定 owner 拥有的第一个组织
 func (db *DbClient) FindFirstOrganizationByOwner(ctx context.Context, ownerID int) (*Organization, error) {
 	var o Organization
-	if err := db.Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
 		organization.organization_id, 
 		organization.name, 
 		organization.phone,
@@ -69,7 +69,7 @@ func (db *DbClient) FindFirstOrganizationByOwner(ctx context.Context, ownerID in
 // FindOrganizationByID 从组织 ID 查找组织
 func (db *DbClient) FindOrganizationByID(ctx context.Context, organizationID int) (*Organization, error) {
 	var o Organization
-	if err := db.First(&o, "organization_id = ?", organizationID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&o, "organization_id = ?", organizationID).Error; err != nil {
 		return nil, err
 	}
 	return &o, nil
@@ -78,7 +78,7 @@ func (db *DbClient) FindOrganizationByID(ctx context.Context, organizationID int
 // FindOrganizationsByOwner 查找指定 owner 拥有的组织
 func (db *DbClient) FindOrganizationsByOwner(ctx context.Context, ownerID int) ([]*Organization, error) {
 	var os []*Organization
-	if err := db.Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
 		organization.organization_id, 
 		organization.name, 
 		organization.phone,
@@ -106,7 +106,7 @@ func (db *DbClient) FindOrganizationsByOwner(ctx context.Context, ownerID int) (
 
 // UpdateOrganizationProfile 更新组织信息
 func (db *DbClient) UpdateOrganizationProfile(ctx context.Context, o *Organization) error {
-	return db.Model(&Organization{}).Where("organization_id = ?", o.OrganizationID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Organization{}).Where("organization_id = ?", o.OrganizationID).Update(map[string]interface{}{
 		"name":        o.Name,
 		"phone":       o.Phone,
 		"contact":     o.Contact,
@@ -123,7 +123,7 @@ func (db *DbClient) UpdateOrganizationProfile(ctx context.Context, o *Organizati
 
 // DeleteOrganizationByID 删除组织
 func (db *DbClient) DeleteOrganizationByID(ctx context.Context, organizationID int) error {
-	tx := db.Begin()
+	tx := db.GetDB(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
 	}
@@ -149,14 +149,14 @@ func (db *DbClient) DeleteOrganizationByID(ctx context.Context, organizationID i
 // GetExistingUserCountByOrganizationID 查找指定 user的数量
 func (db *DbClient) GetExistingUserCountByOrganizationID(ctx context.Context, organizationID int) (int, error) {
 	var count int
-	db.Table("organization_user").Where("organization_id=? AND organization_user.deleted_at is NULL", organizationID).Count(&count)
+	db.GetDB(ctx).Table("organization_user").Where("organization_id=? AND organization_user.deleted_at is NULL", organizationID).Count(&count)
 	return count, nil
 }
 
 // GetOrganizationCountByOwnerID 查找组织的数量
 func (db *DbClient) GetOrganizationCountByOwnerID(ctx context.Context, ownerID int) (int, error) {
 	var count int
-	db.Table("organization_owner").Where("owner_id=? AND organization_owner.deleted_at is NULL", ownerID).Count(&count)
+	db.GetDB(ctx).Table("organization_owner").Where("owner_id=? AND organization_owner.deleted_at is NULL", ownerID).Count(&count)
 	return count, nil
 }
 
@@ -164,11 +164,11 @@ func (db *DbClient) GetOrganizationCountByOwnerID(ctx context.Context, ownerID i
 func (db *DbClient) FindOrganizationByUserID(ctx context.Context, userID int) (*Organization, error) {
 	// TODO: 以后多组织需要重构这个方法
 	var organizationUser OrganizationUser
-	if err := db.Table("organization_user").Where("user_id = ?", userID).Scan(&organizationUser).Error; err != nil {
+	if err := db.GetDB(ctx).Table("organization_user").Where("user_id = ?", userID).Scan(&organizationUser).Error; err != nil {
 		return nil, err
 	}
 	var o Organization
-	if err := db.First(&o, "organization_id = ?", organizationUser.OrganizationID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&o, "organization_id = ?", organizationUser.OrganizationID).Error; err != nil {
 		return nil, err
 	}
 	return &o, nil
@@ -177,6 +177,6 @@ func (db *DbClient) FindOrganizationByUserID(ctx context.Context, userID int) (*
 // CheckOrganizationIsValid 检查组织是否有效
 func (db *DbClient) CheckOrganizationIsValid(ctx context.Context, organizationID int) bool {
 	var organization Organization
-	db.First(&organization, "organization_id = ?", organizationID)
+	db.GetDB(ctx).First(&organization, "organization_id = ?", organizationID)
 	return organization.IsValid == 1
 }

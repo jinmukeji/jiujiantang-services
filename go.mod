@@ -2,7 +2,12 @@ module github.com/jinmukeji/jiujiantang-services
 
 go 1.14
 
-replace github.com/mozillazg/go-pinyin => github.com/mozillazg/go-pinyin v0.15.0
+replace (
+	github.com/mozillazg/go-pinyin => github.com/mozillazg/go-pinyin v0.15.0
+	// FIXME: 由于 etcd 与 gRPC 的兼容问题，得降级 grpc 版本
+	// https://github.com/etcd-io/etcd/issues/11721
+	google.golang.org/grpc => google.golang.org/grpc v1.26.0
+)
 
 require (
 	github.com/ajg/form v1.5.1 // indirect
@@ -23,19 +28,18 @@ require (
 	github.com/iris-contrib/middleware/cors v0.0.0-20191219204441-78279b78a367
 	github.com/jinmukeji/ae-v1 v1.0.2
 	github.com/jinmukeji/ae/v2 v2.10.3
-	github.com/jinmukeji/go-pkg v1.1.1
-	github.com/jinmukeji/plat-pkg v1.18.1
-	github.com/jinmukeji/plat-report v1.0.10
-	github.com/jinmukeji/proto v0.0.0-20200109071617-e8ce07396f92
+	github.com/jinmukeji/go-pkg/v2 v2.2.7
+	github.com/jinmukeji/plat-pkg/v2 v2.1.0
+	github.com/jinmukeji/proto/v3 v3.0.7
 	github.com/jinzhu/gorm v1.9.12
 	github.com/joho/godotenv v1.3.0
 	github.com/jpillora/ipfilter v1.2.1
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kataras/iris/v12 v12.1.8
-	github.com/micro/cli v0.2.0
-	github.com/micro/go-micro v1.18.0
+	github.com/micro/cli/v2 v2.1.2
+	github.com/micro/go-micro/v2 v2.4.0
 	github.com/moul/http2curl v1.0.0 // indirect
-	github.com/mozillazg/go-pinyin v0.17.0
+	github.com/mozillazg/go-pinyin v0.0.0-00010101000000-000000000000
 	github.com/sirupsen/logrus v1.5.0
 	github.com/stretchr/testify v1.5.1
 	github.com/valyala/fasthttp v1.9.0 // indirect

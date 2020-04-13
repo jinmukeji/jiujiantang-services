@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/jinmukeji/go-pkg/mysqldb"
+	"github.com/jinmukeji/jiujiantang-services/device/mysqldb"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -31,12 +31,12 @@ func newTestingDbClientFromEnvFile(filepath string) (*DbClient, error) {
 	}
 
 	db, err := NewDbClient(
-		mysqldb.Address(os.Getenv("X_DB_ADDRESS")),
-		mysqldb.Username(os.Getenv("X_DB_USERNAME")),
-		mysqldb.Password(os.Getenv("X_DB_PASSWORD")),
-		mysqldb.Database(os.Getenv("X_DB_DATABASE")),
-		mysqldb.EnableLog(enableLog),
-		mysqldb.MaxConnections(maxConns),
+		mysqldb.GetDB(ctx).Address(os.Getenv("X_DB_ADDRESS")),
+		mysqldb.GetDB(ctx).Username(os.Getenv("X_DB_USERNAME")),
+		mysqldb.GetDB(ctx).Password(os.Getenv("X_DB_PASSWORD")),
+		mysqldb.GetDB(ctx).Database(os.Getenv("X_DB_DATABASE")),
+		mysqldb.GetDB(ctx).EnableLog(enableLog),
+		mysqldb.GetDB(ctx).MaxConnections(maxConns),
 	)
 	return db, err
 }
@@ -54,7 +54,7 @@ func (suite *DbClientTestSuite) TearDownSuite() {
 // safeCloseDB 安全的关闭数据库连接
 func safeCloseDB(db *DbClient) {
 	if db != nil {
-		db.Close()
+		db.GetDB(ctx).Close()
 	}
 }
 
@@ -91,9 +91,9 @@ func (suite *DbClientTestSuite) TestConnectDBFailed() {
 	wrongPwd := "this_is_a_wrong_password"
 
 	db, err := NewDbClient(
-		mysqldb.Address(wrongAddr),
-		mysqldb.Username(wrongUsername),
-		mysqldb.Password(wrongPwd),
+		mysqldb.GetDB(ctx).Address(wrongAddr),
+		mysqldb.GetDB(ctx).Username(wrongUsername),
+		mysqldb.GetDB(ctx).Password(wrongPwd),
 	)
 	defer safeCloseDB(db)
 
@@ -110,7 +110,7 @@ func (suite *DbClientTestSuite) TestDbClientOptions() {
 	assert.NotNil(t, db)
 	assert.NoError(t, err)
 
-	opts := mysqldb.DefaultOptions()
+	opts := mysqldb.GetDB(ctx).DefaultOptions()
 	assert.Equal(t, os.Getenv("X_DB_ADDRESS"), opts.Address)
 	assert.Equal(t, os.Getenv("X_DB_USERNAME"), opts.Username)
 	assert.Equal(t, os.Getenv("X_DB_PASSWORD"), opts.Password)

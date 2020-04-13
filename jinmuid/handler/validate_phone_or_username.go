@@ -5,7 +5,7 @@ import (
 	"errors"
 	"regexp"
 
-	"github.com/jinmukeji/go-pkg/areacode"
+	"github.com/jinmukeji/go-pkg/v2/areacode"
 
 	"fmt"
 

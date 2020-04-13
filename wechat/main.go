@@ -5,7 +5,7 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/wechat/config"
 	"github.com/jinmukeji/jiujiantang-services/wechat/rest"
-	"github.com/micro/cli"
+	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2/web"
 )
 
@@ -27,28 +27,28 @@ func main() {
 		// CLI Flags
 		// Setup --version flag
 		web.Flags(
-			cli.StringFlag{
+			&cli.StringFlag{
 				Name:        "x_api_base",
 				Value:       "",
 				Usage:       "API Base URL",
-				EnvVar:      "X_API_BASE",
+				EnvVars:     []string{"X_API_BASE"},
 				Destination: &(options.APIBase),
 			},
-			cli.StringFlag{
+			&cli.StringFlag{
 				Name:        "x_wx_callback_server_base",
 				Value:       "",
 				Usage:       "微信公众平台 回调服务器的地址",
-				EnvVar:      "X_WX_CALLBACK_SERVER_BASE",
+				EnvVars:     []string{"X_WX_CALLBACK_SERVER_BASE"},
 				Destination: &(options.WxCallbackServerBase),
 			},
-			cli.StringFlag{
+			&cli.StringFlag{
 				Name:        "x_wx_h5_server_base",
 				Value:       "",
 				Usage:       "微信公众平台 模版ID",
-				EnvVar:      "X_WX_H5_SERVER_BASE",
+				EnvVars:     []string{"X_WX_H5_SERVER_BASE"},
 				Destination: &(options.WxH5ServerBase),
 			},
-			cli.BoolFlag{
+			&cli.BoolFlag{
 				Name:  "version",
 				Usage: "Show version information",
 			},

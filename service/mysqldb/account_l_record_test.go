@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-    "github.com/stretchr/testify/suite"
-    context "golang.org/x/net/context"
+	"github.com/stretchr/testify/suite"
+	context "golang.org/x/net/context"
 )
 
 // AccountLRecordSuite 是 AccountLRecord 的单元测试的 Test Suite
@@ -27,8 +27,8 @@ func (suite *AccountLRecordSuite) TestCreateAccountLRecord() {
 	t := suite.T()
 	ctx := context.Background()
 	account := "JML003"
-    recordID := 10000000
-	err := suite.db.CreateAccountLRecord(ctx, account, int32(recordID))
+	recordID := 10000000
+	err := suite.db.GetDB(ctx).CreateAccountLRecord(ctx, account, int32(recordID))
 	assert.NoError(t, err)
 }
 func TestAccountLRecordSuite(t *testing.T) {

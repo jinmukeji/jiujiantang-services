@@ -1,10 +1,11 @@
 package mysqldb
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"testing"
-	"context"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -30,7 +31,7 @@ func (suite *ClientTestSuite) TearDownSuite() {
 func (suite *ClientTestSuite) TestFindClientByClientID() {
 	t := suite.T()
 	ctx := context.Background()
-	client, err := suite.db.FindClientByClientID(ctx, os.Getenv("X_TEST_CLIENT_ID"))
+	client, err := suite.db.GetDB(ctx).FindClientByClientID(ctx, os.Getenv("X_TEST_CLIENT_ID"))
 	assert.NoError(t, err)
 	assert.NotNil(t, client)
 	assert.Equal(t, "CHSnHWkepLThkmPw8IUX", client.SecretKey)

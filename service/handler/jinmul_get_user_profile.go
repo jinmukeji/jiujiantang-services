@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	"github.com/jinmukeji/go-pkg/age"
+	"github.com/jinmukeji/go-pkg/v2/age"
 
 	"github.com/golang/protobuf/ptypes"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"

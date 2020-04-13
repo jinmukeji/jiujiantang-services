@@ -24,7 +24,7 @@ func (a JinmuLAccount) TableName() string {
 // FindJinmuLAccount 查找account信息
 func (db *DbClient) FindJinmuLAccount(ctx context.Context, account string) (*JinmuLAccount, error) {
 	var jinmuLAccount JinmuLAccount
-	if err := db.First(&jinmuLAccount, "( account = ? ) ", account).Error; err != nil {
+	if err := db.GetDB(ctx).First(&jinmuLAccount, "( account = ? ) ", account).Error; err != nil {
 		return nil, err
 	}
 	return &jinmuLAccount, nil

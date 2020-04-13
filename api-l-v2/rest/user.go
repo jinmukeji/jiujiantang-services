@@ -7,8 +7,8 @@ import (
 	"errors"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/jinmukeji/go-pkg/v2/age"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	"github.com/jinmukeji/go-pkg/age"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	"github.com/kataras/iris/v12"

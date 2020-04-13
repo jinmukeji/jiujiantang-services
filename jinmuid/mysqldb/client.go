@@ -2,6 +2,7 @@ package mysqldb
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
@@ -27,8 +28,16 @@ func (c Client) TableName() string {
 // FindClientByClientID 查找一条 Client 数据记录
 func (db *DbClient) FindClientByClientID(ctx context.Context, clientID string) (*Client, error) {
 	var client Client
-	if err := db.DB(ctx).First(&client, "( client_id = ? ) ", clientID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&client, "( client_id = ? ) ", clientID).Error; err != nil {
 		return nil, err
 	}
 	return &client, nil
+}
+
+// SafeCloseDB  安全的关闭数据库连接
+func (db *DbClient) SafeCloseDB(ctx context.Context) {
+	err := db.GetDB(ctx).Close()
+	if err != nil {
+		fmt.Println("Closing DB error:", err)
+	}
 }

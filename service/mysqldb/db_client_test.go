@@ -53,7 +53,7 @@ func (suite *DbClientTestSuite) TearDownSuite() {
 // safeCloseDB 安全的关闭数据库连接
 func safeCloseDB(db *DbClient) {
 	if db != nil {
-		db.Close()
+		db.GetDB(ctx).Close()
 	}
 }
 
@@ -94,7 +94,7 @@ func (suite *DbClientTestSuite) TestDbClientOptions() {
 	assert.NotNil(t, db)
 	assert.NoError(t, err)
 
-	opts := db.Options()
+	opts := db.GetDB(ctx).Options()
 	assert.Equal(t, os.Getenv("X_DB_ADDRESS"), opts.Address)
 	assert.Equal(t, os.Getenv("X_DB_USERNAME"), opts.Username)
 	assert.Equal(t, os.Getenv("X_DB_PASSWORD"), opts.Password)
