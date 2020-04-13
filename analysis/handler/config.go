@@ -172,7 +172,7 @@ func getDisplayOption(appId string, gender ptypesv2.Gender, hasStressState bool,
 		// 显示运动建议
 		options["DisplaySportsAdvice"] = true
 		// 显示中药建议
-		// options["DisplayChineseMedicineAdvice"] = true
+		options["DisplayChineseMedicineAdvice"] = true
 		// 显示理疗建议
 		options["DisplayPhysicalTherapyAdvice"] = true
 		// 显示局部脉搏波
