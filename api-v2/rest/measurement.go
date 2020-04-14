@@ -103,8 +103,8 @@ type SubmitMeasurementInfoRequest struct {
 	UserId             int32              `json:"user_id"`             // UserID
 	Mac                string             `json:"mac"`                 // mac地址
 	MobileType         string             `json:"mobile_type"`         // 手机类型
-	Payload            *RingSamplePayload `json:"payload"`             // 采样数据
 	MeasurementPosture int32              `json:"measurement_posture"` // 测量姿态
+	Payload            *RingSamplePayload `json:"payload"`             // 采样数据
 	Extras             map[string]string  `json:"extras"`              // 额外的扩展上下文数据，KV 键值对
 }
 
@@ -186,7 +186,7 @@ func (h *v2Handler) SubmitMeasurementData(ctx iris.Context) {
 	req.Payload = &corepb.RingSamplePayload{
 		Fps:               uint32(ringSamplePayload.Fps),
 		Finger:            protoFinger,
-		Count:             uint32(ringSamplePayload.Fps),
+		Count:             uint32(ringSamplePayload.Count),
 		PointSize:         uint32(ringSamplePayload.PointSize),
 		Payload:           payload,
 		PayloadCodec:      SunmitMeasurementPayloadCodec,

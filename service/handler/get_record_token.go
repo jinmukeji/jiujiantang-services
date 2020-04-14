@@ -13,8 +13,8 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/pkg/rpc"
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	mysql "github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
@@ -210,12 +210,9 @@ func (j *JinmuHealth) BuildAnalysisReportOptions(ctx context.Context, reportID s
 func (j *JinmuHealth) buildAnalysisResult(ctx context.Context, record *mysql.Record, reqUserID int) (*MeasurementResult, error) {
 	l := rpc.ContextLogger(ctx)
 	var partialData []int32
-	dataArray, errgetPulseTestDataIntArray := getPulseTestDataIntArray(record.S3Key, j.awsClient)
+	partialData, errgetPulseTestDataIntArray := getPartialPulseTestDataIntArray(record.S3Key, j.awsClient)
 	if errgetPulseTestDataIntArray != nil {
-		l.WithError(errgetPulseTestDataIntArray).Warn("failed to getPulseTestDataIntArray of S3Key")
-	}
-	if len(dataArray) >= 4000 {
-		partialData = dataArray[3000:4000]
+		l.WithError(errgetPulseTestDataIntArray).Warn("failed to getPartialPulseTestDataIntArray of S3Key")
 	}
 	protoFinger, errMapDBFingerToProto := mapDBFingerToProto(record.Finger)
 	if errMapDBFingerToProto != nil {

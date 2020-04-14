@@ -12,8 +12,8 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
-	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // 创建默认微信用户的默认属性
@@ -26,6 +26,11 @@ const (
 	defaultClientID     = "jm-10002"
 	defaultRegisterType = "wechat"
 	createdUserTopic    = "com.jinmuhealth.topic.jinmul-wx-created-user"
+)
+
+const (
+	// 日期格式
+	dateFormat = "2006-01-02"
 )
 
 // Message 消息

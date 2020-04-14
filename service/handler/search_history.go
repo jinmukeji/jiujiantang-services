@@ -1,12 +1,9 @@
 package handler
 
 import (
-	"bufio"
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
@@ -14,7 +11,6 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
 	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
-	pulsetestinfopb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/pulsetestinfo/v1"
 	context "golang.org/x/net/context"
 )
 
@@ -61,21 +57,15 @@ func (j *JinmuHealth) SearchHistory(ctx context.Context, req *corepb.SearchHisto
 		records = r
 	}
 
-    var recordsReply []*corepb.RecordHistory
-    
+	var recordsReply []*corepb.RecordHistory
+
 	for _, record := range records {
 		//TODO:增加显示
 		createAt, _ := ptypes.TimestampProto(record.CreatedAt)
-		dataArray, errgetPulseTestDataIntArray := getPulseTestDataIntArray(record.S3Key, j.awsClient)
+		waveData, errgetPulseTestDataIntArray := getPartialPulseTestDataIntArray(record.S3Key, j.awsClient)
 		if errgetPulseTestDataIntArray != nil {
-			cause := fmt.Sprintf("failed to getPulseTestDataIntArray, record_id: %d, data length is %d", record.RecordID, len(dataArray))
+			cause := fmt.Sprintf("failed to getPulseTestDataIntArray, record_id: %d, data length is %d", record.RecordID, len(waveData))
 			l.WithError(errgetPulseTestDataIntArray).Warn(cause)
-			dataArray = make([]int32, 0)
-		}
-		waveData, errpickPartialPulseTestRawData := pickPartialPulseTestRawData(dataArray)
-		if errpickPartialPulseTestRawData != nil {
-			cause := fmt.Sprintf("failed to errpickPartialPulseTestRawData, record_id is %d, data length is %d", record.RecordID, len(waveData))
-			l.WithError(errpickPartialPulseTestRawData).Warn(cause)
 			waveData = make([]int32, 0)
 		}
 		var answers []Answer
@@ -109,7 +99,7 @@ func (j *JinmuHealth) SearchHistory(ctx context.Context, req *corepb.SearchHisto
 		body := record.AnalyzeBody
 		var physicalDialectics []string
 		if body != "" {
-            var analysisReportRequestBody AnalysisReportRequestBody
+			var analysisReportRequestBody AnalysisReportRequestBody
 			errUnmarshal := json.Unmarshal([]byte(body), &analysisReportRequestBody)
 			if errUnmarshal != nil {
 				continue
@@ -167,7 +157,7 @@ func (j *JinmuHealth) SearchHistory(ctx context.Context, req *corepb.SearchHisto
 			HasStressState:     record.HasStressState,
 			PhysicalDialectics: physicalDialectics,
 		})
-    }
+	}
 	resp.RecordHistories = recordsReply
 	return nil
 }
@@ -215,10 +205,13 @@ func (j *JinmuHealth) GetMeasurementRecord(ctx context.Context, req *corepb.GetM
 		return NewError(ErrInvalidFinger, errMapDBFingerToProto)
 	}
 	resp.Finger = protoFinger
-	dataArray, _ := getPulseTestDataIntArray(record.S3Key, j.awsClient)
-	if len(dataArray) >= 4000 {
-		resp.Info = dataArray[3000:4000]
+	dataArray, errgetPulseTestDataIntArray := getPartialPulseTestDataIntArray(record.S3Key, j.awsClient)
+	if errgetPulseTestDataIntArray != nil {
+		resp.Info = []int32{}
+	} else {
+		resp.Info = dataArray
 	}
+
 	resp.Answers = record.Answers
 	return nil
 }
@@ -237,45 +230,13 @@ func validateSearchHistoryRequest(req *corepb.SearchHistoryRequest) (bool, error
 	return true, nil
 }
 
-// pickPartialPulseTestRawData 从S3上得到特殊的波形数据
-func pickPartialPulseTestRawData(dataArray []int32) ([]int32, error) {
-	if len(dataArray) < appWaveDataStart+appWaveDataLength {
-		return nil, fmt.Errorf("wave data length %d too short", len(dataArray))
-	}
-	return dataArray[appWaveDataStart : appWaveDataStart+appWaveDataLength], nil
-}
-
-// getPulseTestDataIntArray 从aws上得到波形数据
-func getPulseTestDataIntArray(s3Key string, client aws.PulseTestRawDataS3Client) ([]int32, error) {
+// getPartialPulseTestDataIntArray 从aws上得到波形数据
+func getPartialPulseTestDataIntArray(s3Key string, client aws.PulseTestRawDataS3Client) ([]int32, error) {
 	pulseTestRawData, err := client.Download(s3Key)
 	if err != nil {
 		return []int32{}, fmt.Errorf("failed to download raw data of s3key %s: %s", s3Key, err.Error())
 	}
-	return ParsePayload(pulseTestRawData)
-}
-
-// ParsePayload 解析Payload
-func ParsePayload(pulseTestRawData *pulsetestinfopb.PulseTestRawInfo) ([]int32, error) {
-	payload := pulseTestRawData.Payloads
-	if pulseTestRawData.Spec == 2 {
-		waveData := make([]int32, 0)
-		for i := 0; i < len(payload); i += blutoothDataSegmentLength {
-			val := int32(payload[i])<<16 + int32(payload[i+1])<<8 + int32(payload[i+2])
-			waveData = append(waveData, val)
-		}
-		return waveData, nil
-	}
-	scanner := bufio.NewScanner(bytes.NewReader(payload))
-	waveData := make([]int32, 0)
-	for scanner.Scan() {
-		line := scanner.Text()
-		d, parseErr := strconv.Atoi(line[:len(line)-1])
-		if parseErr != nil {
-			continue
-		}
-		waveData = append(waveData, int32(d))
-	}
-	return waveData, nil
+	return getPartialeWaveData(pulseTestRawData.Payloads)
 }
 
 // DeleteRecord 删除记录
