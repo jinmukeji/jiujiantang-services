@@ -91,8 +91,9 @@ type SubmitMeasurementData struct {
 }
 
 func (h *v2Handler) SubmitMeasurementData(ctx iris.Context) {
+	// 用不到大机器，所以该段代码被注释掉
 	/*
-		    大机器的删除
+
 			var measurement Measurement
 			err := ctx.ReadJSON(&measurement)
 			if err != nil {

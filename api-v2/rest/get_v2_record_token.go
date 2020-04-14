@@ -12,7 +12,7 @@ func (h *v2Handler) GetV2AnalyzeReportByToken(ctx iris.Context) {
 	token := ctx.Params().Get("token")
 	req := new(analysispb.GetAnalyzeResultByTokenRequest)
 	req.Token = token
-	// req.Cid = rest.GetCidFromContext(ctx)
+	req.Cid = rest.GetCidFromContext(ctx)
 	resp, errGetAnalyzeResultByToken := h.rpcAnalysisSvc.GetAnalyzeResultByToken(
 		newRPCContext(ctx), req,
 	)

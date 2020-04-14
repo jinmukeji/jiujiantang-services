@@ -84,7 +84,7 @@ func (j *AnalysisManagerService) GetAnalyzeResultByRecordID(ctx context.Context,
 	}
 	// 如果还有需要提问的问题，则分析错误
 	if !ctxData.Output["has_answered_all_questions"].(bool) {
-		return NewError(ErrAEError, fmt.Errorf("error occurs when run engine: all questions has not been answered")
+		return NewError(ErrAEError, fmt.Errorf("error occurs when run engine: all questions has not been answered"))
 	}
 
 	// 构建返回的内容

@@ -156,7 +156,7 @@ var (
 
 // aeOptions 构建AE命令行启动参数
 func aeOptions() micro.Option {
-	flags := []cli.Flag{
+	return micro.Flags(
 		&cli.StringFlag{
 			Name:        "x_lua_src_path",
 			Usage:       "AE LuaSrcPath",
@@ -187,8 +187,7 @@ func aeOptions() micro.Option {
 			EnvVars:     []string{"X_PRODUCTION_AE_LOG"},
 			Destination: &productionAELog,
 		},
-	}
-	return micro.Flags(flags...)
+	)
 }
 
 // aws 存储桶连接信息
@@ -203,7 +202,7 @@ var (
 
 // awsClientOptions 构建命令行启动参数
 func awsClientOptions() micro.Option {
-	flags := []cli.Flag{
+	return micro.Flags(
 		&cli.StringFlag{
 			Name:        "x_aws_bucket_name",
 			Usage:       "aws bucket name",
@@ -240,8 +239,7 @@ func awsClientOptions() micro.Option {
 			EnvVars:     []string{"X_PULSE_TEST_RAW_DATA_S3_KEY_PREFIX"},
 			Destination: &pulseTestRawDataS3KeyPrefix,
 		},
-	}
-	return micro.Flags(flags...)
+	)
 }
 
 // newAWSClient 创建一个 aws 连接

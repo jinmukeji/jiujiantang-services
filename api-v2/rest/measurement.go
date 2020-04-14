@@ -56,15 +56,6 @@ const (
 	SunmitMeasurementPayloadCodec = "ring-red-raw"
 )
 
-// TODO: 开发使用 去掉提交测量时mac地址的验证
-
-// plat-pkg/v2 更新到 v2.1.0
-// go-pkg/v2 更新到 v2.2.7
-// 注意编译九间堂项目的时候更新这两个包。遇到问题及时反馈。
-// @夏天阳 @倪昌兰
-
-// 用户列表把 # 放最后
-
 // SubmitMeasurementDataResponse 提交测量数据的响应
 type SubmitMeasurementDataResponse struct {
 	RecordID            int32     `json:"record_id"`
