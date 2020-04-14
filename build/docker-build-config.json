@@ -22,11 +22,6 @@
             "working_dir": "./out"
         },
         {
-            "image_name":"web-rest-websocket",
-            "dockerfile": "../websocket/Dockerfile",
-            "working_dir": "./out"
-        },
-        {
             "image_name":"svc-sms-gw",
             "dockerfile": "../sms/Dockerfile",
             "working_dir": "./out"
@@ -64,11 +59,6 @@
         {
             "image_name":"web-rest-sys",
             "dockerfile": "../api-sys/Dockerfile",
-            "working_dir": "./out"
-        },
-        {
-            "image_name":"web-go",
-            "dockerfile": "../web-go/Dockerfile",
             "working_dir": "./out"
         }
     ]
