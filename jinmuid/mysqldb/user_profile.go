@@ -36,7 +36,7 @@ func (u UserProfile) TableName() string {
 
 // CreateUserProfile 创建UserProfile
 func (db *DbClient) CreateUserProfile(ctx context.Context, u *UserProfile) (*UserProfile, error) {
-	if err := db.DB(ctx).Create(u).Error; err != nil {
+	if err := db.GetDB(ctx).Create(u).Error; err != nil {
 		return nil, err
 	}
 	return u, nil
@@ -44,7 +44,7 @@ func (db *DbClient) CreateUserProfile(ctx context.Context, u *UserProfile) (*Use
 
 // ModifyUserProfile 修改用户档案
 func (db *DbClient) ModifyUserProfile(ctx context.Context, profile *UserProfile) error {
-	return db.DB(ctx).Model(&UserProfile{}).Where("user_id = ?", profile.UserID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&UserProfile{}).Where("user_id = ?", profile.UserID).Updates(map[string]interface{}{
 		"nickname":         profile.Nickname,
 		"nickname_initial": profile.NicknameInitial,
 		"gender":           profile.Gender,
@@ -57,7 +57,7 @@ func (db *DbClient) ModifyUserProfile(ctx context.Context, profile *UserProfile)
 // FindUserProfile 找到用户档案
 func (db *DbClient) FindUserProfile(ctx context.Context, userID int32) (*UserProfile, error) {
 	var profile UserProfile
-	if err := db.DB(ctx).First(&profile, "( user_id = ? ) ", userID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&profile, "( user_id = ? ) ", userID).Error; err != nil {
 		return nil, err
 	}
 	return &profile, nil
@@ -66,7 +66,7 @@ func (db *DbClient) FindUserProfile(ctx context.Context, userID int32) (*UserPro
 // FindUserProfileByRecordID 通过记录ID获取用户档案
 func (db *DbClient) FindUserProfileByRecordID(ctx context.Context, recordID int32) (*UserProfile, error) {
 	var userProfile UserProfile
-	if err := db.DB(ctx).Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
 	UP.user_id, 
     UP.nickname,
     case when UP.nickname_initial = '~' THEN '#' ELSE UP.nickname_initial END as nickname_initial,
@@ -85,7 +85,7 @@ func (db *DbClient) FindUserProfileByRecordID(ctx context.Context, recordID int3
 
 // CreateUserAndUserProfile 创建用户和用户资料
 func (db *DbClient) CreateUserAndUserProfile(ctx context.Context, user *User, userProfile *UserProfile) error {
-	tx := db.DB(ctx).Begin()
+	tx := db.GetDB(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
 	}

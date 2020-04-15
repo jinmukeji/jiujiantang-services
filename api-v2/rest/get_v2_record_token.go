@@ -3,7 +3,7 @@ package rest
 import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
 	"github.com/kataras/iris/v12"
 )
 

@@ -147,6 +147,8 @@ const (
 	ErrInvalidGender = 90000
 	// ErrGenRandomString 生成随机字符串失败
 	ErrGenRandomString = 91000
+	// ErrInvalidPayload 解码失败，即 payload 非法
+	ErrInvalidPayload = 9200
 )
 
 // NewError 构建一个新的 Error

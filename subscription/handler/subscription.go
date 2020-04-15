@@ -9,7 +9,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/jiujiantang-services/subscription/mysqldb"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 )
 
 // GetUserSubscriptions 得到用户的订阅

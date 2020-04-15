@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // UpdateAnalyzeStatus 更新分析的状态

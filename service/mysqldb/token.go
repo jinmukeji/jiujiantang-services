@@ -29,7 +29,7 @@ func (db *DbClient) CreateToken(ctx context.Context, token string, userID int32,
 		ExpiredAt: now.Add(availableDuration),
 		UpdatedAt: now,
 	}
-	if err := db.Create(&tk).Error; err != nil {
+	if err := db.GetDB(ctx).Create(&tk).Error; err != nil {
 		return nil, err
 	}
 	return &tk, nil
@@ -40,7 +40,7 @@ func (db *DbClient) FindUserIDByToken(ctx context.Context, token string) (int32,
 	var t Token
 	now := time.Now()
 
-	if err := db.Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
+	if err := db.GetDB(ctx).Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
 		return 0, err
 	}
 
@@ -49,5 +49,5 @@ func (db *DbClient) FindUserIDByToken(ctx context.Context, token string) (int32,
 
 // DeleteToken 删除数据库内指定的 token
 func (db *DbClient) DeleteToken(ctx context.Context, token string) error {
-	return db.Delete(Token{}, "token = ?", token).Error
+	return db.GetDB(ctx).Delete(Token{}, "token = ?", token).Error
 }

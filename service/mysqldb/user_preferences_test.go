@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-    "github.com/stretchr/testify/suite"
-    context "golang.org/x/net/context"
+	"github.com/stretchr/testify/suite"
+	context "golang.org/x/net/context"
 )
 
 // UserPreferencesTestSuite 是 UserPreferences 的 testSuite
@@ -27,7 +27,7 @@ func (suite *UserPreferencesTestSuite) TestGetUserPreferencesByUserID() {
 	t := suite.T()
 	ctx := context.Background()
 	const userID = int32(1)
-	u, err := suite.db.GetUserPreferencesByUserID(ctx, userID)
+	u, err := suite.db.GetDB(ctx).GetUserPreferencesByUserID(ctx, userID)
 	assert.NoError(t, err)
 	assert.Equal(t, 1, u.EnableSyndromeDifferentiation)
 }

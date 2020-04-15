@@ -8,11 +8,11 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/ae/v2/biz"
 	"github.com/jinmukeji/ae/v2/engine/core"
+	"github.com/jinmukeji/go-pkg/v2/age"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
-	"github.com/jinmukeji/go-pkg/age"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	ptypesv2 "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // GetAnalyzeResultByToken 根据分享 token 得到分析结果
@@ -81,7 +81,7 @@ func (j *AnalysisManagerService) GetAnalyzeResultByToken(ctx context.Context, re
 	}
 	// 如果还有需要提问的问题，则分析错误
 	if !ctxData.Output["has_answered_all_questions"].(bool) {
-		return NewError(ErrAEError, fmt.Errorf("error occurs when run engine: %s", errRunEngine.Error()))
+		return NewError(ErrAEError, fmt.Errorf("error occurs when run engine: all questions has not been answered"))
 	}
 
 	// 构建返回的内容

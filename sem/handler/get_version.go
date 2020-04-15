@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jinmukeji/jiujiantang-services/sem/config"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
 )
 
 // GetVersion 获取服务版本信息

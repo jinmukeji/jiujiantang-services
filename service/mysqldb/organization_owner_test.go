@@ -33,7 +33,7 @@ func (suite *OrganizationOwnerTestSuite) TestCreateOrganizationOwner() {
 		Name:    organizationName,
 		IsValid: 1,
 	}
-	assert.NoError(t, suite.db.CreateOrganization(ctx, o))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganization(ctx, o))
 	now := time.Now()
 	s := &Subscription{
 		OrganizationID: o.OrganizationID,
@@ -41,9 +41,9 @@ func (suite *OrganizationOwnerTestSuite) TestCreateOrganizationOwner() {
 		ExpiredAt:      now.UTC(),
 		ContractYear:   0,
 	}
-	assert.NoError(t, suite.db.CreateSubscription(ctx, s))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateSubscription(ctx, s))
 	now := time.Now()
-	assert.NoError(t, suite.db.CreateOrganizationOwner(ctx, &OrganizationOwner{
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganizationOwner(ctx, &OrganizationOwner{
 		OrganizationID: o.OrganizationID,
 		OwnerID:        ownerID,
 		CreatedAt:      now.UTC(),
@@ -57,7 +57,7 @@ func (suite *OrganizationOwnerTestSuite) TestCheckOrganizationOwnerSuccess() {
 	const organizationID = 1
 	t := suite.T()
 	ctx := context.Background()
-	ok, err := suite.db.CheckOrganizationOwner(ctx, userID, organizationID)
+	ok, err := suite.db.GetDB(ctx).CheckOrganizationOwner(ctx, userID, organizationID)
 	assert.NoError(t, err)
 	assert.True(t, ok)
 }
@@ -68,7 +68,7 @@ func (suite *OrganizationOwnerTestSuite) TestCheckOrganizationOwnerFail() {
 	const organizationID = 1
 	t := suite.T()
 	ctx := context.Background()
-	ok, err := suite.db.CheckOrganizationOwner(ctx, userID, organizationID)
+	ok, err := suite.db.GetDB(ctx).CheckOrganizationOwner(ctx, userID, organizationID)
 	assert.NoError(t, err)
 	assert.False(t, ok)
 }

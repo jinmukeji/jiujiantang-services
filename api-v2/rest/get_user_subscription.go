@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 	"github.com/kataras/iris/v12"
 )
 

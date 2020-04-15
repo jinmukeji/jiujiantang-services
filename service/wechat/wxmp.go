@@ -1,7 +1,7 @@
 package wechat
 
 import (
-	"github.com/micro/go-micro/broker"
+	"github.com/micro/go-micro/v2/broker"
 	"gopkg.in/chanxuehong/wechat.v2/mp/core"
 	"gopkg.in/chanxuehong/wechat.v2/mp/jssdk"
 	mpoauth2 "gopkg.in/chanxuehong/wechat.v2/mp/oauth2"

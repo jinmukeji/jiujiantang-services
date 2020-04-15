@@ -2,13 +2,14 @@ package mysqldb
 
 import (
 	"context"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/suite"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 )
 
 // UserTestSuite 是 User 的 testSuite
@@ -29,7 +30,7 @@ func (suite *UserTestSuite) TestFindUserByPhone() {
 	phone := os.Getenv("X_TEST_PHONE")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	ctx := context.Background()
-	username, err := suite.db.FindUserByPhone(ctx, phone, nationCode)
+	username, err := suite.db.GetDB(ctx).FindUserByPhone(ctx, phone, nationCode)
 	assert.NoError(t, err)
 	assert.NotNil(t, username)
 }
@@ -38,7 +39,7 @@ func (suite *UserTestSuite) TestFindUserByPhone() {
 func (suite *UserTestSuite) TestFindUserByUsername() {
 	t := suite.T()
 	ctx := context.Background()
-	_, err := suite.db.FindUserByUsername(ctx, os.Getenv("X_TEST_USERNAME"))
+	_, err := suite.db.GetDB(ctx).FindUserByUsername(ctx, os.Getenv("X_TEST_USERNAME"))
 	assert.NoError(t, err)
 }
 
@@ -47,7 +48,7 @@ func (suite *UserTestSuite) TestSetLanguageByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	err := suite.db.SetLanguageByUserID(ctx, int32(userID), os.Getenv("X_TEST_LANGUAGE"))
+	err := suite.db.GetDB(ctx).SetLanguageByUserID(ctx, int32(userID), os.Getenv("X_TEST_LANGUAGE"))
 	assert.NoError(t, err)
 }
 
@@ -56,7 +57,7 @@ func (suite *UserTestSuite) TestFindLanguageByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	_, err := suite.db.FindLanguageByUserID(ctx, int32(userID))
+	_, err := suite.db.GetDB(ctx).FindLanguageByUserID(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -65,7 +66,7 @@ func (suite *UserTestSuite) TestExistUserByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	_, err := suite.db.ExistUserByUserID(ctx, int32(userID))
+	_, err := suite.db.GetDB(ctx).ExistUserByUserID(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -74,7 +75,7 @@ func (suite *UserTestSuite) TestExistPasswordByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	password, err := suite.db.ExistPasswordByUserID(ctx, int32(userID))
+	password, err := suite.db.GetDB(ctx).ExistPasswordByUserID(ctx, int32(userID))
 	assert.NoError(t, err)
 	assert.Equal(t, false, password)
 }
@@ -84,7 +85,7 @@ func (suite *UserTestSuite) TestSetPasswordByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	err := suite.db.SetPasswordByUserID(ctx, int32(userID), os.Getenv("X_TEST_ENCRYPTEDPASSWORD"), os.Getenv("X_TEST_SEED"))
+	err := suite.db.GetDB(ctx).SetPasswordByUserID(ctx, int32(userID), os.Getenv("X_TEST_ENCRYPTEDPASSWORD"), os.Getenv("X_TEST_SEED"))
 	assert.NoError(t, err)
 }
 
@@ -93,7 +94,7 @@ func (suite *UserTestSuite) TestFindSecureQuestionByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	_, err := suite.db.FindSecureQuestionByUserID(ctx, int32(userID))
+	_, err := suite.db.GetDB(ctx).FindSecureQuestionByUserID(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -103,7 +104,7 @@ func (suite *UserTestSuite) TestFindSecureQuestionByPhone() {
 	phone := os.Getenv("X_TEST_PHONE")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	ctx := context.Background()
-	_, err := suite.db.FindSecureQuestionByPhone(ctx, phone, nationCode)
+	_, err := suite.db.GetDB(ctx).FindSecureQuestionByPhone(ctx, phone, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -112,7 +113,7 @@ func (suite *UserTestSuite) TestFindSecureQuestionByUsername() {
 	t := suite.T()
 	username := os.Getenv("X_TEST_USERNAME")
 	ctx := context.Background()
-	_, err := suite.db.FindSecureQuestionByUsername(ctx, username)
+	_, err := suite.db.GetDB(ctx).FindSecureQuestionByUsername(ctx, username)
 	assert.NoError(t, err)
 }
 
@@ -124,7 +125,7 @@ func (suite *UserTestSuite) TestFindSetPasswordByPhone() {
 	encryptedPassword := os.Getenv("X_TEST_ENCRYPTEDPASSWORD")
 	seed := os.Getenv("X_TEST_SEED")
 	ctx := context.Background()
-	err := suite.db.SetPasswordByPhone(ctx, phone, nationCode, encryptedPassword, seed)
+	err := suite.db.GetDB(ctx).SetPasswordByPhone(ctx, phone, nationCode, encryptedPassword, seed)
 	assert.NoError(t, err)
 }
 
@@ -135,7 +136,7 @@ func (suite *UserTestSuite) TestSetPasswordByUsername() {
 	encryptedPassword := os.Getenv("X_TEST_ENCRYPTEDPASSWORD")
 	seed := os.Getenv("X_TEST_SEED")
 	ctx := context.Background()
-	err := suite.db.SetPasswordByUsername(ctx, username, encryptedPassword, seed)
+	err := suite.db.GetDB(ctx).SetPasswordByUsername(ctx, username, encryptedPassword, seed)
 	assert.NoError(t, err)
 }
 
@@ -146,7 +147,7 @@ func (suite *UserTestSuite) TestIsPasswordSameByPhone() {
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	encryptedPassword := os.Getenv("X_TEST_ENCRYPTEDPASSWORD")
 	ctx := context.Background()
-	_, err := suite.db.IsPasswordSameByPhone(ctx, phone, nationCode, encryptedPassword)
+	_, err := suite.db.GetDB(ctx).IsPasswordSameByPhone(ctx, phone, nationCode, encryptedPassword)
 	assert.NoError(t, err)
 }
 
@@ -156,7 +157,7 @@ func (suite *UserTestSuite) TestIsPasswordSameByUsername() {
 	username := os.Getenv("X_TEST_USERNAME")
 	encryptedPassword := os.Getenv("X_TEST_ENCRYPTEDPASSWORD")
 	ctx := context.Background()
-	_, err := suite.db.IsPasswordSameByUsername(ctx, username, encryptedPassword)
+	_, err := suite.db.GetDB(ctx).IsPasswordSameByUsername(ctx, username, encryptedPassword)
 	assert.NoError(t, err)
 }
 
@@ -166,7 +167,7 @@ func (suite *UserTestSuite) TestFindUserIDByPhone() {
 	phone := os.Getenv("X_TEST_PHONE")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	ctx := context.Background()
-	user, err := suite.db.FindUserIDByPhone(ctx, phone, nationCode)
+	user, err := suite.db.GetDB(ctx).FindUserIDByPhone(ctx, phone, nationCode)
 	assert.NoError(t, err)
 	assert.Equal(t, 105546, user)
 }
@@ -176,7 +177,7 @@ func (suite *UserTestSuite) TestFindUserIDByUsername() {
 	t := suite.T()
 	username := os.Getenv("X_TEST_USERNAME")
 	ctx := context.Background()
-	user, err := suite.db.FindUserIDByUsername(ctx, username)
+	user, err := suite.db.GetDB(ctx).FindUserIDByUsername(ctx, username)
 	assert.NoError(t, err)
 	assert.Equal(t, int32(786), user)
 }
@@ -186,7 +187,7 @@ func (suite *UserTestSuite) TestExistUsername() {
 	t := suite.T()
 	username := os.Getenv("X_TEST_USERNAME")
 	ctx := context.Background()
-	user, err := suite.db.ExistUsername(ctx, username)
+	user, err := suite.db.GetDB(ctx).ExistUsername(ctx, username)
 	assert.NoError(t, err)
 	assert.Equal(t, true, user)
 }
@@ -197,7 +198,7 @@ func (suite *UserTestSuite) TestExistPhone() {
 	phone := os.Getenv("X_TEST_PHONE")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	ctx := context.Background()
-	_, err := suite.db.ExistPhone(ctx, phone, nationCode)
+	_, err := suite.db.GetDB(ctx).ExistPhone(ctx, phone, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -207,7 +208,7 @@ func (suite *UserTestSuite) TestExistSignInPhone() {
 	phone := os.Getenv("X_TEST_PHONE")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	ctx := context.Background()
-	_, err := suite.db.ExistSignInPhone(ctx, phone, nationCode)
+	_, err := suite.db.GetDB(ctx).ExistSignInPhone(ctx, phone, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -216,7 +217,7 @@ func (suite *UserTestSuite) TestSecureEmailExists() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	_, err := suite.db.SecureEmailExists(ctx, int32(userID))
+	_, err := suite.db.GetDB(ctx).SecureEmailExists(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -226,7 +227,7 @@ func (suite *UserTestSuite) TestMatchSecureEmail() {
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	email := os.Getenv("X_TEST_EMAIL")
 	ctx := context.Background()
-	_, err := suite.db.MatchSecureEmail(ctx, email, int32(userID))
+	_, err := suite.db.GetDB(ctx).MatchSecureEmail(ctx, email, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -244,7 +245,7 @@ func (suite *UserTestSuite) TestCreateUserByPhone() {
 		UpdatedAt:      now.UTC(),
 	}
 	ctx := context.Background()
-	_, err := suite.db.CreateUserByPhone(ctx, user)
+	_, err := suite.db.GetDB(ctx).CreateUserByPhone(ctx, user)
 	assert.NoError(t, err)
 }
 
@@ -254,7 +255,7 @@ func (suite *UserTestSuite) TestSetSecureEmail() {
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	email := os.Getenv("X_TEST_EMAIL")
 	ctx := context.Background()
-	err := suite.db.SetSecureEmail(ctx, email, int32(userID))
+	err := suite.db.GetDB(ctx).SetSecureEmail(ctx, email, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -263,7 +264,7 @@ func (suite *UserTestSuite) TestUnsetSecureEmail() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	err := suite.db.UnsetSecureEmail(ctx, int32(userID))
+	err := suite.db.GetDB(ctx).UnsetSecureEmail(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -272,7 +273,7 @@ func (suite *UserTestSuite) TestExistsSecureQuestion() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	_, err := suite.db.ExistsSecureQuestion(ctx, int32(userID))
+	_, err := suite.db.GetDB(ctx).ExistsSecureQuestion(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -294,7 +295,7 @@ func (suite *UserTestSuite) TestSetSecureQuestion() {
 		SecureAnswer:      "1",
 	}
 	ctx := context.Background()
-	err := suite.db.SetSecureQuestion(ctx, int32(userID), secureQuestion)
+	err := suite.db.GetDB(ctx).SetSecureQuestion(ctx, int32(userID), secureQuestion)
 	assert.NoError(t, err)
 }
 
@@ -305,7 +306,7 @@ func (suite *UserTestSuite) TestSetSigninPhoneByUserID() {
 	signinPhone := os.Getenv("X_TEST_PHONE")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	ctx := context.Background()
-	err := suite.db.SetSigninPhoneByUserID(ctx, int32(userID), signinPhone, nationCode)
+	err := suite.db.GetDB(ctx).SetSigninPhoneByUserID(ctx, int32(userID), signinPhone, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -315,7 +316,7 @@ func (suite *UserTestSuite) TestSetUserRegion() {
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	region := MainlandChina
 	ctx := context.Background()
-	err := suite.db.SetUserRegion(ctx, int32(userID), region)
+	err := suite.db.GetDB(ctx).SetUserRegion(ctx, int32(userID), region)
 	assert.NoError(t, err)
 }
 
@@ -324,7 +325,7 @@ func (suite *UserTestSuite) TestGetSecureQuestionListToModifyByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	_, err := suite.db.GetSecureQuestionListToModifyByUserID(ctx, int32(userID))
+	_, err := suite.db.GetDB(ctx).GetSecureQuestionListToModifyByUserID(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -333,7 +334,7 @@ func (suite *UserTestSuite) TestFindUserBySecureEmail() {
 	t := suite.T()
 	email := os.Getenv("X_TEST_EMAIL")
 	ctx := context.Background()
-	_, err := suite.db.FindUserBySecureEmail(ctx, email)
+	_, err := suite.db.GetDB(ctx).FindUserBySecureEmail(ctx, email)
 	assert.NoError(t, err)
 }
 
@@ -342,7 +343,7 @@ func (suite *UserTestSuite) TestFindUsernameBySecureEmail() {
 	t := suite.T()
 	email := os.Getenv("X_TEST_EMAIL")
 	ctx := context.Background()
-	_, err := suite.db.FindUsernameBySecureEmail(ctx, email)
+	_, err := suite.db.GetDB(ctx).FindUsernameBySecureEmail(ctx, email)
 	assert.NoError(t, err)
 }
 
@@ -352,7 +353,7 @@ func (suite *UserTestSuite) TestGetSecureQuestionsByPhone() {
 	phone := os.Getenv("X_TEST_PHONE")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
 	ctx := context.Background()
-	_, err := suite.db.GetSecureQuestionsByPhone(ctx, phone, nationCode)
+	_, err := suite.db.GetDB(ctx).GetSecureQuestionsByPhone(ctx, phone, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -361,7 +362,7 @@ func (suite *UserTestSuite) TestGetSecureQuestionsByUsername() {
 	t := suite.T()
 	username := os.Getenv("X_TEST_USERNAME")
 	ctx := context.Background()
-	_, err := suite.db.GetSecureQuestionsByUsername(ctx, username)
+	_, err := suite.db.GetDB(ctx).GetSecureQuestionsByUsername(ctx, username)
 	assert.NoError(t, err)
 }
 
@@ -370,7 +371,7 @@ func (suite *UserTestSuite) TestFindUserByEmail() {
 	t := suite.T()
 	email := os.Getenv("X_TEST_EMAIL")
 	ctx := context.Background()
-	_, err := suite.db.FindUserByEmail(ctx, email)
+	_, err := suite.db.GetDB(ctx).FindUserByEmail(ctx, email)
 	assert.NoError(t, err)
 }
 
@@ -380,7 +381,7 @@ func (suite *UserTestSuite) TestSetSecureEmailByUserID() {
 	email := os.Getenv("X_TEST_EMAIL")
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	err := suite.db.SetSecureEmailByUserID(ctx, int32(userID), email)
+	err := suite.db.GetDB(ctx).SetSecureEmailByUserID(ctx, int32(userID), email)
 	assert.NoError(t, err)
 }
 
@@ -389,7 +390,7 @@ func (suite *UserTestSuite) TestModifyHasSetUserProfileStatus() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	err := suite.db.ModifyHasSetUserProfileStatus(ctx, int32(userID))
+	err := suite.db.GetDB(ctx).ModifyHasSetUserProfileStatus(ctx, int32(userID))
 	assert.NoError(t, err)
 }
 
@@ -398,7 +399,7 @@ func (suite *UserTestSuite) TestHasSecureEmailSets() {
 	t := suite.T()
 	email := os.Getenv("X_TEST_EMAIL")
 	ctx := context.Background()
-	_, err := suite.db.HasSecureEmailSet(ctx, email)
+	_, err := suite.db.GetDB(ctx).HasSecureEmailSet(ctx, email)
 	assert.NoError(t, err)
 }
 
@@ -407,7 +408,7 @@ func (suite *UserTestSuite) TestFindUserByUserID() {
 	t := suite.T()
 	userID, _ := strconv.Atoi(os.Getenv("X_TEST_USER_ID"))
 	ctx := context.Background()
-	user, err := suite.db.FindUserByUserID(ctx, int32(userID))
+	user, err := suite.db.GetDB(ctx).FindUserByUserID(ctx, int32(userID))
 	assert.NoError(t, err)
 	assert.Equal(t, "13221058643", user.SigninPhone)
 }
@@ -424,7 +425,7 @@ func (suite *UserTestSuite) TestModifyUser() {
 		UpdatedAt:         time.Now().UTC(),
 	}
 	ctx := context.Background()
-	err := suite.db.ModifyUser(ctx, user)
+	err := suite.db.GetDB(ctx).ModifyUser(ctx, user)
 	assert.NoError(t, err)
 }
 func TestUserTestSuite(t *testing.T) {

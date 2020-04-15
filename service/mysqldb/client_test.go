@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-    "github.com/stretchr/testify/suite"
-    context "golang.org/x/net/context"
+	"github.com/stretchr/testify/suite"
+	context "golang.org/x/net/context"
 )
 
 // ClientTestSuite 是 Client 的单元测试的 Test Suite
@@ -28,9 +28,9 @@ func (suite *ClientTestSuite) TearDownSuite() {
 
 // TestFindClientByClientID 测试 FindClientByClientID 成功返回记录
 func (suite *ClientTestSuite) TestFindClientByClientID() {
-    t := suite.T()
+	t := suite.T()
 	ctx := context.Background()
-	client, err := suite.db.FindClientByClientID(ctx, "jinmu")
+	client, err := suite.db.GetDB(ctx).FindClientByClientID(ctx, "jinmu")
 	assert.NoError(t, err)
 	assert.NotNil(t, client)
 	assert.Equal(t, "ABCABC", client.SecretKey)

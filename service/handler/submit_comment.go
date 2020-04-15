@@ -10,7 +10,7 @@ import (
 	valid "github.com/asaskevich/govalidator"
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 )
 
 // SubmitFeedback 账号意见反馈

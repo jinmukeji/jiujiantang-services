@@ -7,14 +7,14 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/go-pkg/age"
+	"github.com/jinmukeji/go-pkg/v2/age"
 
 	"github.com/jinmukeji/jiujiantang-services/pkg/rpc"
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 const (

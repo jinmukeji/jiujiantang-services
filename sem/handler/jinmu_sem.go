@@ -3,8 +3,8 @@ package handler
 import (
 	db "github.com/jinmukeji/jiujiantang-services/sem/mysqldb"
 	sem "github.com/jinmukeji/jiujiantang-services/sem/sem_client"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
-	"github.com/micro/go-micro/client"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
+	"github.com/micro/go-micro/v2/client"
 )
 
 // SEMGateway 邮件网关

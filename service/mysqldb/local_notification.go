@@ -48,14 +48,14 @@ func (d LocalNotification) TableName() string {
 
 // CreateLocalNotification 在 local_notifications新增一条记录
 func (db *DbClient) CreateLocalNotification(ctx context.Context, record *LocalNotification) error {
-	return db.Create(record).Error
+	return db.GetDB(ctx).Create(record).Error
 }
 
 // GetLocalNotifications 拿到本地通知
 func (db *DbClient) GetLocalNotifications(ctx context.Context) ([]LocalNotification, error) {
 
 	var pns []LocalNotification
-	err := db.Raw(`SELECT
+	err := db.GetDB(ctx).Raw(`SELECT
 	L.title,
 	L.content,
 	L.event_happen_at,
@@ -77,5 +77,5 @@ func (db *DbClient) GetLocalNotifications(ctx context.Context) ([]LocalNotificat
 
 // DeleteLocalNotification 根据ID删除数据库指定的本地推送内容
 func (db *DbClient) DeleteLocalNotification(ctx context.Context, lnID int) error {
-	return db.Delete(LocalNotification{}, "ln_id = ?", lnID).Error
+	return db.GetDB(ctx).Delete(LocalNotification{}, "ln_id = ?", lnID).Error
 }

@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // GetUserPreferences 得到用户的偏好

@@ -43,7 +43,7 @@ func (suite *UserTestSuite) TestCreateUserSuccess() {
 		RegisterTime: now.UTC(),
 		UpdatedAt:    now.UTC(),
 	}
-	_, err := suite.db.CreateUser(ctx, u)
+	_, err := suite.db.GetDB(ctx).CreateUser(ctx, u)
 	assert.NoError(t, err)
 }
 
@@ -51,7 +51,7 @@ func (suite *UserTestSuite) TestCreateUserSuccess() {
 func (suite *UserTestSuite) TestFindUserByUserIDSuccess() {
 	t := suite.T()
 	ctx := context.Background()
-	u, err := suite.db.FindUserByUserID(ctx, 1)
+	u, err := suite.db.GetDB(ctx).FindUserByUserID(ctx, 1)
 	assert.NotNil(t, u)
 	assert.NoError(t, err)
 }
@@ -63,9 +63,9 @@ func (suite *UserTestSuite) TestUpdateUserProfile() {
 	ctx := context.Background()
 	randName := strconv.Itoa(rand.Int())
 	var p ProtoUserProfile
-	err := suite.db.UpdateUserProfile(ctx, p, userID)
+	err := suite.db.GetDB(ctx).UpdateUserProfile(ctx, p, userID)
 	assert.NoError(t, err)
-	u, _ := suite.db.FindUserByUserID(ctx, userID)
+	u, _ := suite.db.GetDB(ctx).FindUserByUserID(ctx, userID)
 	assert.Equal(t, randName, u.Nickname)
 }
 

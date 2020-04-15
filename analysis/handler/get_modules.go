@@ -8,11 +8,13 @@ import (
 	any "github.com/golang/protobuf/ptypes/any"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	"github.com/jinmukeji/ae/v2/engine/core"
+	"github.com/jinmukeji/jiujiantang-services/analysis/aws"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
-	"github.com/jinmukeji/plat-pkg/rpc/errors"
-	"github.com/jinmukeji/plat-pkg/rpc/errors/codes"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	ptypesv2 "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	"github.com/jinmukeji/jiujiantang-services/ptcodec"
+	"github.com/jinmukeji/plat-pkg/v2/micro/errors"
+	"github.com/jinmukeji/plat-pkg/v2/micro/errors/codes"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	ptypesv2 "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // getModulesFromAEOutput 解析引擎输出的Output，获得与引擎相关的输出模块，用于单次测量
@@ -82,13 +84,9 @@ func (j *AnalysisManagerService) buildModulesNotAboutAE(record *mysqldb.Record, 
 	// 如果为单次测量，则需要构建局部脉搏波模块，否则返回默认值
 	if measurementJudgment {
 		// 构建局部脉搏波模块
-		var partialData []int32
-		dataArray, errgetPulseTestDataIntArray := getPulseTestDataIntArray(record.S3Key, j.awsClient)
+		partialData, errgetPulseTestDataIntArray := getPartialPulseTestDataIntArray(record.S3Key, j.awsClient)
 		if errgetPulseTestDataIntArray != nil {
 			log.WithError(errgetPulseTestDataIntArray).Warn("failed to get pulse test data int array")
-		}
-		if len(dataArray) >= 4000 {
-			partialData = dataArray[3000:4000]
 		}
 
 		partialPulseWaveModule := analysispb.PartialPulseWaveModule{
@@ -103,6 +101,57 @@ func (j *AnalysisManagerService) buildModulesNotAboutAE(record *mysqldb.Record, 
 	}
 
 	return respModules, nil
+}
+
+// getPartialPulseTestDataIntArray 从aws上得到波形数据
+func getPartialPulseTestDataIntArray(s3Key string, client aws.PulseTestRawDataS3Client) ([]int32, error) {
+	pulseTestRawData, err := client.Download(s3Key)
+	if err != nil {
+		return []int32{}, fmt.Errorf("failed to download raw data of s3key %s: %s", s3Key, err.Error())
+	}
+	return getPartialeWaveData(pulseTestRawData.Payloads)
+}
+
+const (
+	// DeviceModelForAlgorithm 指环使用的算法服务器请求的 Model 值
+	RingDeviceModelForAlgorithm = "FYI"
+	// 提交给算法服务器请求的 sample 中的 Type，为红外光数据
+	algorithmSampleType = "RING"
+)
+
+// getPartialWaveData 1000条波形数据
+func getPartialeWaveData(payload []byte) ([]int32, error) {
+	const (
+		// App 接收波形数据的开始位置
+		appWaveDataStart = 3000
+		// App 接收波形数据长度
+		appWaveDataLength = 1000
+	)
+
+	// 获得解码后的原始数据的数组
+	decodeModel, err := mapDeviceModelToCodec(RingDeviceModelForAlgorithm)
+	if err != nil {
+		return []int32{}, fmt.Errorf("invalid device model %s", err.Error())
+	}
+	decoder := ptcodec.NewDecoder(decodeModel)
+	int32Array, err := decoder.Decode(payload)
+	if err != nil {
+		return []int32{}, fmt.Errorf("failed to decode payload %s", err.Error())
+	}
+
+	partialData := make([]int32, appWaveDataLength)
+	for k, v := range int32Array[appWaveDataStart : appWaveDataStart+appWaveDataLength] {
+		partialData[k] = int32(v)
+	}
+	return partialData, nil
+}
+
+func mapDeviceModelToCodec(model string) (string, error) {
+	switch model {
+	case RingDeviceModelForAlgorithm:
+		return ptcodec.CodecRingRedRaw, nil
+	}
+	return "", fmt.Errorf("invalid device model type [%s]", model)
 }
 
 // getModulesOfWeeklyReport 解析周报分析的Output，获得与引擎相关的输出模块

@@ -24,7 +24,7 @@ func (db *DbClient) FindUserIDByToken(ctx context.Context, token string) (int32,
 	var t Token
 	now := time.Now()
 
-	if err := db.Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
+	if err := db.GetDB(ctx).Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
 		return 0, err
 	}
 	return t.UserID, nil

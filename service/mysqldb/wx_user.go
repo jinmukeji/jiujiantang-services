@@ -25,7 +25,7 @@ func (w WXUser) TableName() string {
 
 // CreateWXUser 创建微信用户
 func (db *DbClient) CreateWXUser(ctx context.Context, wXUser *WXUser) error {
-	if err := db.Create(wXUser).Error; err != nil {
+	if err := db.GetDB(ctx).Create(wXUser).Error; err != nil {
 		return err
 	}
 	return nil
@@ -34,14 +34,14 @@ func (db *DbClient) CreateWXUser(ctx context.Context, wXUser *WXUser) error {
 // ExistWXUser 存在微信用户
 func (db *DbClient) ExistWXUser(ctx context.Context, unionID string) (bool, error) {
 	var count int
-	db.Table("wechat_user").Where("union_id=?", unionID).Count(&count)
+	db.GetDB(ctx).Table("wechat_user").Where("union_id=?", unionID).Count(&count)
 	return count > 0, nil
 }
 
 // FindWXUserByUnionID 通过UnionId找WXUser
 func (db *DbClient) FindWXUserByUnionID(ctx context.Context, UnionID string) (*WXUser, error) {
 	var wxUser WXUser
-	err := db.First(&wxUser, "union_id = ? ", UnionID).Error
+	err := db.GetDB(ctx).First(&wxUser, "union_id = ? ", UnionID).Error
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (db *DbClient) FindWXUserByUnionID(ctx context.Context, UnionID string) (*W
 // FindWXUserByUserID 通过userID找WXUser
 func (db *DbClient) FindWXUserByUserID(ctx context.Context, userID int32) (*WXUser, error) {
 	var wxUser WXUser
-	err := db.First(&wxUser, "user_id = ? ", userID).Error
+	err := db.GetDB(ctx).First(&wxUser, "user_id = ? ", userID).Error
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +61,7 @@ func (db *DbClient) FindWXUserByUserID(ctx context.Context, userID int32) (*WXUs
 // FindWXUserByOpenID 通过openID找WXUser
 func (db *DbClient) FindWXUserByOpenID(ctx context.Context, openID string) (*WXUser, error) {
 	var wxUser WXUser
-	err := db.First(&wxUser, "open_id = ? ", openID).Error
+	err := db.GetDB(ctx).First(&wxUser, "open_id = ? ", openID).Error
 	if err != nil {
 		return nil, err
 	}

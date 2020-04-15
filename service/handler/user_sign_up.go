@@ -9,8 +9,8 @@ import (
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // kangmeiClient 康美客户端

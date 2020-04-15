@@ -48,7 +48,7 @@ func (suite *AuditUserCredentialUpdateTestSuite) TestCreateAuditUserCredentialUp
 		UpdatedRecordType: PasswordUpdated,
 	}
 	ctx := context.Background()
-	err := suite.db.CreateAuditUserCredentialUpdate(ctx,record)
+	err := suite.db.GetDB(ctx).CreateAuditUserCredentialUpdate(ctx, record)
 	assert.NoError(t, err)
 }
 

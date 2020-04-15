@@ -5,8 +5,8 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/api-sys/config"
 	"github.com/jinmukeji/jiujiantang-services/api-sys/rest"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/web"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2/web"
 )
 
 var (
@@ -25,25 +25,7 @@ func main() {
 		web.RegisterTTL(config.DefaultRegisterTTL),
 		web.RegisterInterval(config.DefaultRegisterInterval),
 
-		web.Flags(
-			cli.StringFlag{
-				Name:        "x_api_base",
-				Value:       "",
-				Usage:       "API Base URL",
-				EnvVar:      "X_API_BASE",
-				Destination: &apiBase,
-			},
-			cli.StringFlag{
-				Name:        "x_config_file",
-				Usage:       "Config File",
-				EnvVar:      "X_CONFIG_FILE",
-				Destination: &configFile,
-			},
-			cli.BoolFlag{
-				Name:  "version",
-				Usage: "Show version information",
-			},
-		),
+		webOptions(),
 	)
 	// Setup --version flag
 
@@ -71,4 +53,26 @@ func main() {
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func webOptions() web.Option {
+	return web.Flags(
+		&cli.StringFlag{
+			Name:        "x_api_base",
+			Value:       "",
+			Usage:       "API Base URL",
+			EnvVars:     []string{"X_API_BASE"},
+			Destination: &apiBase,
+		},
+		&cli.StringFlag{
+			Name:        "x_config_file",
+			Usage:       "Config File",
+			EnvVars:     []string{"X_CONFIG_FILE"},
+			Destination: &configFile,
+		},
+		&cli.BoolFlag{
+			Name:  "version",
+			Usage: "Show version information",
+		},
+	)
 }

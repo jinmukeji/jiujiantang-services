@@ -6,7 +6,7 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
 	"github.com/kataras/iris/v12"
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/metadata"
 )
 
 const (

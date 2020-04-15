@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	tx "github.com/jinmukeji/plat-pkg/transaction"
+	tx "github.com/jinmukeji/plat-pkg/v2/store"
 )
 
 // Datastore 定义数据访问接口

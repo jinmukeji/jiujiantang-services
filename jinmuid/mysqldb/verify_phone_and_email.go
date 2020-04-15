@@ -37,13 +37,13 @@ func (v PhoneOrEmailVerfication) TableName() string {
 
 // CreatePhoneOrEmailVerfication 创建手机邮箱验证记录
 func (db *DbClient) CreatePhoneOrEmailVerfication(ctx context.Context, record *PhoneOrEmailVerfication) error {
-	return db.DB(ctx).Create(record).Error
+	return db.GetDB(ctx).Create(record).Error
 }
 
 // VerifyVerificationNumber 验证 VerificationNumber是否有效
 func (db *DbClient) VerifyVerificationNumber(ctx context.Context, verificationType VerificationType, verificationNumber string, UserID int32) (bool, error) {
 	var count int
-	err := db.DB(ctx).Raw(`SELECT count(*) FROM phone_or_email_verfication 
+	err := db.GetDB(ctx).Raw(`SELECT count(*) FROM phone_or_email_verfication 
 	    where verification_type = ? and verification_number = ? and user_id = ? 
 		AND expired_at > NOW() and has_used = false;`, verificationType, verificationNumber, UserID).Count(&count).Error
 	if err != nil {
@@ -54,7 +54,7 @@ func (db *DbClient) VerifyVerificationNumber(ctx context.Context, verificationTy
 
 // SetVerificationNumberAsUsed 设置VerificationNumber已经使用
 func (db *DbClient) SetVerificationNumberAsUsed(ctx context.Context, verificationType VerificationType, verificationNumber string) error {
-	return db.DB(ctx).Model(&PhoneOrEmailVerfication{}).Where("verification_type = ? and verification_number = ? ", verificationType, verificationNumber).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&PhoneOrEmailVerfication{}).Where("verification_type = ? and verification_number = ? ", verificationType, verificationNumber).Updates(map[string]interface{}{
 		"has_used": true,
 	}).Error
 }
@@ -62,7 +62,7 @@ func (db *DbClient) SetVerificationNumberAsUsed(ctx context.Context, verificatio
 // VerifyVerificationNumberByPhone 手机号验证 VerificationNumber是否有效
 func (db *DbClient) VerifyVerificationNumberByPhone(ctx context.Context, verificationNumber string, phone, nationCode string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Raw(`SELECT count(*) FROM phone_or_email_verfication 
+	err := db.GetDB(ctx).Raw(`SELECT count(*) FROM phone_or_email_verfication 
 	    where send_to = ? and verification_number = ? and nation_code = ? 
 		AND expired_at > NOW() and has_used = false;`, phone, verificationNumber, nationCode).Count(&count).Error
 	if err != nil {
@@ -74,7 +74,7 @@ func (db *DbClient) VerifyVerificationNumberByPhone(ctx context.Context, verific
 // VerifyVerificationNumberByEmail 邮箱 VerificationNumber是否有效
 func (db *DbClient) VerifyVerificationNumberByEmail(ctx context.Context, verificationNumber string, email string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Raw(`SELECT count(*) FROM phone_or_email_verfication 
+	err := db.GetDB(ctx).Raw(`SELECT count(*) FROM phone_or_email_verfication 
 	    where send_to = ? AND verification_number = ? 
 		AND expired_at > NOW() and has_used = false;`, email, verificationNumber).Count(&count).Error
 	if err != nil {

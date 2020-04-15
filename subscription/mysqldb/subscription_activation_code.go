@@ -34,7 +34,7 @@ func (s SubscriptionActivationCode) TableName() string {
 // GetSubscriptionActivationCodeInfo 得到激活码的信息
 func (db *DbClient) GetSubscriptionActivationCodeInfo(ctx context.Context, code string) (*SubscriptionActivationCode, error) {
 	var subscriptionActivationCode SubscriptionActivationCode
-	err := db.Model(&SubscriptionActivationCode{}).Where("code = ?", code).Scan(&subscriptionActivationCode).Error
+	err := db.GetDB(ctx).Model(&SubscriptionActivationCode{}).Where("code = ?", code).Scan(&subscriptionActivationCode).Error
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +43,7 @@ func (db *DbClient) GetSubscriptionActivationCodeInfo(ctx context.Context, code 
 
 // ActivateSubscriptionActivationCode 设置激活码为已经激活的
 func (db *DbClient) ActivateSubscriptionActivationCode(ctx context.Context, code string, subscriptionID, userID int32) error {
-	return db.Model(&SubscriptionActivationCode{}).Where("code = ?", code).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&SubscriptionActivationCode{}).Where("code = ?", code).Updates(map[string]interface{}{
 		"subscription_id": subscriptionID,
 		"user_id":         userID,
 		"activated":       true,
@@ -54,7 +54,7 @@ func (db *DbClient) ActivateSubscriptionActivationCode(ctx context.Context, code
 
 // UseSubscriptionActivationCode 使用订阅激活码
 func (db *DbClient) UseSubscriptionActivationCode(ctx context.Context, userID int32, activationCode *SubscriptionActivationCode, uuid string) error {
-	tx := db.Begin()
+	tx := db.GetDB(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
 	}

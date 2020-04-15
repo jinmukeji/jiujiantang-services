@@ -47,7 +47,7 @@ func (s Subscription) TableName() string {
 
 // CreateSubscription 创建订阅
 func (db *DbClient) CreateSubscription(ctx context.Context, subscription *Subscription) (*Subscription, error) {
-	err := db.Create(subscription).Error
+	err := db.GetDB(ctx).Create(subscription).Error
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (db *DbClient) CreateSubscription(ctx context.Context, subscription *Subscr
 // GetSubscriptionsByUserID 通过userID获取订阅
 func (db *DbClient) GetSubscriptionsByUserID(ctx context.Context, userID int32) ([]*Subscription, error) {
 	var s []*Subscription
-	if err := db.Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
 	    (S.subscription_id), 
 		S.subscription_type, 
 		S.max_user_limits,
@@ -83,7 +83,7 @@ func (db *DbClient) GetSubscriptionsByUserID(ctx context.Context, userID int32) 
 // GetSelectedSubscriptionByUserID 通过userID获取订阅
 func (db *DbClient) GetSelectedSubscriptionByUserID(ctx context.Context, userID int32) (*Subscription, error) {
 	var s Subscription
-	err := db.Raw(`SELECT 
+	err := db.GetDB(ctx).Raw(`SELECT 
     S.subscription_id,
     S.subscription_type,
     S.max_user_limits,
@@ -114,7 +114,7 @@ WHERE
 // FindSelectedSubscriptionByUserID 通过用户ID找订阅
 func (db *DbClient) FindSelectedSubscriptionByUserID(ctx context.Context, userID int32) (*Subscription, error) {
 	var s Subscription
-	if err := db.First(&s, "owner_id = ? and is_selected = 1", userID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&s, "owner_id = ? and is_selected = 1", userID).Error; err != nil {
 		return nil, err
 	}
 	return &s, nil
@@ -122,7 +122,7 @@ func (db *DbClient) FindSelectedSubscriptionByUserID(ctx context.Context, userID
 
 // ActivateSubscription 激活订阅
 func (db *DbClient) ActivateSubscription(ctx context.Context, subscription *Subscription) error {
-	return db.Model(&Subscription{}).Where("subscription_id = ?", subscription.SubscriptionID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Subscription{}).Where("subscription_id = ?", subscription.SubscriptionID).Updates(map[string]interface{}{
 		"expired_at":   subscription.ExpiredAt,
 		"activated":    subscription.Activated,
 		"activated_at": subscription.ActivatedAt,
@@ -133,7 +133,7 @@ func (db *DbClient) ActivateSubscription(ctx context.Context, subscription *Subs
 // CheckSubscriptionOwner 检查用户是否是订阅的拥有者
 func (db *DbClient) CheckSubscriptionOwner(ctx context.Context, ownerID, subscriptionID int) (bool, error) {
 	var count int
-	if err := db.Raw("select count(*) from subscription where owner_id = ? AND subscription_id = ?", int32(ownerID), int32(subscriptionID)).Count(&count).Error; err != nil {
+	if err := db.GetDB(ctx).Raw("select count(*) from subscription where owner_id = ? AND subscription_id = ?", int32(ownerID), int32(subscriptionID)).Count(&count).Error; err != nil {
 		return false, err
 	}
 	return count != 0, nil
@@ -141,7 +141,7 @@ func (db *DbClient) CheckSubscriptionOwner(ctx context.Context, ownerID, subscri
 
 // UpdateSubscriptionIsSelectedStatus 更新订阅的默认状态
 func (db *DbClient) UpdateSubscriptionIsSelectedStatus(ctx context.Context, ownerID int32) error {
-	return db.Model(&Subscription{}).Where("owner_id = ?", ownerID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Subscription{}).Where("owner_id = ?", ownerID).Updates(map[string]interface{}{
 		"is_selected": false,
 	}).Error
 }

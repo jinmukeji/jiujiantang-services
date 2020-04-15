@@ -1,14 +1,11 @@
 package rest
 
 import (
-	"encoding/base64"
-	"errors"
 	"fmt"
 	"strings"
 	"time"
 
-	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/kataras/iris/v12"
 )
 
@@ -94,91 +91,95 @@ type SubmitMeasurementData struct {
 }
 
 func (h *v2Handler) SubmitMeasurementData(ctx iris.Context) {
-	var measurement Measurement
-	err := ctx.ReadJSON(&measurement)
-	if err != nil {
-		writeError(ctx, wrapError(ErrParsingRequestFailed, "", err), false)
-		return
-	}
-	if measurement.MeasurementData.UserID == 0 {
-		writeError(ctx, wrapError(ErrValueRequired, "", errors.New("missing user_id")), false)
-		return
-	}
-	if measurement.MeasurementData.AppHeartRate < 0 {
-		writeError(ctx, wrapError(ErrInvalidValue, "", fmt.Errorf("invalid app heart rate %d", measurement.MeasurementData.AppHeartRate)), false)
-		return
-	}
+	// 用不到大机器，所以该段代码被注释掉
+	/*
 
-	if measurement.MeasurementData.Finger < 1 || measurement.MeasurementData.Finger > 10 {
-		writeError(ctx, wrapError(ErrInvalidValue, "", fmt.Errorf("invalid finger %d", measurement.MeasurementData.Finger)), false)
-		return
-	}
+			var measurement Measurement
+			err := ctx.ReadJSON(&measurement)
+			if err != nil {
+				writeError(ctx, wrapError(ErrParsingRequestFailed, "", err), false)
+				return
+			}
+			if measurement.MeasurementData.UserID == 0 {
+				writeError(ctx, wrapError(ErrValueRequired, "", errors.New("missing user_id")), false)
+				return
+			}
+			if measurement.MeasurementData.AppHeartRate < 0 {
+				writeError(ctx, wrapError(ErrInvalidValue, "", fmt.Errorf("invalid app heart rate %d", measurement.MeasurementData.AppHeartRate)), false)
+				return
+			}
 
-	if measurement.MeasurementData.MobileType != Android && measurement.MeasurementData.MobileType != Iphone {
-		writeError(ctx, wrapError(ErrInvalidValue, "", fmt.Errorf("mobile type must be ANDROID or IPHONE,current type is %s", measurement.MeasurementData.MobileType)), false)
-		return
-	}
-	req := new(corepb.SubmitMeasurementInfoRequest)
-	req.UserId = int32(measurement.MeasurementData.UserID)
-	protoMobileType, errmapRestMobileTypeToProto := mapRestMobileTypeToProto(measurement.MeasurementData.MobileType)
-	if errmapRestMobileTypeToProto != nil {
-		writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestMobileTypeToProto), false)
-		return
-	}
-	req.MobileType = protoMobileType
-	req.AppHighestHr = measurement.MeasurementData.AppHighestHeartRate
-	req.AppLowestHr = measurement.MeasurementData.AppLowestHeartRate
-	protoMeasurementPosture, errmapRestMeasurementPostureToProto := mapRestMeasurementPostureToProto(measurement.MeasurementData.MeasurementPosture)
-	if errmapRestMeasurementPostureToProto != nil {
-		writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestMeasurementPostureToProto), false)
-		return
-	}
-	req.MeasurementPosture = protoMeasurementPosture
-	data0, _ := base64.StdEncoding.DecodeString(measurement.MeasurementData.Data0)
-	req.Info0 = &corepb.BluetoothInfo{
-		Ir5160: data0,
-	}
+			if measurement.MeasurementData.Finger < 1 || measurement.MeasurementData.Finger > 10 {
+				writeError(ctx, wrapError(ErrInvalidValue, "", fmt.Errorf("invalid finger %d", measurement.MeasurementData.Finger)), false)
+				return
+			}
 
-	data1, _ := base64.StdEncoding.DecodeString(measurement.MeasurementData.Data1)
-	req.Info1 = &corepb.BluetoothInfo{
-		Ir5160: data1,
-	}
-	req.Mac = measurement.MeasurementData.Mac
-	req.AppHr = int32(measurement.MeasurementData.AppHeartRate)
-	protoFinger, errMapRestFingerToProto := mapRestFingerToProto(measurement.MeasurementData.Finger)
-	if errMapRestFingerToProto != nil {
-		writeError(ctx, wrapError(ErrInvalidValue, "", errMapRestFingerToProto), false)
-		return
-	}
-	req.Finger = protoFinger
-	resp, errResp := h.rpcSvc.SubmitMeasurementInfo(
-		newRPCContext(ctx), req,
-	)
-	if errResp != nil {
-		writeRpcInternalError(ctx, errResp, false)
-		return
-	}
+			if measurement.MeasurementData.MobileType != Android && measurement.MeasurementData.MobileType != Iphone {
+				writeError(ctx, wrapError(ErrInvalidValue, "", fmt.Errorf("mobile type must be ANDROID or IPHONE,current type is %s", measurement.MeasurementData.MobileType)), false)
+				return
+			}
+			req := new(corepb.SubmitMeasurementInfoRequest)
+			req.UserId = int32(measurement.MeasurementData.UserID)
+			protoMobileType, errmapRestMobileTypeToProto := mapRestMobileTypeToProto(measurement.MeasurementData.MobileType)
+			if errmapRestMobileTypeToProto != nil {
+				writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestMobileTypeToProto), false)
+				return
+			}
+			req.MobileType = protoMobileType
+			req.AppHighestHr = measurement.MeasurementData.AppHighestHeartRate
+			req.AppLowestHr = measurement.MeasurementData.AppLowestHeartRate
+			protoMeasurementPosture, errmapRestMeasurementPostureToProto := mapRestMeasurementPostureToProto(measurement.MeasurementData.MeasurementPosture)
+			if errmapRestMeasurementPostureToProto != nil {
+				writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestMeasurementPostureToProto), false)
+				return
+			}
+			req.MeasurementPosture = protoMeasurementPosture
+			data0, _ := base64.StdEncoding.DecodeString(measurement.MeasurementData.Data0)
+			req.Info0 = &corepb.BluetoothInfo{
+				Ir5160: data0,
+			}
 
-	rest.WriteOkJSON(ctx, SubmitMeasurementData{
-		RecordID:            resp.RecordId,
-		Cid:                 resp.RecordId,
-		C0:                  resp.C0,
-		C1:                  resp.C1,
-		C2:                  resp.C2,
-		C3:                  resp.C3,
-		C4:                  resp.C4,
-		C5:                  resp.C5,
-		C6:                  resp.C6,
-		C7:                  resp.C7,
-		WaveData:            resp.PartialInfo,
-		AppHeartRate:        resp.AppHr,
-		CreatedAt:           time.Now().UTC(),
-		Finger:              int32(resp.Finger),
-		RecordType:          resp.RecordType,
-		HeartRate:           resp.Hr,
-		AppHighestHeartRate: resp.AppHighestHr,
-		AppLowestHeartRate:  resp.AppLowestHr,
-	})
+			data1, _ := base64.StdEncoding.DecodeString(measurement.MeasurementData.Data1)
+			req.Info1 = &corepb.BluetoothInfo{
+				Ir5160: data1,
+			}
+			req.Mac = measurement.MeasurementData.Mac
+			req.AppHr = int32(measurement.MeasurementData.AppHeartRate)
+			protoFinger, errMapRestFingerToProto := mapRestFingerToProto(measurement.MeasurementData.Finger)
+			if errMapRestFingerToProto != nil {
+				writeError(ctx, wrapError(ErrInvalidValue, "", errMapRestFingerToProto), false)
+				return
+			}
+			req.Finger = protoFinger
+			resp, errResp := h.rpcSvc.SubmitMeasurementInfo(
+				newRPCContext(ctx), req,
+			)
+			if errResp != nil {
+				writeRpcInternalError(ctx, errResp, false)
+				return
+			}
+
+			rest.WriteOkJSON(ctx, SubmitMeasurementData{
+				RecordID:            resp.RecordId,
+				Cid:                 resp.RecordId,
+				C0:                  resp.C0,
+				C1:                  resp.C1,
+				C2:                  resp.C2,
+				C3:                  resp.C3,
+				C4:                  resp.C4,
+				C5:                  resp.C5,
+				C6:                  resp.C6,
+				C7:                  resp.C7,
+				WaveData:            resp.PartialInfo,
+				AppHeartRate:        resp.AppHr,
+				CreatedAt:           time.Now().UTC(),
+				Finger:              int32(resp.Finger),
+				RecordType:          resp.RecordType,
+				HeartRate:           resp.Hr,
+				AppHighestHeartRate: resp.AppHighestHr,
+				AppLowestHeartRate:  resp.AppLowestHr,
+		    })
+	*/
 }
 
 func mapRestMobileTypeToProto(mobileType string) (corepb.MobileType, error) {

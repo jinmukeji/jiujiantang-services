@@ -31,7 +31,7 @@ func (suite *TokenTestSuite) TestCreateTokenSuccess() {
 	const userID = int32(1)
 	token := auth.GenerateToken()
 	// 创建 token
-	tk, err := suite.db.CreateToken(ctx, token, userID, time.Hour*12)
+	tk, err := suite.db.GetDB(ctx).CreateToken(ctx, token, userID, time.Hour*12)
 	assert.NoError(t, err)
 	assert.Equal(t, userID, tk.UserID)
 }
@@ -44,11 +44,11 @@ func (suite *TokenTestSuite) TestFindUserIDByTokenSuccess() {
 	token := auth.GenerateToken()
 
 	// 创建 token
-	tk, err := suite.db.CreateToken(ctx, token, userID, time.Hour*12)
+	tk, err := suite.db.GetDB(ctx).CreateToken(ctx, token, userID, time.Hour*12)
 	assert.NoError(t, err)
 
 	// 从 token 取出 accoount
-	user, _ := suite.db.FindUserIDByToken(ctx, tk.Token)
+	user, _ := suite.db.GetDB(ctx).FindUserIDByToken(ctx, tk.Token)
 	assert.Equal(t, user, userID)
 }
 
@@ -59,12 +59,12 @@ func (suite *TokenTestSuite) TestFindUserIDByTokenFail() {
 	token := auth.GenerateToken()
 
 	// 插入一条 1 秒后失效的记录
-    _, errCreateToken := suite.db.CreateToken(ctx, token, 1, time.Second)
-    assert.Error(t, errCreateToken)
+	_, errCreateToken := suite.db.GetDB(ctx).CreateToken(ctx, token, 1, time.Second)
+	assert.Error(t, errCreateToken)
 
 	// 休眠2秒
 	time.Sleep(time.Second * 2)
-	userID, err := suite.db.FindUserIDByToken(ctx, token)
+	userID, err := suite.db.GetDB(ctx).FindUserIDByToken(ctx, token)
 
 	// 失效返回error
 	assert.True(t, userID == int32(0))
@@ -79,16 +79,16 @@ func (suite *TokenTestSuite) TestDeleteToken() {
 	token := auth.GenerateToken()
 
 	// 生成 token
-	tk, err := suite.db.CreateToken(ctx, token, userID, time.Hour*12)
+	tk, err := suite.db.GetDB(ctx).CreateToken(ctx, token, userID, time.Hour*12)
 	assert.NoError(t, err)
 	assert.Equal(t, userID, tk.UserID)
 
 	// 删除 token
-	err = suite.db.DeleteToken(ctx, tk.Token)
+	err = suite.db.GetDB(ctx).DeleteToken(ctx, tk.Token)
 	assert.NoError(t, err)
 
 	// 删除后找不到 token
-	user, err := suite.db.FindUserIDByToken(ctx, tk.Token)
+	user, err := suite.db.GetDB(ctx).FindUserIDByToken(ctx, tk.Token)
 	assert.Equal(t, int32(0), user)
 	assert.Error(t, err)
 }

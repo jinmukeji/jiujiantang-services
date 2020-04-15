@@ -14,7 +14,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	protobuf "github.com/golang/protobuf/proto"
-	pulsetestinfopb "github.com/jinmukeji/proto/gen/micro/idl/jm/pulsetestinfo/v1"
+	pulsetestinfopb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/pulsetestinfo/v1"
 )
 
 // PulseTestRawDataS3Client 可以上传和下载波形数据

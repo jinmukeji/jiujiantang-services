@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/v2/metadata"
 )
 
 // AccessTokenKey 用于从 Context 的 Metadata 中获取和设置用户会话访问凭证

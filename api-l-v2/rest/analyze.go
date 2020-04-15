@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/jinmukeji/go-pkg/crypto/rand"
+	"github.com/jinmukeji/go-pkg/v2/crypto/rand"
 
 	"fmt"
 
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/ae-v1/core"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	ptypespb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	ptypespb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v1"
 	"github.com/kataras/iris/v12"
 )
 

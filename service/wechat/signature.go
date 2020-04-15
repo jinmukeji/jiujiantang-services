@@ -4,7 +4,7 @@ import (
 	"sort"
 	"strings"
 
-    "github.com/jinmukeji/go-pkg/crypto/hash"
+	"github.com/jinmukeji/go-pkg/v2/crypto/hash"
 )
 
 // CheckWxSignature 验证微信接入的 Signature

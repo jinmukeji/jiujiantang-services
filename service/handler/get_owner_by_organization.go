@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 )
 
 // GetOwnerIDByOrganizationID 根据organizationID获取ownerID

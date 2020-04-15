@@ -42,7 +42,7 @@ func (suite *LocalNotificationTestSuite) TestCreateLocalNotification() {
 	t := suite.T()
 	localnotification := generateLocalNotification()
 	ctx := context.Background()
-	assert.NoError(t, suite.db.CreateLocalNotification(ctx, localnotification))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateLocalNotification(ctx, localnotification))
 	assert.NotZero(t, localnotification.Timezone)
 }
 
@@ -50,7 +50,7 @@ func (suite *LocalNotificationTestSuite) TestCreateLocalNotification() {
 func (suite *LocalNotificationTestSuite) TestGetLocalNotification() {
 	t := suite.T()
 	ctx := context.Background()
-	_, err := suite.db.GetLocalNotifications(ctx)
+	_, err := suite.db.GetDB(ctx).GetLocalNotifications(ctx)
 	assert.NoError(t, err)
 }
 
@@ -59,7 +59,7 @@ func (suite *LocalNotificationTestSuite) TestDeleteLocalNotification() {
 	t := suite.T()
 	ctx := context.Background()
 	lnID := 1
-	err := suite.db.DeleteLocalNotification(ctx, lnID)
+	err := suite.db.GetDB(ctx).DeleteLocalNotification(ctx, lnID)
 	assert.NoError(t, err)
 }
 

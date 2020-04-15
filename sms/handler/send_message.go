@@ -9,8 +9,8 @@ import (
 
 	mysqldb "github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
 	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
-	smspb "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
+	smspb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
 )
 
 const (

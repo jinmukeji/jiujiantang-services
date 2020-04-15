@@ -5,10 +5,9 @@ import (
 	"path/filepath"
 	"testing"
 
-	encry "github.com/jinmukeji/go-pkg/crypto/rand"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	encry "github.com/jinmukeji/go-pkg/v2/crypto/rand"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

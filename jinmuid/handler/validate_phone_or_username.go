@@ -5,11 +5,11 @@ import (
 	"errors"
 	"regexp"
 
-	"github.com/jinmukeji/go-pkg/areacode"
+	"github.com/jinmukeji/go-pkg/v2/areacode"
 
 	"fmt"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // UserValidateUsernameOrPhone 验证手机号码和用户名是否存在

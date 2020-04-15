@@ -26,7 +26,7 @@ type Session struct {
 
 // CreateSession 创建Session
 func (db *DbClient) CreateSession(ctx context.Context, s *Session) (*Session, error) {
-	if err := db.Create(&s).Error; err != nil {
+	if err := db.GetDB(ctx).Create(&s).Error; err != nil {
 		return nil, err
 	}
 	return s, nil
@@ -35,7 +35,7 @@ func (db *DbClient) CreateSession(ctx context.Context, s *Session) (*Session, er
 // FindSession 寻找Session
 func (db *DbClient) FindSession(ctx context.Context, sessionID string) (*Session, error) {
 	var session Session
-	err := db.Model(&Session{}).Where("session_id = ?", sessionID).Scan(&session).Error
+	err := db.GetDB(ctx).Model(&Session{}).Where("session_id = ?", sessionID).Scan(&session).Error
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +44,7 @@ func (db *DbClient) FindSession(ctx context.Context, sessionID string) (*Session
 
 // UpdateSession 更新Session
 func (db *DbClient) UpdateSession(ctx context.Context, sessionID string, session *Session) error {
-	return db.Model(&Session{}).Where("session_id = ?", sessionID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Session{}).Where("session_id = ?", sessionID).Updates(map[string]interface{}{
 		"state":      session.State,
 		"open_id":    session.OpenID,
 		"union_id":   session.UnionID,

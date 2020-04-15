@@ -26,7 +26,7 @@ func (c Client) TableName() string {
 // FindClientByClientID 查找一条 Client 数据记录
 func (db *DbClient) FindClientByClientID(ctx context.Context, clientID string) (*Client, error) {
 	var client Client
-	if err := db.First(&client, "( client_id = ? ) ", clientID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&client, "( client_id = ? ) ", clientID).Error; err != nil {
 		return nil, err
 	}
 	return &client, nil

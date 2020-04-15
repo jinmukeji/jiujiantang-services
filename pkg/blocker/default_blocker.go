@@ -1,7 +1,7 @@
 package blocker
 
 import (
-	"github.com/jinmukeji/go-pkg/stringset"
+	"github.com/jinmukeji/go-pkg/v2/stringset"
 	"github.com/jpillora/ipfilter"
 )
 

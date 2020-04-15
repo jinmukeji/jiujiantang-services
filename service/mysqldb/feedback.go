@@ -24,13 +24,13 @@ func (feedback *Feedback) TableName() string {
 
 // CreateFeedback 新增一个用户反馈
 func (db *DbClient) CreateFeedback(ctx context.Context, feedback *Feedback) error {
-	return db.Create(feedback).Error
+	return db.GetDB(ctx).Create(feedback).Error
 }
 
 // FindFeedbackByFeedBackID 查找一个用户反馈
 func (db *DbClient) FindFeedbackByFeedBackID(ctx context.Context, feedbackID int) (*Feedback, error) {
 	var feedback Feedback
-	if err := db.First(&feedback, "feedback_id = ?", feedbackID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&feedback, "feedback_id = ?", feedbackID).Error; err != nil {
 		return nil, err
 	}
 	return &feedback, nil

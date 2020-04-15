@@ -28,7 +28,7 @@ func (db *DbClient) CreateAccountLRecord(ctx context.Context, account string, re
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
-	if err := db.Create(&record).Error; err != nil {
+	if err := db.GetDB(ctx).Create(&record).Error; err != nil {
 		return err
 	}
 	return nil

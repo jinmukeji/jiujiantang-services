@@ -8,11 +8,11 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/ae/v2/biz"
 	"github.com/jinmukeji/jiujiantang-services/analysis/mysqldb"
-	"github.com/jinmukeji/plat-pkg/rpc/errors"
-	"github.com/jinmukeji/plat-pkg/rpc/errors/codes"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
+	"github.com/jinmukeji/plat-pkg/v2/micro/errors"
+	"github.com/jinmukeji/plat-pkg/v2/micro/errors/codes"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // GetAnalyzeResultByRecordID 根据 record_id 得到分析结果
@@ -84,7 +84,7 @@ func (j *AnalysisManagerService) GetAnalyzeResultByRecordID(ctx context.Context,
 	}
 	// 如果还有需要提问的问题，则分析错误
 	if !ctxData.Output["has_answered_all_questions"].(bool) {
-		return NewError(ErrAEError, fmt.Errorf("error occurs when run engine: %s", errRunEngine.Error()))
+		return NewError(ErrAEError, fmt.Errorf("error occurs when run engine: all questions has not been answered"))
 	}
 
 	// 构建返回的内容

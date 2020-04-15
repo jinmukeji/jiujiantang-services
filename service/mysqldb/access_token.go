@@ -31,7 +31,7 @@ func (db *DbClient) CreateAccessToken(ctx context.Context, token string, account
 		ExpiredAt:   now.Add(availableDuration),
 		UpdatedAt:   now,
 	}
-	if err := db.Create(&tk).Error; err != nil {
+	if err := db.GetDB(ctx).Create(&tk).Error; err != nil {
 		return nil, err
 	}
 	return &tk, nil
@@ -42,7 +42,7 @@ func (db *DbClient) FindJinmuLAccountByToken(ctx context.Context, token string) 
 	var t JinmuLAccessToken
 	now := time.Now()
 
-	if err := db.Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
+	if err := db.GetDB(ctx).Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
 		return "", err
 	}
 	return t.Account, nil
@@ -53,7 +53,7 @@ func (db *DbClient) FindMachineUUIDByToken(ctx context.Context, token string) (s
 	var t JinmuLAccessToken
 	now := time.Now()
 
-	if err := db.Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
+	if err := db.GetDB(ctx).Where("expired_at > ? ", now).First(&t, "token = ?", token).Error; err != nil {
 		return "", err
 	}
 	return t.MachineUUID, nil
@@ -61,5 +61,5 @@ func (db *DbClient) FindMachineUUIDByToken(ctx context.Context, token string) (s
 
 // DeleteJinmuLAccessToken 删除AccessToken
 func (db *DbClient) DeleteJinmuLAccessToken(ctx context.Context, token string) error {
-	return db.Delete(JinmuLAccessToken{}, "token = ?", token).Error
+	return db.GetDB(ctx).Delete(JinmuLAccessToken{}, "token = ?", token).Error
 }
