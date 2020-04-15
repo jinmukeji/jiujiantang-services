@@ -31,18 +31,6 @@ func (h *sysHandler) ClientPreferences(ctx iris.Context) {
 		writeError(ctx, wrapError(ErrParsingRequestFailed, "", err))
 		return
 	}
-	// FIXME: 需要区别不同环境进行验证，目前暂时取消验证
-	// req := new(proto.ClientAuthRequest)
-	// req.ClientId = clientPreferencesBody.ClientID
-	// req.SecretKeyHash = clientPreferencesBody.SecretKeyHash
-	// req.Seed = clientPreferencesBody.Seed
-	// _, errClientAuth := h.rpcSvc.ClientAuth(
-	// 	newRPCContext(ctx), req,
-	// )
-	// if errClientAuth != nil {
-	// 	writeRPCInternalError(ctx, errClientAuth)
-	// 	return
-	// }
 
 	clientPreference, err := h.clientPreferences.GetClientPreferences(clientPreferencesBody.ClientID, clientPreferencesBody.ClientVersion, clientPreferencesBody.Environment)
 	if err != nil {
