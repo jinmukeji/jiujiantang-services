@@ -1,30 +1,12 @@
 # iOS客户端
-"jm-10004": &JM_10004
+"xima-10001": &XM_10001
   "2.1":
-    dev:
-      api_url: "https://dev-api.jinmuhealth.com:37633/v2-api"
-      app_login_url: "https://res-cdn.jinmuhealth.com/v2-dev/app-login/2-1/index.html"
-      app_entry_url: "https://res-cdn.jinmuhealth.com/v2-dev/app-entry/2-1"
-      app_faq_url: "https://res-cdn.jinmuhealth.com/v2-dev/app-faq/2-1"
-      app_report_url: "https://res-cdn.jinmuhealth.com/v2-dev/app-report/2-1/index.html"
-    testing:
-      api_url: "https://testing-api.jinmuhealth.com:37633/v2-api"
-      app_login_url: "https://res-cdn.jinmuhealth.com/v2-testing/app-login/2-1/index.html"
-      app_entry_url: "https://res-cdn.jinmuhealth.com/v2-testing/app-entry/2-1"
-      app_faq_url: "https://res-cdn.jinmuhealth.com/v2-testing/app-faq/2-1"
-      app_report_url: "https://res-cdn.jinmuhealth.com/v2-testing/app-report/2-1/index.html"
-    staging:
-      api_url: "https://staging-api.jinmuhealth.com:37633/v2-api"
-      app_login_url: "https://res-cdn.jinmuhealth.com/v2-staging/app-login/2-1/index.html"
-      app_entry_url: "https://res-cdn.jinmuhealth.com/v2-staging/app-entry/2-1"
-      app_faq_url: "https://res-cdn.jinmuhealth.com/v2-staging/app-faq/2-1"
-      app_report_url: "https://res-cdn.jinmuhealth.com/v2-staging/app-report/2-1/index.html"
     production:
-      api_url: "https://api.jinmuhealth.com:59433/v2-api"
-      app_login_url: "https://res-cdn.jinmuhealth.com/v2/app-login/2-1/index.html"
-      app_entry_url: "https://res-cdn.jinmuhealth.com/v2/app-entry/2-1"
-      app_faq_url: "https://res-cdn.jinmuhealth.com/v2/app-faq/2-1"
-      app_report_url: "https://res-cdn.jinmuhealth.com/v2/app-report/2-1/index.html"
+      api_url: "https://api.ximalife.com:59666/v2-api"
+      app_login_url: "https://res.ximalife.com/v2/app-login/2-1/index.html"
+      app_entry_url: "https://res.ximalife.com/v2/app-entry/2-1"
+      app_faq_url: "https://res.ximalife.com/v2/app-faq/2-1"
+      app_report_url: "https://res.ximalife.com/v2/app-report/2-1/index.html"
 
 # 安卓客户端
-"jm-10005": *JM_10004
+"xima-10002": *XM_10001
