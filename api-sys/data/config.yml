@@ -1,12 +1,12 @@
 # iOS客户端
 "xima-10001": &XM_10001
-  "2.1":
+  "1.0":
     production:
       api_url: "https://api.ximalife.com:59666/v2-api"
-      app_login_url: "https://res.ximalife.com/v2/app-login/2-1/index.html"
-      app_entry_url: "https://res.ximalife.com/v2/app-entry/2-1"
-      app_faq_url: "https://res.ximalife.com/v2/app-faq/2-1"
-      app_report_url: "https://res.ximalife.com/v2/app-report/2-1/index.html"
+      app_login_url: "https://res.ximalife.com/v2/app-login/1-0/index.html"
+      app_entry_url: "https://res.ximalife.com/v2/app-entry/1-0"
+      app_faq_url: "https://res.ximalife.com/v2/app-faq/1-0"
+      app_report_url: "https://res.ximalife.com/v2/app-report/1-0/index.html"
 
 # 安卓客户端
 "xima-10002": *XM_10001
