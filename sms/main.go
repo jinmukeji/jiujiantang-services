@@ -33,7 +33,7 @@ func main() {
 		micro.WrapHandler(logger.LogWrapper),
 
 		// // Setup runtime flags
-		dbClientOptions(), aliyunSmsOptions(), tencentYunSmsOptions(),
+		dbClientOptions(), aliyunSmsOptions(),
 
 		// Setup --version flag
 		defaultVersionFlags(),
@@ -73,11 +73,7 @@ func main() {
 	if errNewAliyunSmsClient != nil {
 		log.Fatalln(errNewAliyunSmsClient)
 	}
-	tencentYunSmsClient, errTencentYunSmsClient := newTencentYunSmsClient()
-	if errTencentYunSmsClient != nil {
-		log.Fatalln(errTencentYunSmsClient)
-	}
-	smsGateway := handler.NewSMSGateway(db, aliyunSmsClient, tencentYunSmsClient)
+	smsGateway := handler.NewSMSGateway(db, aliyunSmsClient)
 	if err := proto.RegisterSmsAPIHandler(server, smsGateway); err != nil {
 		log.Fatalln(err)
 	}
@@ -103,11 +99,6 @@ var (
 	aliyunSmsAccessKeySecret string
 )
 
-var (
-	tencentYunSmsAccessKeyID     string
-	tencentYunSmsAccessKeySecret string
-)
-
 func defaultVersionFlags() micro.Option {
 	return micro.Flags(
 		&cli.BoolFlag{
@@ -131,24 +122,6 @@ func aliyunSmsOptions() micro.Option {
 			Usage:       "Aliyun SMS Access Key Secret",
 			EnvVars:     []string{"X_ALIYUN_SMS_ACCESS_KEY_Secret"},
 			Destination: &aliyunSmsAccessKeySecret,
-		},
-	)
-}
-
-// tencentYunSmsOptions 构建命令行启动参数
-func tencentYunSmsOptions() micro.Option {
-	return micro.Flags(
-		&cli.StringFlag{
-			Name:        "x_tencent_yun_sms_access_key_id",
-			Usage:       "Tencent Yun SMS Access Key ID",
-			EnvVars:     []string{"X_TENCENT_YUN_SMS_ACCESS_APP_ID"},
-			Destination: &tencentYunSmsAccessKeyID,
-		},
-		&cli.StringFlag{
-			Name:        "x_tencent_yun_sms_access_key_secret",
-			Usage:       "Tencent Yun Access Key Secret",
-			EnvVars:     []string{"X_TENCENT_YUN_SMS_ACCESS_KEY_Secret"},
-			Destination: &tencentYunSmsAccessKeySecret,
 		},
 	)
 }
@@ -218,9 +191,4 @@ func newDbClient() (*mysqldb.DbClient, error) {
 // newAliyunSmsClient 创建阿里云短信网关客户端
 func newAliyunSmsClient() (*sms.AliyunSMSClient, error) {
 	return sms.NewAliyunSMSClient(aliyunSmsAccessKeyID, aliyunSmsAccessKeySecret)
-}
-
-// newTencentYunSmsClient 创建腾讯云短信网关客户端
-func newTencentYunSmsClient() (*sms.TencentYunSMSClient, error) {
-	return sms.NewTencentYunSMSClient(tencentYunSmsAccessKeyID, tencentYunSmsAccessKeySecret)
 }

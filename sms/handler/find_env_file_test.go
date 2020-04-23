@@ -14,19 +14,15 @@ const (
 )
 
 // NewClientOptionsFromEnvFile 读取环境变脸配置文件，返回算法服务器连接配置
-func newClientOptionsFromEnvFile(filepath string) (*sms.AliyunSMSClient, *sms.TencentYunSMSClient) {
+func newClientOptionsFromEnvFile(filepath string) *sms.AliyunSMSClient {
 	err := godotenv.Load(filepath)
 	if err != nil {
 		panic(err)
 	}
 	return &sms.AliyunSMSClient{
-			AccessKeyID:     os.Getenv("X_ALIYUN_SMS_ACCESS_KEY_ID"),
-			AccessKeySecret: os.Getenv("X_ALIYUN_SMS_ACCESS_KEY_Secret"),
-		},
-		&sms.TencentYunSMSClient{
-			SDKAppID: os.Getenv("X_TENCENT_YUN_SMS_ACCESS_APP_ID"),
-			AppKey:   os.Getenv("X_TENCENT_YUN_SMS_ACCESS_KEY_Secret"),
-		}
+		AccessKeyID:     os.Getenv("X_ALIYUN_SMS_ACCESS_KEY_ID"),
+		AccessKeySecret: os.Getenv("X_ALIYUN_SMS_ACCESS_KEY_Secret"),
+	}
 }
 
 // NewTestingDbClientFromEnvFile 从配置文件里面读取环境变量并创建 DbClient
