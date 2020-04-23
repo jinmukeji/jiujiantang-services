@@ -99,11 +99,6 @@ var (
 	aliyunSmsAccessKeySecret string
 )
 
-// var (
-// 	tencentYunSmsAccessKeyID     string
-// 	tencentYunSmsAccessKeySecret string
-// )
-
 func defaultVersionFlags() micro.Option {
 	return micro.Flags(
 		&cli.BoolFlag{
