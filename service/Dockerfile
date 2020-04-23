@@ -3,5 +3,4 @@ LABEL   com.jinmuhealth.service.name="svc-biz-core" \
         com.jinmuhealth.service.type="srv"
 ADD ./svc-biz-core_linux_amd64 /svc-biz-core_linux_amd64 
 ADD ./ae_data /ae_data
-ADD ./blocker /blocker
 ENTRYPOINT [ "/svc-biz-core_linux_amd64","--x_ae_config_dir=/ae_data"]
