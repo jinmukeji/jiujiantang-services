@@ -103,10 +103,10 @@ var (
 	aliyunSmsAccessKeySecret string
 )
 
-var (
-	tencentYunSmsAccessKeyID     string
-	tencentYunSmsAccessKeySecret string
-)
+// var (
+// 	tencentYunSmsAccessKeyID     string
+// 	tencentYunSmsAccessKeySecret string
+// )
 
 func defaultVersionFlags() micro.Option {
 	return micro.Flags(
@@ -138,18 +138,18 @@ func aliyunSmsOptions() micro.Option {
 // tencentYunSmsOptions 构建命令行启动参数
 func tencentYunSmsOptions() micro.Option {
 	return micro.Flags(
-		&cli.StringFlag{
-			Name:        "x_tencent_yun_sms_access_key_id",
-			Usage:       "Tencent Yun SMS Access Key ID",
-			EnvVars:     []string{"X_TENCENT_YUN_SMS_ACCESS_APP_ID"},
-			Destination: &tencentYunSmsAccessKeyID,
-		},
-		&cli.StringFlag{
-			Name:        "x_tencent_yun_sms_access_key_secret",
-			Usage:       "Tencent Yun Access Key Secret",
-			EnvVars:     []string{"X_TENCENT_YUN_SMS_ACCESS_KEY_Secret"},
-			Destination: &tencentYunSmsAccessKeySecret,
-		},
+	// &cli.StringFlag{
+	// 	Name:        "x_tencent_yun_sms_access_key_id",
+	// 	Usage:       "Tencent Yun SMS Access Key ID",
+	// 	EnvVars:     []string{"X_TENCENT_YUN_SMS_ACCESS_APP_ID"},
+	// 	Destination: &tencentYunSmsAccessKeyID,
+	// },
+	// &cli.StringFlag{
+	// 	Name:        "x_tencent_yun_sms_access_key_secret",
+	// 	Usage:       "Tencent Yun Access Key Secret",
+	// 	EnvVars:     []string{"X_TENCENT_YUN_SMS_ACCESS_KEY_Secret"},
+	// 	Destination: &tencentYunSmsAccessKeySecret,
+	// },
 	)
 }
 
@@ -222,5 +222,7 @@ func newAliyunSmsClient() (*sms.AliyunSMSClient, error) {
 
 // newTencentYunSmsClient 创建腾讯云短信网关客户端
 func newTencentYunSmsClient() (*sms.TencentYunSMSClient, error) {
-	return sms.NewTencentYunSMSClient(tencentYunSmsAccessKeyID, tencentYunSmsAccessKeySecret)
+	// 暂不使用腾讯云发送短信
+	return nil, nil
+	//	return sms.NewTencentYunSMSClient(tencentYunSmsAccessKeyID, tencentYunSmsAccessKeySecret)
 }

@@ -113,8 +113,6 @@ services:
       - "--x_db_max_connections=1"
       - "--x_aliyun_sms_access_key_id=${X_ALIYUN_SMS_ACCESS_KEY_ID}"
       - "--x_aliyun_sms_access_key_secret=${X_ALIYUN_SMS_ACCESS_KEY_Secret}"
-      - "--x_tencent_yun_sms_access_key_id=${X_TENCENT_YUN_SMS_ACCESS_APP_ID}"
-      - "--x_tencent_yun_sms_access_key_secret=${X_TENCENT_YUN_SMS_ACCESS_KEY_Secret}"
     environment:
       - LOG_FORMAT=logstash
     ports:
