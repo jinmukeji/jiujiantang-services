@@ -137,7 +137,7 @@ func (j *JinmuHealth) OwnerGetOrganizations(ctx context.Context, req *corepb.Own
 			totalUserCount, _ := j.datastore.GetExistingUserCountByOrganizationID(ctx, o.OrganizationID)
 			createdAt, _ := ptypes.TimestampProto(subscription.CreatedAt)
 			repl.Organizations[i].Subscription = &corepb.Subscription{
-				SubscriptionType: subscriptionpb.SubscriptionType(subscription.SubscriptionType),
+				SubscriptionType: mapDBSubscriptionTypeToProto(subscription.SubscriptionType),
 				ActiveTime:       activatedAt,
 				ExpiredTime:      expiredAt,
 				Active:           subscription.Active == 1,
@@ -181,10 +181,28 @@ func (j *JinmuHealth) OwnerGetOrganizationSubscription(ctx context.Context, req 
 			TotalUserCount:   int32(totalUserCount),
 			MaxUserLimits:    int32(subscription.MaxUserLimits),
 			CreatedTime:      createdAt,
-			SubscriptionType: subscriptionpb.SubscriptionType(subscription.SubscriptionType),
+			SubscriptionType: mapDBSubscriptionTypeToProto(subscription.SubscriptionType),
 		}
 	}
 	return nil
+}
+
+func mapDBSubscriptionTypeToProto(dbType mysqldb.SubscriptionType) subscriptionpb.SubscriptionType {
+	switch dbType {
+	case mysqldb.SubscriptionTypeCustomizedVersion:
+		return subscriptionpb.SubscriptionType_SUBSCRIPTION_TYPE_CUSTOMIZED_VERSION
+	case mysqldb.SubscriptionTypeTrialVersion:
+		return subscriptionpb.SubscriptionType_SUBSCRIPTION_TYPE_TRIAL_VERSION
+	case mysqldb.SubscriptionTypeGoldenVersion:
+		return subscriptionpb.SubscriptionType_SUBSCRIPTION_TYPE_GOLDEN_VERSION
+	case mysqldb.SubscriptionTypePlatinumVersion:
+		return subscriptionpb.SubscriptionType_SUBSCRIPTION_TYPE_PLATINUM_VERSION
+	case mysqldb.SubscriptionTypeDiamondVersion:
+		return subscriptionpb.SubscriptionType_SUBSCRIPTION_TYPE_DIAMOND_VERSION
+	case mysqldb.SubscriptionTypeGiftVersion:
+		return subscriptionpb.SubscriptionType_SUBSCRIPTION_TYPE_GIFT_VERSION
+	}
+	return subscriptionpb.SubscriptionType_SUBSCRIPTION_TYPE_INVALID
 }
 
 // OwnerAddOrganizationUsers 拥有者向组织下添加用户
