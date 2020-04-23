@@ -90,7 +90,7 @@ type RingSamplePayload struct {
 }
 
 // 提交测量数据请求
-type SubmitMeasurementInfoRequest struct {
+type SubmitMeasurementInfo struct {
 	UserId             int32              `json:"user_id"`             // UserID
 	Mac                string             `json:"mac"`                 // mac地址
 	MobileType         string             `json:"mobile_type"`         // 手机类型
@@ -99,14 +99,19 @@ type SubmitMeasurementInfoRequest struct {
 	Extras             map[string]string  `json:"extras"`              // 额外的扩展上下文数据，KV 键值对
 }
 
+type SubmitMeasurementInfoRequest struct {
+	Measurement SubmitMeasurementInfo `json:"measurement"`
+}
+
 func (h *v2Handler) SubmitMeasurementData(ctx iris.Context) {
 
-	var submitMeasurementInfoRequest SubmitMeasurementInfoRequest
-	err := ctx.ReadJSON(&submitMeasurementInfoRequest)
+	var request SubmitMeasurementInfoRequest
+	err := ctx.ReadJSON(&request)
 	if err != nil {
 		writeError(ctx, wrapError(ErrParsingRequestFailed, "", err), false)
 		return
 	}
+	submitMeasurementInfoRequest := request.Measurement
 	if submitMeasurementInfoRequest.UserId == 0 {
 		writeError(
 			ctx,

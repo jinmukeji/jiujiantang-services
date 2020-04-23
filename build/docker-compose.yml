@@ -204,7 +204,7 @@ services:
       - "--x_db_database=xima_dev"
       - "--x_db_enable_log=true"
       - "--x_db_max_connections=1"
-      - "--x_activation_code_encrypt_key=jinmu"
+      - "--x_activation_code_encrypt_key=xima"
     environment:
       - LOG_FORMAT=logstash
     ports:
