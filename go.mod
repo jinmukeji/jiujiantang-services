@@ -20,7 +20,6 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.0
 	github.com/google/uuid v1.1.1
-	github.com/iris-contrib/httpexpect v0.0.0-20180314041918-ebe99fcebbce
 	github.com/iris-contrib/middleware/cors v0.0.0-20191219204441-78279b78a367
 	github.com/jinmukeji/ae-v1 v1.0.2
 	github.com/jinmukeji/ae/v2 v2.10.6
@@ -30,14 +29,12 @@ require (
 	github.com/jinmukeji/plat-pkg/v2 v2.2.0
 	github.com/jinmukeji/proto/v3 v3.0.7
 	github.com/jinzhu/gorm v1.9.12
-	github.com/joho/godotenv v1.3.0
 	github.com/jpillora/ipfilter v1.2.1
 	github.com/kataras/iris/v12 v12.1.8
 	github.com/micro/cli/v2 v2.1.2
 	github.com/micro/go-micro/v2 v2.5.0
 	github.com/mozillazg/go-pinyin v0.0.0-00010101000000-000000000000
 	github.com/sirupsen/logrus v1.5.0
-	github.com/stretchr/testify v1.5.1
 	golang.org/x/net v0.0.0-20200421231249-e086a090c8fd
 	gopkg.in/chanxuehong/wechat.v2 v2.0.0-20190402080805-fa408c6cc20d
 	gopkg.in/yaml.v2 v2.2.8

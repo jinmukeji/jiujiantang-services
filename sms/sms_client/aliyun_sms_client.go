@@ -252,3 +252,13 @@ func getSign(accessSecret, stringToSign string) (string, error) {
 	}
 	return base64.StdEncoding.EncodeToString(mac.Sum(nil)), nil
 }
+
+func dealNationCode(nationCode string) string {
+	if nationCode == "" {
+		return "86"
+	}
+	if nationCode != "" && strings.HasPrefix(nationCode, "+") {
+		return nationCode[1:]
+	}
+	return nationCode
+}
