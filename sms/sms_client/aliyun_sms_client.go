@@ -192,7 +192,7 @@ func (client *AliyunSMSClient) getSortQueryStringTmp(phoneNumber, templateCode, 
 		"TemplateCode":     templateCode,
 	}
 	if language == English {
-		params["SignName"] = "Jinmu"
+		params["SignName"] = "Xima"
 	}
 	var keys []string
 
