@@ -6,9 +6,9 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	activation "github.com/jinmukeji/gf-api2/subscription/activation-code"
+	activation "github.com/jinmukeji/jiujiantang-services/subscription/activation-code"
 
-	"github.com/jinmukeji/go-pkg/crypto/rand"
+	"github.com/jinmukeji/go-pkg/v2/crypto/rand"
 
 	"github.com/jinzhu/gorm"
 )

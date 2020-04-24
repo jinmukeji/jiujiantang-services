@@ -23,8 +23,6 @@ require (
 	github.com/iris-contrib/middleware/cors v0.0.0-20191219204441-78279b78a367
 	github.com/jinmukeji/ae-v1 v1.0.2
 	github.com/jinmukeji/ae/v2 v2.10.7
-	github.com/jinmukeji/gf-api2 v0.0.0-20200424031953-cd810283ffdc
-	github.com/jinmukeji/go-pkg v1.1.1
 	github.com/jinmukeji/go-pkg/v2 v2.2.7
 	github.com/jinmukeji/plat-pkg/v2 v2.2.0
 	github.com/jinmukeji/proto/v3 v3.0.7
