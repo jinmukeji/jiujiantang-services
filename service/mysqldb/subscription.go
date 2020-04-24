@@ -5,20 +5,37 @@ import (
 	"time"
 )
 
+type SubscriptionType int32
+
+const (
+	// 定制化
+	SubscriptionTypeCustomizedVersion = 0
+	// 试用版
+	SubscriptionTypeTrialVersion = 1
+	// 黄金姆
+	SubscriptionTypeGoldenVersion = 2
+	// 白金姆
+	SubscriptionTypePlatinumVersion = 3
+	// 钻石姆
+	SubscriptionTypeDiamondVersion = 4
+	// 礼品版
+	SubscriptionTypeGiftVersion = 5
+)
+
 // Subscription 订阅
 type Subscription struct {
-	SubscriptionID   int        `gorm:"primary_key"` // 订阅ID
-	OrganizationID   int        // 组织ID
-	SubscriptionType int        // 0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版
-	MaxUserLimits    int        // 组织下最大用户数量
-	Active           int        // 是否激活
-	CustomizedCode   string     // 自定义代码
-	ActivatedAt      time.Time  // 合同开始日期
-	ExpiredAt        time.Time  // 合同结束日期
-	ContractYear     int        // 合同期限
-	CreatedAt        time.Time  // 创建时间
-	UpdatedAt        time.Time  // 更新时间
-	DeletedAt        *time.Time // 删除时间
+	SubscriptionID   int              `gorm:"primary_key"` // 订阅ID
+	OrganizationID   int              // 组织ID
+	SubscriptionType SubscriptionType // 0 定制化 1 试用版 2 黄喜马把脉 3 白喜马把脉 4 钻石姆 5 礼品版
+	MaxUserLimits    int              // 组织下最大用户数量
+	Active           int              // 是否激活
+	CustomizedCode   string           // 自定义代码
+	ActivatedAt      time.Time        // 合同开始日期
+	ExpiredAt        time.Time        // 合同结束日期
+	ContractYear     int              // 合同期限
+	CreatedAt        time.Time        // 创建时间
+	UpdatedAt        time.Time        // 更新时间
+	DeletedAt        *time.Time       // 删除时间
 }
 
 // TableName 返回 Subscription 所在的表名
