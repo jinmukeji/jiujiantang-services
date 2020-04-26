@@ -18,12 +18,12 @@ const (
 	CustomizedVersion = "定制化"
 	// TrialVersion 试用版
 	TrialVersion = "试用版"
-	// GoldenVersion 黄喜马把脉
-	GoldenVersion = "黄喜马把脉"
-	// PlatinumVersion 白喜马把脉
-	PlatinumVersion = "白喜马把脉"
-	// DiamondVersion 钻石姆
-	DiamondVersion = "钻石姆"
+	// GoldenVersion 黄喜马
+	GoldenVersion = "黄喜马"
+	// PlatinumVersion 白喜马
+	PlatinumVersion = "白喜马"
+	// DiamondVersion 钻石喜马
+	DiamondVersion = "钻石喜马"
 	// GiftVersion 礼品版
 	GiftVersion = "礼品版"
 	// AlmostExpire 账号快过期
