@@ -60,6 +60,11 @@
             "image_name":"web-rest-sys",
             "dockerfile": "../api-sys/Dockerfile",
             "working_dir": "./out"
+        },
+        {
+            "image_name":"web-go",
+            "dockerfile": "../web-go/Dockerfile",
+            "working_dir": "./out"
         }
     ]
 }

@@ -11,7 +11,7 @@ replace (
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496
-	github.com/aws/aws-sdk-go v1.30.12
+	github.com/aws/aws-sdk-go v1.30.13
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/chanxuehong/rand v0.0.0-20180830053958-4b3aff17f488 // indirect
 	github.com/chanxuehong/util v0.0.0-20200304121633-ca8141845b13 // indirect
@@ -22,9 +22,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/iris-contrib/middleware/cors v0.0.0-20191219204441-78279b78a367
 	github.com/jinmukeji/ae-v1 v1.0.2
-	github.com/jinmukeji/ae/v2 v2.10.6
-	github.com/jinmukeji/gf-api2 v0.0.0-20200423013859-e242d0cdc97f
-	github.com/jinmukeji/go-pkg v1.1.1
+	github.com/jinmukeji/ae/v2 v2.10.7
 	github.com/jinmukeji/go-pkg/v2 v2.2.7
 	github.com/jinmukeji/plat-pkg/v2 v2.2.0
 	github.com/jinmukeji/proto/v3 v3.0.7
