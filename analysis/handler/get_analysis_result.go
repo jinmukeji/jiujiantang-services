@@ -228,7 +228,7 @@ func (j *AnalysisManagerService) GetAnalyzeResult(ctx context.Context, req *anal
 		}
 		// 如果引擎判断为测量异常，则返回错误
 		if hasAbnormalMeasurementFromAeOutput {
-			return NewError(ErrMeasurement, fmt.Errorf("error occurs in measuremet"))
+			return NewError(ErrMeasurement, fmt.Errorf("error occurs in measurement"))
 		}
 		displayOptions := getDisplayOption(record.ClientID, userProfile.GetGender(), checkIfHasStressStateFromAeOutput(*ctxData), hasAbnormalMeasurementFromAeOutput, true)
 
