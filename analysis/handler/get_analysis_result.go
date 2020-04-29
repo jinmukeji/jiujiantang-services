@@ -174,10 +174,10 @@ func (j *AnalysisManagerService) GetAnalyzeResult(ctx context.Context, req *anal
 		if ctxData.Output["stress_state_judgment"] != nil {
 			stressStateJudgment, ok := ctxData.Output["stress_state_judgment"].(map[string]interface{})
 			if ok {
-				if parseOutputBool(stressStateJudgment, "Has_stress_state") {
+				if parseOutputBool(stressStateJudgment, "has_stress_state") {
 					hasStressState = true
 				}
-				stressStatus["has_stress_state"] = parseOutputBool(stressStateJudgment, "Has_stress_state")
+				stressStatus["has_stress_state"] = parseOutputBool(stressStateJudgment, "has_stress_state")
 				stressStatus["has_done_sports"] = parseOutputBool(stressStateJudgment, "has_done_sports")
 				stressStatus["has_drinked_wine"] = parseOutputBool(stressStateJudgment, "has_drinked_wine")
 				stressStatus["has_had_cold"] = parseOutputBool(stressStateJudgment, "has_had_cold")
@@ -203,7 +203,10 @@ func (j *AnalysisManagerService) GetAnalyzeResult(ctx context.Context, req *anal
 		if errUpdateRecordTransactionNumber != nil {
 			return NewError(ErrDatabase, fmt.Errorf("failed to update record transaction number of record %d: %s", record.RecordID, errUpdateRecordTransactionNumber.Error()))
 		}
-		// 更新分析状态为完成
+
+		// 构建返回的内容
+		hasAbnormalMeasurementFromAeOutput := checkIfHasAbnormalMeasurementFromAeOutput(*ctxData)
+		// 更新分析状态
 		r := &mysqldb.Record{
 			RecordID:       req.RecordId,
 			HasStressState: hasStressState,
@@ -212,12 +215,21 @@ func (j *AnalysisManagerService) GetAnalyzeResult(ctx context.Context, req *anal
 			AnalyzeStatus:  mysqldb.AnalysisStatusCompeleted,
 		}
 
+		// 如果引擎判断为测量异常，则分析状态为错误
+		if hasAbnormalMeasurementFromAeOutput {
+			r.AnalyzeStatus = mysqldb.AnalysisStatusError
+		} else {
+			r.AnalyzeStatus = mysqldb.AnalysisStatusCompeleted
+		}
+
 		err = j.database.UpdateAnalysisRecord(r)
 		if err != nil {
 			return NewError(ErrDatabase, fmt.Errorf("failed to update analysis record of recordID %d: %s", req.RecordId, err.Error()))
 		}
-		// 构建返回的内容
-		hasAbnormalMeasurementFromAeOutput := checkIfHasAbnormalMeasurementFromAeOutput(*ctxData)
+		// 如果引擎判断为测量异常，则返回错误
+		if hasAbnormalMeasurementFromAeOutput {
+			return NewError(ErrMeasurement, fmt.Errorf("error occurs in measuremen"))
+		}
 		displayOptions := getDisplayOption(record.ClientID, userProfile.GetGender(), checkIfHasStressStateFromAeOutput(*ctxData), hasAbnormalMeasurementFromAeOutput, true)
 
 		respModules, err := getModulesFromAEOutput(*ctxData, displayOptions, userProfile.GetGender())

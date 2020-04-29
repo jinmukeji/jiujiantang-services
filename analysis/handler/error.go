@@ -35,6 +35,8 @@ const (
 	ErrInvalidFinger = 92000
 	// ErrBuildReturnModule 构建返回的模块失败
 	ErrBuildReturnModule = 93000
+	// ErrMeasurement 测量异常
+	ErrMeasurement = 94000
 )
 
 // NewError 构建一个新的 Error
