@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	mlog "github.com/jinmukeji/go-pkg/log"
-	"github.com/micro/go-micro/server"
+	mlog "github.com/jinmukeji/go-pkg/v2/log"
+	"github.com/micro/go-micro/v2/server"
 	"github.com/sirupsen/logrus"
 )
 

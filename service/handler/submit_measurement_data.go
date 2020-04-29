@@ -7,51 +7,46 @@ import (
 	"fmt"
 	"time"
 
-	idgen "github.com/jinmukeji/go-pkg/id-gen"
-	microclient "github.com/micro/go-micro/client"
-
 	valid "github.com/asaskevich/govalidator"
 	"github.com/golang/protobuf/ptypes"
-	"github.com/jinmukeji/go-pkg/age"
-	"github.com/jinmukeji/go-pkg/mac"
-	"github.com/jinmukeji/go-pkg/mathutil"
+	"github.com/jinmukeji/go-pkg/v2/age"
+	idgen "github.com/jinmukeji/go-pkg/v2/id-gen"
+	"github.com/jinmukeji/go-pkg/v2/mac"
+	"github.com/jinmukeji/jiujiantang-services/ptcodec"
+
+	"github.com/jinmukeji/go-pkg/v2/mathutil"
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	"github.com/jinmukeji/plat-report/ptcodec"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	devicepb "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
-	pulsetestinfopb "github.com/jinmukeji/proto/gen/micro/idl/jm/pulsetestinfo/v1"
-	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
-	calcpb "github.com/jinmukeji/proto/gen/micro/idl/platform/calc/v2"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	pulsetestinfopb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/pulsetestinfo/v1"
+	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	calcpb "github.com/jinmukeji/proto/v3/gen/micro/idl/platform/calc/v2"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
+	microclient "github.com/micro/go-micro/v2/client"
 )
 
 const (
-	// 蓝牙数据的位数
-	blutoothDataTotalBytes = 24000
-	// 蓝牙数据每三个为一组
-	blutoothDataSegmentLength = 3
-	// App 接收波形数据的开始位置
-	appWaveDataStart = 3000
-	// App 接收波形数据长度
-	appWaveDataLength = 1000
-	// 日期格式
-	dateFormat = "2006-01-02"
-	// 时间格式
-	timeFormat = "15:04:05"
 	// 当前记录类型默认值为 9，表示第三代数据结构规范
-	currentRecordType = 9
+	CurrentRecordType = 9
 	// 当前的测试数据版本是2
-	currentPulseTestDataSpec = 2
+	CurrentPulseTestDataSpec = 2
 	//  左手指
-	leftFinger = "L"
+	LeftFinger = "L"
 	//  右手指
 	RightFinger = "R"
 )
 
+const (
+	// DeviceModelForAlgorithm 指环使用的算法服务器请求的 Model 值
+	RingDeviceModelForAlgorithm = "FYI"
+	// 提交给算法服务器请求的 sample 中的 Type，为红外光数据
+	algorithmSampleType = "RING"
+)
+
 // SubmitMeasurementInfo 用户提交测量数据
 func (j *JinmuHealth) SubmitMeasurementInfo(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest, resp *corepb.SubmitMeasurementInfoResponse) error {
+
 	accessTokenType, _ := auth.AccessTokenTypeFromContext(ctx)
 	ownerID, _ := auth.UserIDFromContext(ctx)
 	if accessTokenType != AccessTokenTypeLValue {
@@ -80,29 +75,7 @@ func (j *JinmuHealth) SubmitMeasurementInfo(ctx context.Context, req *corepb.Sub
 	if err = j.validateMeasurementDataRequest(ctx, req); err != nil {
 		return err
 	}
-	// 获取并验证 device
-	mac := mac.NormalizeMac(req.Mac)
-	reqGetDeviceByMac := new(devicepb.GetDeviceByMacRequest)
-	reqGetDeviceByMac.Mac = req.Mac
 
-	respGetDeviceByMac, errGetDeviceByMac := j.deviceSvc.GetDeviceByMac(ctx, reqGetDeviceByMac)
-	if errGetDeviceByMac != nil {
-		return NewError(ErrDatabase, fmt.Errorf("failed to get device [mac:%s] info", reqGetDeviceByMac.GetMac()))
-	}
-	if respGetDeviceByMac.Device == nil {
-		return NewError(ErrInvalidDevice, fmt.Errorf("device [MAC:%s] is invalid", mac))
-	}
-
-	device := &mysqldb.Device{
-		DeviceID:       int(respGetDeviceByMac.Device.DeviceId),
-		CustomizedCode: respGetDeviceByMac.Device.CustomizedCode,
-		Zone:           respGetDeviceByMac.Device.Zone,
-	}
-
-	// 验证设备是否可用
-	if errValidateDevice := j.validateDevice(ctx, device); errValidateDevice != nil {
-		return errValidateDevice
-	}
 	// 获取当前提交测量数据的用户
 	reqGetUserProfile := new(jinmuidpb.GetUserProfileRequest)
 	reqGetUserProfile.UserId = req.UserId
@@ -117,12 +90,13 @@ func (j *JinmuHealth) SubmitMeasurementInfo(ctx context.Context, req *corepb.Sub
 	if err != nil {
 		return NewError(ErrBuildAlgorithmRequestFailure, fmt.Errorf("Fail to build request for algorithm: %s", err.Error()))
 	}
+
 	algResp, err := j.algorithmClient.SubmitCalc(ctx, algRequest, microclient.WithAddress(j.algorithmServerAddress))
 	if err != nil {
 		return NewError(ErrInvokeAlgorithmServerFailure, fmt.Errorf("Failed to invoke algorithm server : %s", err.Error()))
 	}
 	// 构建数据库存储的记录
-	record, errBuildDbRecord := buildDbRecord(ctx, req, algResp, device)
+	record, errBuildDbRecord := buildDbRecord(ctx, req, algResp)
 	if errBuildDbRecord != nil {
 		return NewError(ErrCreateRecordFailure, errBuildDbRecord)
 	}
@@ -145,10 +119,12 @@ func (j *JinmuHealth) SubmitMeasurementInfo(ctx context.Context, req *corepb.Sub
 		}
 	}
 	// 将原始数据保存到 s3
-	pulseTestRawData := getSavingData(req.Info0.Ir5160, req.Info1.Ir5160, int32(record.RecordID))
+	pulseTestRawData := getSavingData(req.Payload.Payload, int32(record.RecordID))
 
-	// 设置返回 app 的结果
-	dataSendToApp := getPartialWaveData(req.Info0.Ir5160, req.Info1.Ir5160)
+	dataSendToApp, err := getPartialeWaveData(req.GetPayload().GetPayload())
+	if err != nil {
+		return NewError(ErrSetWavedataFailure, errors.New("Fail to get wavedata"))
+	}
 	if err := setSubmitMeasurementReply(req, resp, algResp, dataSendToApp); err != nil {
 		return NewError(ErrSetWavedataFailure, errors.New("Fail to set wavedata send to app"))
 	}
@@ -159,43 +135,66 @@ func (j *JinmuHealth) SubmitMeasurementInfo(ctx context.Context, req *corepb.Sub
 	}
 	resp.RecordId = int32(record.RecordID)
 	resp.CreatedTime, _ = ptypes.TimestampProto(record.CreatedAt)
-	resp.AppHr = req.AppHr
-	resp.Finger = req.Finger
+	resp.Finger = req.Payload.GetFinger()
 	resp.Hr = int32(record.HeartRate)
 	resp.RecordType = int32(record.RecordType)
 	resp.AppHighestHr = int32(algResp.GetResult().GetHighestHeartRate())
 	resp.AppLowestHr = int32(algResp.GetResult().GetLowestHeartRate())
-	// TODO:应该改为开关控制神黄能否通过自定义代码获取测量数据等行为
-	// 记录使用过的设备
-	reqUserUseDevice := new(devicepb.UserUseDeviceRequest)
-	reqUserUseDevice.UserId = req.UserId
-	reqUserUseDevice.DeviceId = int32(device.DeviceID)
-	client, _ := clientFromContext(ctx)
-	reqUserUseDevice.ClientId = client.ClientID
-	_, errUserUseDevice := j.deviceSvc.UserUseDevice(ctx, reqUserUseDevice)
-	if errUserUseDevice != nil {
-		return errUserUseDevice
-	}
 	return nil
+}
+
+func mapDeviceModelToCodec(model string) (string, error) {
+	switch model {
+	case RingDeviceModelForAlgorithm:
+		return ptcodec.CodecRingRedRaw, nil
+	}
+	return "", fmt.Errorf("invalid device model type [%s]", model)
 }
 
 // validateMeasurementData 验证 app 提交的数据
 func (j *JinmuHealth) validateMeasurementDataRequest(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest) error {
+
+	// 验证 mac 地址非空
 	if valid.IsNull(req.Mac) {
 		return NewError(ErrInvalidDevice, errors.New("mac address is required"))
 	}
-
-	data0 := req.Info0.Ir5160
-	data1 := req.Info1.Ir5160
-	// 防止数组越界
-	if len(data0) != blutoothDataTotalBytes || len(data1) != blutoothDataTotalBytes {
-		return NewError(ErrMeasurementDataLengthNotMatch, fmt.Errorf("测量采样数据长度不满足,data0长度为%d,data1长度为%d", len(data0), len(data1)))
+	// 验证测量姿势是否合法
+	_, err := mapProtoPostureToDB(req.GetMeasurementPosture())
+	if err != nil {
+		return fmt.Errorf("invalid posture: %w", err)
+	}
+	// 验证手机类型
+	if req.MobileType == corepb.MobileType_MOBILE_TYPE_INVALID || req.MobileType == corepb.MobileType_MOBILE_TYPE_UNSET {
+		return fmt.Errorf("invalid mobile type")
+	}
+	payload := req.GetPayload()
+	if payload == nil {
+		return fmt.Errorf("payload should not be null")
+	}
+	// 验证数据点是否正确
+	if len(payload.GetPayload()) != int(payload.GetCount()*payload.GetPointSize()) {
+		return fmt.Errorf("size of payload %d is invalid", len(payload.GetPayload()))
 	}
 
-	if len(data0)%blutoothDataSegmentLength != 0 || len(data1)%blutoothDataSegmentLength != 0 {
-		return NewError(ErrMeasurementDataLengthNotMatch, fmt.Errorf("测量采样数据长度不满足,data0长度为%d,data1长度为%d", len(data0), len(data1)))
+	// 验证采样开始和结束时间是否合法
+	if payload.GetSamplingStartTime() == nil {
+		return fmt.Errorf("sampling_start_time of payload is null")
+	}
+	if payload.GetSamplingStopTime() == nil {
+		return fmt.Errorf("sampling_stop_time of payload is null")
+	}
+	payload1StartTime, err := ptypes.Timestamp(payload.GetSamplingStartTime())
+	if err != nil {
+		return fmt.Errorf("failed to parse payload_1.sampling_start_time: %w", err)
+	}
+	payload1StopTime, err := ptypes.Timestamp(payload.GetSamplingStopTime())
+	if err != nil {
+		return fmt.Errorf("failed to parse payload_1.sampling_stop_time: %w", err)
 	}
 
+	if payload1StartTime.After(payload1StopTime) {
+		return fmt.Errorf("sampling_start_time of payload_1 should be earlier than sampling_stop_time")
+	}
 	return nil
 }
 
@@ -217,18 +216,6 @@ func mapProtoGenderToCalc(gender generalpb.Gender) (calcpb.Gender, error) {
 	}
 	return calcpb.Gender_GENDER_INVALID, errors.New("invalid proto gender")
 }
-
-const (
-	// DeviceModelForAlgorithm 算法服务器请求的 Model 值
-	DeviceModelForAlgorithm = "XMW23"
-	// 提交给算法服务器请求的 sample 中的 Type，为红外光数据
-	algorithmSampleType = "IR"
-
-	defaultDecoder = "pmpd-raw"
-
-	// 脉证仪没有用到加解密处理
-	PayloadCodec = "pmpd-raw"
-)
 
 func mapCoreFingerToCalc(finger corepb.Finger) (calcpb.Finger, error) {
 	switch finger {
@@ -258,7 +245,6 @@ func mapCoreFingerToCalc(finger corepb.Finger) (calcpb.Finger, error) {
 
 // buildAlgorithmRequest 从 app 提交的数据生成算法服务器请求数据
 func buildAlgorithmRequest(userID int32, userProfile *jinmuidpb.UserProfile, req *corepb.SubmitMeasurementInfoRequest) (*calcpb.SubmitCalcRequest, error) {
-
 	txId := buildTxId()
 
 	gender, err := mapProtoGenderToCalc(userProfile.GetGender())
@@ -283,23 +269,23 @@ func buildAlgorithmRequest(userID int32, userProfile *jinmuidpb.UserProfile, req
 		DeviceId: "",
 		//  十六进制,返回标准的 MAC 地址
 		Mac:   mac.NormalizeMac(req.Mac),
-		Model: DeviceModelForAlgorithm,
+		Model: RingDeviceModelForAlgorithm,
 	}
 
 	// 获得解码后的原始数据的数组
-	decoder := ptcodec.NewDecoder(PayloadCodec)
+	decoder := ptcodec.NewDecoder(req.Payload.GetPayloadCodec())
 	if decoder == nil {
-		return nil, fmt.Errorf("failed to get decoder of payload codec [%s]", PayloadCodec)
+		return nil, fmt.Errorf("failed to get decoder of payload codec [%s]", req.Payload.GetPayloadCodec())
 	}
 	// 请求算法服务器用第二段蓝牙数据计算
-	payload := req.GetInfo1().GetIr5160()
+	payload := req.GetPayload().GetPayload()
 
 	payloadArray, err := decoder.Decode(payload)
 	if err != nil {
 		return nil, errors.New("failed to decode payload of payload codec")
 	}
 
-	finger, err := mapCoreFingerToCalc(req.GetFinger())
+	finger, err := mapCoreFingerToCalc(req.GetPayload().GetFinger())
 	if err != nil {
 		return nil, fmt.Errorf("failed to map core finger to pulse test: %s", err.Error())
 	}
@@ -307,18 +293,16 @@ func buildAlgorithmRequest(userID int32, userProfile *jinmuidpb.UserProfile, req
 	start, _ := ptypes.TimestampProto(now.Add(-1 * time.Minute))
 	end, _ := ptypes.TimestampProto(now)
 	samplePayload := &calcpb.SamplePayload{
-		Type:       algorithmSampleType,
-		Finger:     finger,
-		SampleRate: 200,
-		Payload:    payloadArray,
-		// 额外的扩展参数为空
-		Params:            nil,
+		Type:              algorithmSampleType,
+		Finger:            finger,
+		SampleRate:        req.Payload.GetFps(),
+		Payload:           payloadArray,
+		Params:            req.Payload.GetSampleContext(),
 		SamplingStartTime: start,
 		SamplingStopTime:  end,
 	}
 
 	algorithmRequest := &calcpb.SubmitCalcRequest{
-
 		TxId:    txId,
 		Subject: profile,
 		Device:  device,
@@ -334,7 +318,8 @@ func generateAlgCid() string {
 }
 
 // buildDbRecord 从算法服务器返回和 app 提交数据生成 record
-func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest, resp *calcpb.SubmitCalcResponse, device *mysqldb.Device) (*mysqldb.Record, error) {
+func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest, resp *calcpb.SubmitCalcResponse) (*mysqldb.Record, error) {
+
 	now := time.Now()
 
 	client, _ := clientFromContext(ctx)
@@ -371,7 +356,7 @@ func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest
 	if errmapProtoPostureToDB != nil {
 		return nil, errmapProtoPostureToDB
 	}
-	mysqlFinger, errMapProtoFingerToDB := mapProtoFingerToDB(req.Finger)
+	mysqlFinger, errMapProtoFingerToDB := mapProtoFingerToDB(req.Payload.GetFinger())
 	if errMapProtoFingerToDB != nil {
 		return nil, errMapProtoFingerToDB
 	}
@@ -381,8 +366,8 @@ func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest
 		AlgorithmLowestHeartRate:  LowestHr,
 		ClientID:                  clientID,
 		UserID:                    int(req.UserId),
-		DeviceID:                  device.DeviceID,
-		RecordType:                currentRecordType,
+		DeviceID:                  0,
+		RecordType:                CurrentRecordType,
 
 		Finger: mysqlFinger,
 
@@ -411,18 +396,13 @@ func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest
 		C6CV: C6CV,
 		C7CV: C7CV,
 
-		IsValid:             mysqldb.DbValidValue,
-		SNR:                 float32(resp.GetResult().GetSnr()),
-		AppHighestHeartRate: req.AppHighestHr,
-		AppLowestHeartRate:  req.AppLowestHr,
-		MeasurementPosture:  measurementPosture,
-		AnalyzeStatus:       mysqldb.AnalysisStatusPending, // pending
-		CreatedAt:           now,
-		UpdatedAt:           now,
+		IsValid:            mysqldb.DbValidValue,
+		SNR:                float32(resp.GetResult().GetSnr()),
+		MeasurementPosture: measurementPosture,
+		AnalyzeStatus:      mysqldb.AnalysisStatusPending, // pending
+		CreatedAt:          now,
+		UpdatedAt:          now,
 	}
-	// 直流漂移
-	// dcDrift, _ := strconv.ParseFloat(resp.GetResult().GetDr(), 10)
-	// record.DcDrift = float32(dcDrift)
 
 	// 设置心率
 	heartRate := resp.GetResult().GetAverageHeartRate()
@@ -431,7 +411,6 @@ func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest
 	// 心率变异
 	heartRateCV := resp.GetResult().GetHeartRateCv()
 	record.HeartRateCV = float32(heartRateCV)
-
 	return record, nil
 }
 
@@ -499,29 +478,41 @@ func setSubmitMeasurementReply(req *corepb.SubmitMeasurementInfoRequest, reply *
 }
 
 // getSavingData 生成发送到 AWS 存储桶的数据 (仅 Ir5160 数据)
-func getSavingData(data0, data1 []byte, recordID int32) pulsetestinfopb.PulseTestRawInfo {
+func getSavingData(payload []byte, recordID int32) pulsetestinfopb.PulseTestRawInfo {
 	var b bytes.Buffer
-	b.Write(data0)
-	b.Write(data1)
+	b.Write(payload)
 	return pulsetestinfopb.PulseTestRawInfo{
-		Spec:     currentPulseTestDataSpec,
+		Spec:     CurrentPulseTestDataSpec,
 		RecordId: uint32(recordID),
 		Payloads: b.Bytes(),
 	}
 }
 
 // getPartialWaveData 1000条波形数据
-func getPartialWaveData(data0, data1 []byte) []int32 {
-	waveData := make([]int32, 0)
-	for i := 0; i < blutoothDataTotalBytes; i += blutoothDataSegmentLength {
-		val := int32(data0[i])<<16 + int32(data0[i+1])<<8 + int32(data0[i+2])
-		waveData = append(waveData, val)
+func getPartialeWaveData(payload []byte) ([]int32, error) {
+	const (
+		// App 接收波形数据的开始位置
+		appWaveDataStart = 3000
+		// App 接收波形数据长度
+		appWaveDataLength = 1000
+	)
+
+	// 获得解码后的原始数据的数组
+	decodeModel, err := mapDeviceModelToCodec(RingDeviceModelForAlgorithm)
+	if err != nil {
+		return []int32{}, NewError(ErrInvalidDevice, fmt.Errorf("invalid device model %s", err.Error()))
 	}
-	for i := 0; i < blutoothDataTotalBytes; i += blutoothDataSegmentLength {
-		val := int32(data1[i])<<16 + int32(data1[i+1])<<8 + int32(data1[i+2])
-		waveData = append(waveData, val)
+	decoder := ptcodec.NewDecoder(decodeModel)
+	int32Array, err := decoder.Decode(payload)
+	if err != nil {
+		return []int32{}, NewError(ErrInvalidPayload, fmt.Errorf("failed to decode payload %s", err.Error()))
 	}
-	return waveData[appWaveDataStart : appWaveDataStart+appWaveDataLength]
+
+	partialData := make([]int32, appWaveDataLength)
+	for k, v := range int32Array[appWaveDataStart : appWaveDataStart+appWaveDataLength] {
+		partialData[k] = int32(v)
+	}
+	return partialData, nil
 }
 
 // Int32ValBoundedBy10 返回 -10 到 10 之间的整数
@@ -566,15 +557,15 @@ func getHandByFinger(protoFinger corepb.Finger) (string, error) {
 	case corepb.Finger_FINGER_UNSET:
 		return "", fmt.Errorf("invalid proto finger %d", protoFinger)
 	case corepb.Finger_FINGER_LEFT_1:
-		return leftFinger, nil
+		return LeftFinger, nil
 	case corepb.Finger_FINGER_LEFT_2:
-		return leftFinger, nil
+		return LeftFinger, nil
 	case corepb.Finger_FINGER_LEFT_3:
-		return leftFinger, nil
+		return LeftFinger, nil
 	case corepb.Finger_FINGER_LEFT_4:
-		return leftFinger, nil
+		return LeftFinger, nil
 	case corepb.Finger_FINGER_LEFT_5:
-		return leftFinger, nil
+		return LeftFinger, nil
 	case corepb.Finger_FINGER_RIGHT_1:
 		return RightFinger, nil
 	case corepb.Finger_FINGER_RIGHT_2:

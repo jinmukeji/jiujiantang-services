@@ -113,8 +113,6 @@ services:
       - "--x_db_max_connections=1"
       - "--x_aliyun_sms_access_key_id=${X_ALIYUN_SMS_ACCESS_KEY_ID}"
       - "--x_aliyun_sms_access_key_secret=${X_ALIYUN_SMS_ACCESS_KEY_Secret}"
-      - "--x_tencent_yun_sms_access_key_id=${X_TENCENT_YUN_SMS_ACCESS_APP_ID}"
-      - "--x_tencent_yun_sms_access_key_secret=${X_TENCENT_YUN_SMS_ACCESS_KEY_Secret}"
     environment:
       - LOG_FORMAT=logstash
     ports:
@@ -204,7 +202,7 @@ services:
       - "--x_db_database=xima_dev"
       - "--x_db_enable_log=true"
       - "--x_db_max_connections=1"
-      - "--x_activation_code_encrypt_key=jinmu"
+      - "--x_activation_code_encrypt_key=xima"
     environment:
       - LOG_FORMAT=logstash
     ports:
@@ -283,6 +281,21 @@ services:
     networks:
       app_net:
         ipv4_address: 192.168.192.113
+
+  web-go:
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/web-go:${VERSION}
+    command:
+      # Setup service registry with command override
+      - "--registry=mdns"
+      - "--server_address=:9011"
+      # - "--selector=cache" # enables in memory caching of discovered nodes # enables the client side connection pool
+    environment:
+      - LOG_FORMAT=logstash
+    ports:
+      - "9011:9011"
+    networks:
+      app_net:
+        ipv4_address: 192.168.192.114
 
 networks:
   app_net:

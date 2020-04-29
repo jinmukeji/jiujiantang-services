@@ -6,7 +6,7 @@ import (
 
 	"fmt"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // GetSecureQuestionsByPhoneOrUsername 根据用户名或者手机号获取当前设置的密保问题

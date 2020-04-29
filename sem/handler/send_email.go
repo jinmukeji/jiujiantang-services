@@ -11,8 +11,8 @@ import (
 
 	mysqldb "github.com/jinmukeji/jiujiantang-services/sem/mysqldb"
 	sem "github.com/jinmukeji/jiujiantang-services/sem/sem_client"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
-	sempb "github.com/jinmukeji/proto/gen/micro/idl/jm/sem/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
+	sempb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sem/v1"
 )
 
 const (

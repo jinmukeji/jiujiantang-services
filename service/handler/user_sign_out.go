@@ -3,8 +3,8 @@ package handler
 import (
 	"context"
 
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // UserSignOut 注销用户

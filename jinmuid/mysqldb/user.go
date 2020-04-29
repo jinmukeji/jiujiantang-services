@@ -115,7 +115,7 @@ func (user User) TableName() string {
 // FindUserByPhone 通过电话找到用户
 func (db *DbClient) FindUserByPhone(ctx context.Context, phone string, nationCode string) (*User, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( signin_phone = ? and nation_code = ?) ", phone, nationCode).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_phone = ? and nation_code = ?) ", phone, nationCode).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -124,7 +124,7 @@ func (db *DbClient) FindUserByPhone(ctx context.Context, phone string, nationCod
 // FindUserByUsername 通过用户名找到base64密码
 func (db *DbClient) FindUserByUsername(ctx context.Context, username string) (*User, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( signin_username = ? ) ", username).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_username = ? ) ", username).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -132,7 +132,7 @@ func (db *DbClient) FindUserByUsername(ctx context.Context, username string) (*U
 
 // SetLanguageByUserID 通过userID设置Language
 func (db *DbClient) SetLanguageByUserID(ctx context.Context, userID int32, language string) error {
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"language":         language,
 		"has_set_language": true,
 		"updated":          time.Now().UTC(),
@@ -142,7 +142,7 @@ func (db *DbClient) SetLanguageByUserID(ctx context.Context, userID int32, langu
 // FindLanguageByUserID 通过userID找到Language
 func (db *DbClient) FindLanguageByUserID(ctx context.Context, userID int32) (string, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( user_id = ? ) ", userID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( user_id = ? ) ", userID).Error; err != nil {
 		return "", err
 	}
 	return string(user.Language), nil
@@ -151,14 +151,14 @@ func (db *DbClient) FindLanguageByUserID(ctx context.Context, userID int32) (str
 // ExistUserByUserID 查看 user 能否存在
 func (db *DbClient) ExistUserByUserID(ctx context.Context, userID int32) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Count(&count).Error
 	return count == 1, err
 }
 
 // ExistPasswordByUserID 查看 password 能否存在
 func (db *DbClient) ExistPasswordByUserID(ctx context.Context, userID int32) (bool, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( user_id = ? ) ", userID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( user_id = ? ) ", userID).Error; err != nil {
 		return false, err
 	}
 	return user.HasSetPassword, nil
@@ -166,7 +166,7 @@ func (db *DbClient) ExistPasswordByUserID(ctx context.Context, userID int32) (bo
 
 // SetPasswordByUserID 通过userID设置密码
 func (db *DbClient) SetPasswordByUserID(ctx context.Context, userID int32, encryptedPassword string, seed string) error {
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"encrypted_password":         encryptedPassword,
 		"seed":                       seed,
 		"latest_updated_password_at": time.Now().UTC(),
@@ -177,7 +177,7 @@ func (db *DbClient) SetPasswordByUserID(ctx context.Context, userID int32, encry
 // FindSecureQuestionByUserID 通过userID找到密保问题和答案
 func (db *DbClient) FindSecureQuestionByUserID(ctx context.Context, userID int32) ([]SecureQuestion, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( user_id = ? AND has_set_secure_questions = ?) ", userID, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( user_id = ? AND has_set_secure_questions = ?) ", userID, true).Error; err != nil {
 		return nil, err
 	}
 	secureQuestions := []SecureQuestion{
@@ -192,7 +192,7 @@ func (db *DbClient) FindSecureQuestionByUserID(ctx context.Context, userID int32
 func (db *DbClient) FindSecureQuestionByPhone(ctx context.Context, phone string, nationCode string) ([]SecureQuestion, error) {
 	var user User
 
-	if err := db.DB(ctx).First(&user, "( signin_phone = ?  AND nation_code = ?  AND has_set_phone = ? AND has_set_secure_questions = ?) ", phone, nationCode, true, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_phone = ?  AND nation_code = ?  AND has_set_phone = ? AND has_set_secure_questions = ?) ", phone, nationCode, true, true).Error; err != nil {
 		return nil, err
 	}
 	secureQuestions := []SecureQuestion{
@@ -208,7 +208,7 @@ func (db *DbClient) FindSecureQuestionByPhone(ctx context.Context, phone string,
 func (db *DbClient) FindSecureQuestionByUsername(ctx context.Context, username string) ([]SecureQuestion, error) {
 	var user User
 
-	if err := db.DB(ctx).First(&user, "( signin_username = ? AND has_set_username = ? AND has_set_secure_questions = ?) ", username, true, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_username = ? AND has_set_username = ? AND has_set_secure_questions = ?) ", username, true, true).Error; err != nil {
 		return nil, err
 	}
 	secureQuestions := []SecureQuestion{
@@ -221,7 +221,7 @@ func (db *DbClient) FindSecureQuestionByUsername(ctx context.Context, username s
 
 // SetPasswordByPhone 根据手机号重置密码
 func (db *DbClient) SetPasswordByPhone(ctx context.Context, phone string, nationCode string, encryptedPassword string, seed string) error {
-	return db.DB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ?  AND has_set_phone = ?", phone, nationCode, true).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ?  AND has_set_phone = ?", phone, nationCode, true).Updates(map[string]interface{}{
 		"encrypted_password":         encryptedPassword,
 		"seed":                       seed,
 		"latest_updated_password_at": time.Now().UTC(),
@@ -231,7 +231,7 @@ func (db *DbClient) SetPasswordByPhone(ctx context.Context, phone string, nation
 
 // SetPasswordByUsername 根据用户名重置密码
 func (db *DbClient) SetPasswordByUsername(ctx context.Context, username string, encryptedPassword string, seed string) error {
-	return db.DB(ctx).Model(&User{}).Where("signin_username = ? AND has_set_username = ?", username, true).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("signin_username = ? AND has_set_username = ?", username, true).Updates(map[string]interface{}{
 		"encrypted_password":         encryptedPassword,
 		"seed":                       seed,
 		"latest_updated_password_at": time.Now().UTC(),
@@ -242,14 +242,14 @@ func (db *DbClient) SetPasswordByUsername(ctx context.Context, username string, 
 // IsPasswordSameByPhone 根据手机号判断密码是否与之前密码相同
 func (db *DbClient) IsPasswordSameByPhone(ctx context.Context, phone string, nationCode string, encryptedPassword string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ? AND encrypted_password = ? AND has_set_phone = ? ", phone, nationCode, encryptedPassword, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ? AND encrypted_password = ? AND has_set_phone = ? ", phone, nationCode, encryptedPassword, true).Count(&count).Error
 	return count != 0, err
 }
 
 // IsPasswordSameByUsername 根据用户名判断密码是否与之前密码相同
 func (db *DbClient) IsPasswordSameByUsername(ctx context.Context, username string, encryptedPassword string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("signin_username = ? AND encrypted_password = ? AND has_set_username = ?", username, encryptedPassword, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("signin_username = ? AND encrypted_password = ? AND has_set_username = ?", username, encryptedPassword, true).Count(&count).Error
 	return count != 0, err
 }
 
@@ -257,7 +257,7 @@ func (db *DbClient) IsPasswordSameByUsername(ctx context.Context, username strin
 func (db *DbClient) FindUserIDByPhone(ctx context.Context, phoneNumber string, nationCode string) (int32, error) {
 	var user User
 
-	if err := db.DB(ctx).First(&user, "( signin_phone = ? AND nation_code = ? AND has_set_phone = ? ) ", phoneNumber, nationCode, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_phone = ? AND nation_code = ? AND has_set_phone = ? ) ", phoneNumber, nationCode, true).Error; err != nil {
 		return 0, err
 	}
 	return user.UserID, nil
@@ -267,7 +267,7 @@ func (db *DbClient) FindUserIDByPhone(ctx context.Context, phoneNumber string, n
 func (db *DbClient) FindUserIDByUsername(ctx context.Context, username string) (int32, error) {
 	var user User
 
-	if err := db.DB(ctx).First(&user, "( signin_username = ? AND has_set_username = ? ) ", username, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_username = ? AND has_set_username = ? ) ", username, true).Error; err != nil {
 		return 0, err
 	}
 	return user.UserID, nil
@@ -276,35 +276,35 @@ func (db *DbClient) FindUserIDByUsername(ctx context.Context, username string) (
 // ExistUsername 用户名是否存在
 func (db *DbClient) ExistUsername(ctx context.Context, username string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("signin_username = ? AND has_set_username = ? ", username, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("signin_username = ? AND has_set_username = ? ", username, true).Count(&count).Error
 	return count != 0, err
 }
 
 // HasSetSecureEmailByAnyone 安全邮箱是否已经被任何人设置
 func (db *DbClient) HasSetSecureEmailByAnyone(ctx context.Context, email string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("secure_email = ? AND has_set_email = ?", email, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("secure_email = ? AND has_set_email = ?", email, true).Count(&count).Error
 	return count != 0, err
 }
 
 // ExistPhone 手机号是否已经存在
 func (db *DbClient) ExistPhone(ctx context.Context, phone string, nationCode string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ? AND has_set_phone = ? ", phone, nationCode, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ? AND has_set_phone = ? ", phone, nationCode, true).Count(&count).Error
 	return count != 0, err
 }
 
 // ExistSignInPhone 登录手机号是否已经存在
 func (db *DbClient) ExistSignInPhone(ctx context.Context, phone string, nationCode string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ? AND has_set_phone = ? ", phone, nationCode, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("signin_phone = ? AND nation_code = ? AND has_set_phone = ? ", phone, nationCode, true).Count(&count).Error
 	return count != 0, err
 }
 
 // SecureEmailExists 当前用户是否已经设置了安全邮箱
 func (db *DbClient) SecureEmailExists(ctx context.Context, userID int32) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("user_id = ? AND has_set_email = ?", userID, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("user_id = ? AND has_set_email = ?", userID, true).Count(&count).Error
 	return count != 0, err
 
 }
@@ -312,13 +312,13 @@ func (db *DbClient) SecureEmailExists(ctx context.Context, userID int32) (bool, 
 // MatchSecureEmail 安全邮箱是否与原来邮箱一致
 func (db *DbClient) MatchSecureEmail(ctx context.Context, email string, userID int32) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("user_id = ? AND has_set_email = ? AND secure_email = ?", userID, true, email).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("user_id = ? AND has_set_email = ? AND secure_email = ?", userID, true, email).Count(&count).Error
 	return count == 1, err
 }
 
 // CreateUserByPhone 创建user通过电话
 func (db *DbClient) CreateUserByPhone(ctx context.Context, u *User) (int32, error) {
-	if err := db.DB(ctx).Create(u).Error; err != nil {
+	if err := db.GetDB(ctx).Create(u).Error; err != nil {
 		return 0, err
 	}
 	return u.UserID, nil
@@ -326,7 +326,7 @@ func (db *DbClient) CreateUserByPhone(ctx context.Context, u *User) (int32, erro
 
 // SetSecureEmail 设置安全邮箱
 func (db *DbClient) SetSecureEmail(ctx context.Context, email string, userID int32) error {
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"secure_email":            email,
 		"has_set_email":           true,
 		"latest_updated_email_at": time.Now().UTC(),
@@ -335,7 +335,7 @@ func (db *DbClient) SetSecureEmail(ctx context.Context, email string, userID int
 
 // UnsetSecureEmail 解除设置安全邮箱
 func (db *DbClient) UnsetSecureEmail(ctx context.Context, userID int32) error {
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"secure_email":            "",
 		"has_set_email":           false,
 		"latest_updated_email_at": time.Now().UTC(),
@@ -345,7 +345,7 @@ func (db *DbClient) UnsetSecureEmail(ctx context.Context, userID int32) error {
 // ExistsSecureQuestion 用户是否已经设置了密保问题
 func (db *DbClient) ExistsSecureQuestion(ctx context.Context, userID int32) (bool, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( user_id = ? AND deleted_at is null ) ", userID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( user_id = ? AND deleted_at is null ) ", userID).Error; err != nil {
 		return false, err
 	}
 	if !user.HasSetSecureQuestions {
@@ -359,7 +359,7 @@ func (db *DbClient) SetSecureQuestion(ctx context.Context, userID int32, secureQ
 	if len(secureQuestion) != QuestionCount {
 		return errors.New("wrong count of question")
 	}
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"secure_question_1":                  secureQuestion[0].SecureQuestionKey,
 		"secure_answer_1":                    secureQuestion[0].SecureAnswer,
 		"secure_question_2":                  secureQuestion[1].SecureQuestionKey,
@@ -374,7 +374,7 @@ func (db *DbClient) SetSecureQuestion(ctx context.Context, userID int32, secureQ
 // SetSigninPhoneByUserID 通过userID设置登录手机号
 func (db *DbClient) SetSigninPhoneByUserID(ctx context.Context, userID int32, signinPhone string, nationCode string) error {
 	now := time.Now()
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"signin_phone":            signinPhone,
 		"has_set_phone":           true,
 		"latest_updated_phone_at": now.UTC(),
@@ -385,7 +385,7 @@ func (db *DbClient) SetSigninPhoneByUserID(ctx context.Context, userID int32, si
 
 // SetUserRegion 设置用户区域
 func (db *DbClient) SetUserRegion(ctx context.Context, userID int32, region Region) error {
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"has_set_region": true,
 		"region":         region,
 	}).Error
@@ -394,7 +394,7 @@ func (db *DbClient) SetUserRegion(ctx context.Context, userID int32, region Regi
 // GetSecureQuestionListToModifyByUserID 通过userID找到密保问题
 func (db *DbClient) GetSecureQuestionListToModifyByUserID(ctx context.Context, userID int32) ([]string, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( user_id = ? and has_set_secure_questions = ?) ", userID, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( user_id = ? and has_set_secure_questions = ?) ", userID, true).Error; err != nil {
 		return nil, err
 	}
 	return []string{user.SecureQuestion1, user.SecureQuestion2, user.SecureQuestion3}, nil
@@ -403,7 +403,7 @@ func (db *DbClient) GetSecureQuestionListToModifyByUserID(ctx context.Context, u
 // FindUserBySecureEmail 通过安全邮箱找到User
 func (db *DbClient) FindUserBySecureEmail(ctx context.Context, email string) (*User, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( secure_email = ? and has_set_email = ?) ", email, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( secure_email = ? and has_set_email = ?) ", email, true).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -413,7 +413,7 @@ func (db *DbClient) FindUserBySecureEmail(ctx context.Context, email string) (*U
 func (db *DbClient) FindUsernameBySecureEmail(ctx context.Context, email string) (string, error) {
 	var user User
 
-	if err := db.DB(ctx).First(&user, "( secure_email = ? AND has_set_email = ? ) ", email, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( secure_email = ? AND has_set_email = ? ) ", email, true).Error; err != nil {
 		return "", err
 	}
 	if user.HasSetUsername {
@@ -426,7 +426,7 @@ func (db *DbClient) FindUsernameBySecureEmail(ctx context.Context, email string)
 func (db *DbClient) GetSecureQuestionsByPhone(ctx context.Context, nationCode, phone string) ([]string, error) {
 	var user User
 
-	if err := db.DB(ctx).First(&user, "( signin_phone = ?  AND nation_code = ?  AND has_set_phone = ? AND has_set_secure_questions = ?) ", phone, nationCode, true, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_phone = ?  AND nation_code = ?  AND has_set_phone = ? AND has_set_secure_questions = ?) ", phone, nationCode, true, true).Error; err != nil {
 		return nil, err
 	}
 	secureQuestions := []string{user.SecureQuestion1, user.SecureQuestion2, user.SecureQuestion3}
@@ -438,7 +438,7 @@ func (db *DbClient) GetSecureQuestionsByPhone(ctx context.Context, nationCode, p
 func (db *DbClient) GetSecureQuestionsByUsername(ctx context.Context, username string) ([]string, error) {
 	var user User
 
-	if err := db.DB(ctx).First(&user, "( signin_username = ?  AND has_set_username = ? AND has_set_secure_questions = ?) ", username, true, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( signin_username = ?  AND has_set_username = ? AND has_set_secure_questions = ?) ", username, true, true).Error; err != nil {
 		return nil, err
 	}
 	secureQuestions := []string{user.SecureQuestion1, user.SecureQuestion2, user.SecureQuestion3}
@@ -449,7 +449,7 @@ func (db *DbClient) GetSecureQuestionsByUsername(ctx context.Context, username s
 // FindUserByEmail 通过邮箱找到User
 func (db *DbClient) FindUserByEmail(ctx context.Context, email string) (*User, error) {
 	var user User
-	if err := db.DB(ctx).First(&user, "( secure_email = ? and has_set_email = ?) ", email, true).Error; err != nil {
+	if err := db.GetDB(ctx).First(&user, "( secure_email = ? and has_set_email = ?) ", email, true).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
@@ -458,7 +458,7 @@ func (db *DbClient) FindUserByEmail(ctx context.Context, email string) (*User, e
 // SetSecureEmailByUserID 根据userID重置安全邮箱
 func (db *DbClient) SetSecureEmailByUserID(ctx context.Context, userID int32, email string) error {
 	now := time.Now()
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"secure_email":            email,
 		"has_set_email":           true,
 		"latest_updated_email_at": now.UTC(),
@@ -468,7 +468,7 @@ func (db *DbClient) SetSecureEmailByUserID(ctx context.Context, userID int32, em
 
 // ModifyHasSetUserProfileStatus 修改HasSetUserProfile状态
 func (db *DbClient) ModifyHasSetUserProfileStatus(ctx context.Context, userID int32) error {
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"has_set_user_profile": true,
 		"is_profile_completed": true,
 		"updated_at":           time.Now().UTC(),
@@ -478,14 +478,14 @@ func (db *DbClient) ModifyHasSetUserProfileStatus(ctx context.Context, userID in
 // HasSecureEmailSet 当前安全邮箱是否被任何人设置
 func (db *DbClient) HasSecureEmailSet(ctx context.Context, email string) (bool, error) {
 	var count int
-	err := db.DB(ctx).Model(&User{}).Where("secure_email = ? AND has_set_email = ?", email, true).Count(&count).Error
+	err := db.GetDB(ctx).Model(&User{}).Where("secure_email = ? AND has_set_email = ?", email, true).Count(&count).Error
 	return count == 1, err
 }
 
 // FindUserByUserID 获取用户和用户档案信息
 func (db *DbClient) FindUserByUserID(ctx context.Context, userID int32) (*User, error) {
 	var user User
-	if err := db.DB(ctx).Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
     U.signin_username, 
     UP.nickname as nickname,
     case when UP.nickname_initial = '~' THEN '#' ELSE UP.nickname_initial END as nickname_initial,
@@ -524,7 +524,7 @@ func (db *DbClient) FindUserByUserID(ctx context.Context, userID int32) (*User, 
 
 // ModifyUser 修改用户信息
 func (db *DbClient) ModifyUser(ctx context.Context, user *User) error {
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", user.UserID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", user.UserID).Updates(map[string]interface{}{
 		"customized_code":   user.CustomizedCode,
 		"remark":            user.Remark,
 		"user_defined_code": user.UserDefinedCode,
@@ -535,7 +535,7 @@ func (db *DbClient) ModifyUser(ctx context.Context, user *User) error {
 // DeleteUser 删除用户
 func (db *DbClient) DeleteUser(ctx context.Context, userID int32) error {
 	now := time.Now()
-	return db.DB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"updated_at": now.UTC(),
 		"deleted_at": now.UTC(),
 	}).Error

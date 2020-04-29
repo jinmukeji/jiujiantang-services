@@ -6,7 +6,7 @@ import (
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 	"github.com/kataras/iris/v12"
 )
 

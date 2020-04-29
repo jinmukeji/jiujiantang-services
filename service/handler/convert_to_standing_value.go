@@ -1,7 +1,7 @@
 package handler
 
 import (
-	proto "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 // ConvertToStandingCValues 转化站姿中的C0-C7

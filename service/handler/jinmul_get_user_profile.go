@@ -3,11 +3,11 @@ package handler
 import (
 	"context"
 
-	"github.com/jinmukeji/go-pkg/age"
+	"github.com/jinmukeji/go-pkg/v2/age"
 
 	"github.com/golang/protobuf/ptypes"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // JinmuLGetUserProfile 查看用户个人档案

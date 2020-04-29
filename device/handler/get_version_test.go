@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/device/v1"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )

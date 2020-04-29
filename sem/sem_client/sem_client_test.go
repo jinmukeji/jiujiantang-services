@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	encry "github.com/jinmukeji/go-pkg/crypto/rand"
+	encry "github.com/jinmukeji/go-pkg/v2/crypto/rand"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"

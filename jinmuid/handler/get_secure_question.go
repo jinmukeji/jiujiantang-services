@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
 )
 
 // SecureQuestions 密保问题列表

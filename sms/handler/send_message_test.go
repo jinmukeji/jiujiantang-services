@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
-	smspb "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
+	smspb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -21,8 +21,8 @@ type SendMessageSuite struct {
 func (suite *SendMessageSuite) SetupSuite() {
 	envFilepath := filepath.Join("testdata", "local.svc-sms-gw.env")
 	db, _ := newTestingDbClientFromEnvFile(envFilepath)
-	aliyunSMSClient, tencentYunSmsClient := newClientOptionsFromEnvFile(envFilepath)
-	suite.smsGateway = NewSMSGateway(db, aliyunSMSClient, tencentYunSmsClient)
+	aliyunSMSClient := newClientOptionsFromEnvFile(envFilepath)
+	suite.smsGateway = NewSMSGateway(db, aliyunSMSClient)
 }
 
 // TestSendMessage 测试发送短信

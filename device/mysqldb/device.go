@@ -30,7 +30,7 @@ func (d Device) TableName() string {
 // GetDeviceByDeviceID 通过DeviceID查询Device
 func (db *DbClient) GetDeviceByDeviceID(ctx context.Context, deviceID int32) (*Device, error) {
 	var device Device
-	err := db.Model(&Device{}).Where("device_id = ?", deviceID).Scan(&device).Error
+	err := db.GetDB(ctx).Model(&Device{}).Where("device_id = ?", deviceID).Scan(&device).Error
 	if err != nil {
 		return nil, err
 	}
@@ -40,7 +40,7 @@ func (db *DbClient) GetDeviceByDeviceID(ctx context.Context, deviceID int32) (*D
 // UserGetUsedDevices 用户得到使用过的设备
 func (db *DbClient) UserGetUsedDevices(ctx context.Context, userID int32) ([]*Device, error) {
 	var devices []*Device
-	err := db.Raw(`SELECT 
+	err := db.GetDB(ctx).Raw(`SELECT 
 	D.device_id,
 	D.mac,
 	D.sn,
@@ -63,7 +63,7 @@ func (db *DbClient) UserGetUsedDevices(ctx context.Context, userID int32) ([]*De
 // GetDeviceByMac 通过 mac 查询Device
 func (db *DbClient) GetDeviceByMac(ctx context.Context, mac uint64) (*Device, error) {
 	var device Device
-	err := db.Model(&Device{}).Where("mac = ?", mac).Scan(&device).Error
+	err := db.GetDB(ctx).Model(&Device{}).Where("mac = ?", mac).Scan(&device).Error
 	if err != nil {
 		return nil, err
 	}

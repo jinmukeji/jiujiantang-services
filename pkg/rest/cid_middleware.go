@@ -1,7 +1,7 @@
 package rest
 
 import (
-	id "github.com/jinmukeji/go-pkg/id-gen"
+	id "github.com/jinmukeji/go-pkg/v2/id-gen"
 	"github.com/kataras/iris/v12"
 )
 

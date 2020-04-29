@@ -159,7 +159,7 @@ func (r Record) TableName() string {
 // FindRecordByID 查找指定 ID 的一条 Record 数据记录
 func (db *DbClient) FindRecordByID(ctx context.Context, recordID int) (*Record, error) {
 	var r Record
-	if err := db.First(&r, "record_id = ? ", recordID).Error; err != nil {
+	if err := db.GetDB(ctx).First(&r, "record_id = ? ", recordID).Error; err != nil {
 		return nil, err
 	}
 	return &r, nil
@@ -167,7 +167,7 @@ func (db *DbClient) FindRecordByID(ctx context.Context, recordID int) (*Record, 
 
 // SetRecordSentWxViewReportNotification 设置是否已经发送过微信查看报告通知的状态标记 0: 未发送，1: 已发送
 func (db *DbClient) SetRecordSentWxViewReportNotification(ctx context.Context, recordID int, sent bool) error {
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"has_sent_wx_view_report_notification": sent,
 		"updated_at":                           time.Now().UTC(),
 	}).Error
@@ -176,7 +176,7 @@ func (db *DbClient) SetRecordSentWxViewReportNotification(ctx context.Context, r
 // FindValidRecordByID 查找指定 ID 的一条有效的 Record 数据记录
 func (db *DbClient) FindValidRecordByID(ctx context.Context, recordID int) (*Record, error) {
 	var r Record
-	if err := db.First(&r, "record_id = ? and is_valid = ?", recordID, DbValidValue).Error; err != nil {
+	if err := db.GetDB(ctx).First(&r, "record_id = ? and is_valid = ?", recordID, DbValidValue).Error; err != nil {
 		return nil, err
 	}
 	return &r, nil
@@ -184,7 +184,7 @@ func (db *DbClient) FindValidRecordByID(ctx context.Context, recordID int) (*Rec
 
 // UpdateRemarkByRecordID 更新备注
 func (db *DbClient) UpdateRemarkByRecordID(ctx context.Context, recordID int, remark string) error {
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"remark":     remark,
 		"updated_at": time.Now().UTC(),
 	}).Error
@@ -193,7 +193,7 @@ func (db *DbClient) UpdateRemarkByRecordID(ctx context.Context, recordID int, re
 // FindValidRecordsByDateRange 返回给定时间范围内的有效 record
 func (db *DbClient) FindValidRecordsByDateRange(ctx context.Context, subjectID int, start time.Time, end time.Time) ([]Record, error) {
 	var records []Record
-	if err := db.Model(&Record{}).Order("create_date_utc desc").Where("(subject_id = ?) AND ( create_date_utc between ? AND ? ) AND( is_valid = ?)", subjectID, start, end, DbValidValue).Find(&records).Error; err != nil {
+	if err := db.GetDB(ctx).Model(&Record{}).Order("create_date_utc desc").Where("(subject_id = ?) AND ( create_date_utc between ? AND ? ) AND( is_valid = ?)", subjectID, start, end, DbValidValue).Find(&records).Error; err != nil {
 		return nil, err
 	}
 	return records, nil
@@ -201,7 +201,7 @@ func (db *DbClient) FindValidRecordsByDateRange(ctx context.Context, subjectID i
 
 // CreateRecord 增加测量记录
 func (db *DbClient) CreateRecord(ctx context.Context, record *Record) error {
-	tx := db.Begin()
+	tx := db.GetDB(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
 	}
@@ -226,7 +226,7 @@ func (db *DbClient) CreateRecord(ctx context.Context, record *Record) error {
 // CheckUserHasRecord 验证用户和测量记录是否有关联
 func (db *DbClient) CheckUserHasRecord(ctx context.Context, userID int32, recordID int32) (bool, error) {
 	var count int
-	err := db.Raw("select count(*) from record where user_id = ? and record_id = ?", userID, recordID).Count(&count).Error
+	err := db.GetDB(ctx).Raw("select count(*) from record where user_id = ? and record_id = ?", userID, recordID).Count(&count).Error
 	if err != nil {
 		return false, err
 	}
@@ -239,7 +239,7 @@ func (db *DbClient) FindValidPaginatedRecordsByDateRange(ctx context.Context, us
 	if size == -1 {
 		size = maxQuerySize
 	}
-	if err := db.Model(&Record{}).Order("created_at desc").Where("(user_id = ?) AND ( created_at between ? AND ? ) AND( is_valid = ?) AND ( has_ae_error = 0) AND analyze_status = 2", userID, start, end, DbValidValue).Offset(offset).Limit(size).Find(&records).Error; err != nil {
+	if err := db.GetDB(ctx).Model(&Record{}).Order("created_at desc").Where("(user_id = ?) AND ( created_at between ? AND ? ) AND( is_valid = ?) AND ( has_ae_error = 0) AND analyze_status = 2", userID, start, end, DbValidValue).Offset(offset).Limit(size).Find(&records).Error; err != nil {
 		return nil, err
 	}
 	return records, nil
@@ -248,7 +248,7 @@ func (db *DbClient) FindValidPaginatedRecordsByDateRange(ctx context.Context, us
 // FindValidPaginatedRecordsByUserID 通过UserID拿到records
 func (db *DbClient) FindValidPaginatedRecordsByUserID(ctx context.Context, userID int32) ([]Record, error) {
 	var records []Record
-	if err := db.Model(&Record{}).Order("created_at desc").Where("user_id = ? AND is_valid = 1 AND has_ae_error = 0 AND analyze_status = 2", userID).Find(&records).Error; err != nil {
+	if err := db.GetDB(ctx).Model(&Record{}).Order("created_at desc").Where("user_id = ? AND is_valid = 1 AND has_ae_error = 0 AND analyze_status = 2", userID).Find(&records).Error; err != nil {
 		return nil, err
 	}
 	return records, nil
@@ -257,13 +257,13 @@ func (db *DbClient) FindValidPaginatedRecordsByUserID(ctx context.Context, userI
 // GetUserIDByRecordID 通过RecordID得到UserID
 func (db *DbClient) GetUserIDByRecordID(ctx context.Context, recordID int32) (int32, error) {
 	var record Record
-	db.Model(&Record{}).Where("record_id = ?", recordID).Scan(&record)
+	db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Scan(&record)
 	return int32(record.UserID), nil
 }
 
 // UpdateRecordStatus 更新状态
 func (db *DbClient) UpdateRecordStatus(ctx context.Context, record *Record) error {
-	return db.Model(&Record{}).Where("record_id = ?", record.RecordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", record.RecordID).Update(map[string]interface{}{
 		"is_sport_or_drunk": record.IsSportOrDrunk,
 		"cold":              record.Cold,
 		"menstrual_cycle":   record.MenstrualCycle,
@@ -283,13 +283,13 @@ func (db *DbClient) UpdateRecordStatus(ctx context.Context, record *Record) erro
 // ExistRecordByRecordID 检查Record是否存在
 func (db *DbClient) ExistRecordByRecordID(ctx context.Context, recordID int32) (bool, error) {
 	var count int
-	db.Model(&Record{}).Where("record_id = ? AND is_valid = 1 ", recordID).Count(&count)
+	db.GetDB(ctx).Model(&Record{}).Where("record_id = ? AND is_valid = 1 ", recordID).Count(&count)
 	return count != 0, nil
 }
 
 // UpdateRecordAnswers 更新Record中的Answers
 func (db *DbClient) UpdateRecordAnswers(ctx context.Context, recordID int32, answers string) error {
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"answers":        answers,
 		"analyze_status": AnalysisStatusCompeleted,
 		"updated_at":     time.Now().UTC(),
@@ -298,7 +298,7 @@ func (db *DbClient) UpdateRecordAnswers(ctx context.Context, recordID int32, ans
 
 // UpdateRecordHasPaid 更新Record中的hasPaid
 func (db *DbClient) UpdateRecordHasPaid(ctx context.Context, recordID int32) error {
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"has_paid":   true,
 		"updated_at": time.Now().UTC(),
 	}).Error
@@ -306,7 +306,7 @@ func (db *DbClient) UpdateRecordHasPaid(ctx context.Context, recordID int32) err
 
 // UpdateRecordToken 更新分享报告的token
 func (db *DbClient) UpdateRecordToken(ctx context.Context, recordID int32, token string) error {
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"record_token": token,
 		"updated_at":   time.Now().UTC(),
 	}).Error
@@ -315,7 +315,7 @@ func (db *DbClient) UpdateRecordToken(ctx context.Context, recordID int32, token
 // FindRecordByToken 查找指定 token 的一条 Record 数据记录
 func (db *DbClient) FindRecordByToken(ctx context.Context, token string) (*Record, error) {
 	var r Record
-	if err := db.First(&r, "record_token = ? ", token).Error; err != nil {
+	if err := db.GetDB(ctx).First(&r, "record_token = ? ", token).Error; err != nil {
 		return nil, err
 	}
 	return &r, nil
@@ -323,7 +323,7 @@ func (db *DbClient) FindRecordByToken(ctx context.Context, token string) (*Recor
 
 // UpdateRecordHasAEError 更新记录有效性
 func (db *DbClient) UpdateRecordHasAEError(ctx context.Context, recordID int32, hasAEError int32) error {
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"has_ae_error": hasAEError,
 		"updated_at":   time.Now().UTC(),
 	}).Error
@@ -331,7 +331,7 @@ func (db *DbClient) UpdateRecordHasAEError(ctx context.Context, recordID int32, 
 
 // UpdateRecordTransactionNumber 更新记录的流水号
 func (db *DbClient) UpdateRecordTransactionNumber(ctx context.Context, recordID int32, transactionNumber string) error {
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"transaction_number": transactionNumber,
 		"updated_at":         time.Now().UTC(),
 	}).Error
@@ -340,7 +340,7 @@ func (db *DbClient) UpdateRecordTransactionNumber(ctx context.Context, recordID 
 // DeleteRecord 删除记录
 func (db *DbClient) DeleteRecord(ctx context.Context, recordID int32) error {
 	now := time.Now()
-	return db.Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
+	return db.GetDB(ctx).Model(&Record{}).Where("record_id = ?", recordID).Update(map[string]interface{}{
 		"deleted_at": now.UTC(),
 		"updated_at": now.UTC(),
 	}).Error

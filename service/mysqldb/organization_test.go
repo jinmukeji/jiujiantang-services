@@ -29,7 +29,7 @@ func (suite *OrganizationTestSuite) TestFindFirstOrganizationByOwner() {
 	t := suite.T()
 	ctx := context.Background()
 	var testOwnerID = 1
-	o, err := suite.db.FindFirstOrganizationByOwner(ctx, testOwnerID)
+	o, err := suite.db.GetDB(ctx).FindFirstOrganizationByOwner(ctx, testOwnerID)
 	assert.NoError(t, err)
 	assert.Equal(t, testUsername, o.Name)
 }
@@ -43,7 +43,7 @@ func (suite *OrganizationTestSuite) TestCreateOrganization() {
 		Name:    organizationName,
 		IsValid: 1,
 	}
-	assert.NoError(t, suite.db.CreateOrganization(ctx, o))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganization(ctx, o))
 	now := time.Now()
 	s := &Subscription{
 		OrganizationID: o.OrganizationID,
@@ -51,7 +51,7 @@ func (suite *OrganizationTestSuite) TestCreateOrganization() {
 		ExpiredAt:      now.UTC(),
 		ContractYear:   0,
 	}
-	assert.NoError(t, suite.db.CreateSubscription(ctx, s))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateSubscription(ctx, s))
 }
 
 // TestFindOrganizationsByOwner 测试查找指定 owner 拥有的第一个组织
@@ -60,7 +60,7 @@ func (suite *OrganizationTestSuite) TestFindOrganizationsByOwner() {
 	t := suite.T()
 	ctx := context.Background()
 	var testOwnerID = 1
-	os, err := suite.db.FindOrganizationsByOwner(ctx, testOwnerID)
+	os, err := suite.db.GetDB(ctx).FindOrganizationsByOwner(ctx, testOwnerID)
 	assert.NoError(t, err)
 	assert.NotEqual(t, 0, len(os))
 	o := os[0]
@@ -73,7 +73,7 @@ func (suite *OrganizationTestSuite) TestFindOrganizationByID() {
 	ctx := context.Background()
 	const organizationID = 1
 	const organizationName = "xx"
-	o, err := suite.db.FindOrganizationByID(ctx, organizationID)
+	o, err := suite.db.GetDB(ctx).FindOrganizationByID(ctx, organizationID)
 	assert.NoError(t, err)
 	assert.Equal(t, organizationName, o.Name)
 }
@@ -88,7 +88,7 @@ func (suite *OrganizationTestSuite) TestDeleteOrganization() {
 		Name:    organizationName,
 		IsValid: 1,
 	}
-	assert.NoError(t, suite.db.CreateOrganization(ctx, o))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganization(ctx, o))
 	now := time.Now()
 	s := &Subscription{
 		OrganizationID: o.OrganizationID,
@@ -96,19 +96,19 @@ func (suite *OrganizationTestSuite) TestDeleteOrganization() {
 		ExpiredAt:      now.UTC(),
 		ContractYear:   0,
 	}
-	assert.NoError(t, suite.db.CreateSubscription(ctx, s))
-	errCreateOrganizationOwner := suite.db.CreateOrganizationOwner(ctx, &OrganizationOwner{
+	assert.NoError(t, suite.db.GetDB(ctx).CreateSubscription(ctx, s))
+	errCreateOrganizationOwner := suite.db.GetDB(ctx).CreateOrganizationOwner(ctx, &OrganizationOwner{
 		OrganizationID: o.OrganizationID,
 		OwnerID:        ownerID,
 		CreatedAt:      now.UTC(),
 		UpdatedAt:      now.UTC(),
 	})
 	assert.NoError(t, errCreateOrganizationOwner)
-	ok, err := suite.db.CheckOrganizationOwner(ctx, ownerID, o.OrganizationID)
+	ok, err := suite.db.GetDB(ctx).CheckOrganizationOwner(ctx, ownerID, o.OrganizationID)
 	assert.NoError(t, err)
 	assert.True(t, ok)
-	assert.NoError(t, suite.db.DeleteOrganizationByID(ctx, o.OrganizationID))
-	ok, err = suite.db.CheckOrganizationOwner(ctx, ownerID, o.OrganizationID)
+	assert.NoError(t, suite.db.GetDB(ctx).DeleteOrganizationByID(ctx, o.OrganizationID))
+	ok, err = suite.db.GetDB(ctx).CheckOrganizationOwner(ctx, ownerID, o.OrganizationID)
 	assert.NoError(t, err)
 	assert.False(t, ok)
 }
@@ -118,7 +118,7 @@ func (suite *OrganizationTestSuite) TestFindUserSizeByOrganizationID() {
 	t := suite.T()
 	ctx := context.Background()
 	const organizationID = 2
-	o, err := suite.db.GetExistingUserCountByOrganizationID(ctx, organizationID)
+	o, err := suite.db.GetDB(ctx).GetExistingUserCountByOrganizationID(ctx, organizationID)
 	assert.NoError(t, err)
 	assert.Equal(t, organizationID, o)
 
@@ -130,7 +130,7 @@ func (suite *OrganizationTestSuite) TestFindOrganizationSizeByOwnerID() {
 	const ownerID = 1
 	const size = 6 // 通过查看数据库该用户发现有6个组织
 	ctx := context.Background()
-	o, err := suite.db.GetOrganizationCountByOwnerID(ctx, ownerID)
+	o, err := suite.db.GetDB(ctx).GetOrganizationCountByOwnerID(ctx, ownerID)
 	assert.NoError(t, err)
 	assert.Equal(t, size, o)
 }

@@ -25,48 +25,48 @@ const (
 
 // simpleChineseTemplateAction 国内简体模版
 var simpleChineseTemplateAction = map[TemplateAction]string{
-	SignUp:            "SMS_157065159", // 手机号注册
-	SignIn:            "SMS_157070152", // 手机号登录
-	ResetPassword:     "SMS_157065163", // 找回/重置密码
-	SetPhoneNumber:    "SMS_157070159", // 设置手机号
-	ModifyPhoneNumber: "SMS_157070166", // 修改手机号
+	SignUp:            "SMS_188631876", // 手机号注册
+	SignIn:            "SMS_188631878", // 手机号登陆
+	ResetPassword:     "SMS_188631881", // 找回/重置密码
+	SetPhoneNumber:    "SMS_188626845", // 设置手机号
+	ModifyPhoneNumber: "SMS_188626847", // 修改手机号
 }
 
 // simpleChineseInternationalTemplateAction 国际简体模版
 var simpleChineseInternationalTemplateAction = map[TemplateAction]string{
-	SignUp:            "SMS_157065508", // 手机号注册
-	SignIn:            "SMS_157065512", // 手机号登录
-	ResetPassword:     "SMS_157070484", // 找回/重置密码
-	SetPhoneNumber:    "SMS_157065515", // 设置手机号
-	ModifyPhoneNumber: "SMS_157070490", // 修改手机号
+	SignUp:            "SMS_188631885", // 手机号注册
+	SignIn:            "SMS_188641813", // 手机号登陆
+	ResetPassword:     "SMS_188641816", // 找回/重置密码
+	SetPhoneNumber:    "SMS_188631891", // 设置手机号
+	ModifyPhoneNumber: "SMS_188641817", // 修改手机号
 }
 
 // 阿里的非国际短信,仅支持简体和中文
 // traditionalChineseInternationalTemplateAction 国际繁体模版
 var traditionalChineseInternationalTemplateAction = map[TemplateAction]string{
-	SignUp:            "SMS_157065521", // 手机号注册
-	SignIn:            "SMS_157070497", // 手机号登录
-	ResetPassword:     "SMS_157070500", // 找回/重置密码
-	SetPhoneNumber:    "SMS_157065530", // 设置手机号
-	ModifyPhoneNumber: "SMS_157070508", // 修改手机号
+	SignUp:            "SMS_188631895", // 手机号注册
+	SignIn:            "SMS_188641821", // 手机号登陆
+	ResetPassword:     "SMS_188631898", // 找回/重置密码
+	SetPhoneNumber:    "SMS_188636826", // 设置手机号
+	ModifyPhoneNumber: "SMS_188631900", // 修改手机号
 }
 
 // englishTemplateAction 国内英文模版
 var englishTemplateAction = map[TemplateAction]string{
-	SignUp:            "SMS_157065661", // 手机号注册
-	SignIn:            "SMS_157065666", // 手机号登录
-	ResetPassword:     "SMS_157065672", // 找回/重置密码
-	SetPhoneNumber:    "SMS_157070840", // 设置手机号
-	ModifyPhoneNumber: "SMS_157070634", // 修改手机号
+	SignUp:            "SMS_188631903", // 手机号注册
+	SignIn:            "SMS_188631906", // 手机号登陆
+	ResetPassword:     "SMS_188631863", // 找回/重置密码
+	SetPhoneNumber:    "SMS_188636835", // 设置手机号
+	ModifyPhoneNumber: "SMS_188626825", // 修改手机号
 }
 
 // englishInternationalTemplateAction 国际英文模版
 var englishInternationalTemplateAction = map[TemplateAction]string{
-	SignUp:            "SMS_157070643", // 手机号注册
-	SignIn:            "SMS_157065690", // 手机号登录
-	ResetPassword:     "SMS_157065703", // 找回/重置密码
-	SetPhoneNumber:    "SMS_157070663", // 设置手机号
-	ModifyPhoneNumber: "SMS_157070666", // 修改手机号
+	SignUp:            "SMS_188632025", // 手机号注册
+	SignIn:            "SMS_188641931", // 手机号登陆
+	ResetPassword:     "SMS_188960045", // 找回/重置密码
+	SetPhoneNumber:    "SMS_188632028", // 设置手机号
+	ModifyPhoneNumber: "SMS_188990002", // 修改手机号
 }
 
 // SendSmsReply 发送短信返回
@@ -187,12 +187,12 @@ func (client *AliyunSMSClient) getSortQueryStringTmp(phoneNumber, templateCode, 
 		"Version":          "2017-05-25",
 		"RegionId":         "cn-hangzhou",
 		"PhoneNumbers":     phoneNumber,
-		"SignName":         "喜马把脉平台",
+		"SignName":         "喜马平台",
 		"TemplateParam":    templateParamJSON,
 		"TemplateCode":     templateCode,
 	}
 	if language == English {
-		params["SignName"] = "Jinmu"
+		params["SignName"] = "Xima"
 	}
 	var keys []string
 
@@ -251,4 +251,14 @@ func getSign(accessSecret, stringToSign string) (string, error) {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(mac.Sum(nil)), nil
+}
+
+func dealNationCode(nationCode string) string {
+	if nationCode == "" {
+		return "86"
+	}
+	if nationCode != "" && strings.HasPrefix(nationCode, "+") {
+		return nationCode[1:]
+	}
+	return nationCode
 }

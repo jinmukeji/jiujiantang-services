@@ -21,7 +21,7 @@ func (o OrganizationUser) TableName() string {
 
 // CreateOrganizationUsers 在 organization_user 新增多条记录
 func (db *DbClient) CreateOrganizationUsers(ctx context.Context, users []*OrganizationUser) error {
-	tx := db.Begin()
+	tx := db.GetDB(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
 	}
@@ -36,12 +36,12 @@ func (db *DbClient) CreateOrganizationUsers(ctx context.Context, users []*Organi
 
 // DeleteOrganizationUser 在 organization_user 删除一条记录
 func (db *DbClient) DeleteOrganizationUser(ctx context.Context, userID, organizationID int) error {
-	return db.Where("organization_id = ? AND user_id = ?", organizationID, userID).Delete(&OrganizationUser{}).Error
+	return db.GetDB(ctx).Where("organization_id = ? AND user_id = ?", organizationID, userID).Delete(&OrganizationUser{}).Error
 }
 
 // DeleteOrganizationUsers 在 organization_user 删除多条记录
 func (db *DbClient) DeleteOrganizationUsers(ctx context.Context, userIDList []int32, organizationID int32) error {
-	tx := db.Begin()
+	tx := db.GetDB(ctx).Begin()
 	if tx.Error != nil {
 		return tx.Error
 	}
@@ -57,7 +57,7 @@ func (db *DbClient) DeleteOrganizationUsers(ctx context.Context, userIDList []in
 // CheckOrganizationUser 检查 user 是否为组织下用户
 func (db *DbClient) CheckOrganizationUser(ctx context.Context, userID, organizationID int) (bool, error) {
 	var count int
-	if err := db.Raw("select count(*) from organization_user where user_id = ? AND organization_id = ?", userID, organizationID).Count(&count).Error; err != nil {
+	if err := db.GetDB(ctx).Raw("select count(*) from organization_user where user_id = ? AND organization_id = ?", userID, organizationID).Count(&count).Error; err != nil {
 		return false, err
 	}
 	return count != 0, nil
@@ -66,7 +66,7 @@ func (db *DbClient) CheckOrganizationUser(ctx context.Context, userID, organizat
 // FindOrganizationUsers 查看组织下用户
 func (db *DbClient) FindOrganizationUsers(ctx context.Context, organizationID int) ([]*User, error) {
 	var users []*User
-	db.Raw(`SELECT
+	db.GetDB(ctx).Raw(`SELECT
 			DISTINCT OU.user_id,
 			U.username,
 			U.nickname,
@@ -106,7 +106,7 @@ func (db *DbClient) FindOrganizationUsersByOffset(ctx context.Context, organizat
 	if size == -1 {
 		size = maxQuerySize
 	}
-	db.Limit(size).Offset(offset).Raw(`SELECT
+	db.GetDB(ctx).Limit(size).Offset(offset).Raw(`SELECT
 	DISTINCT OU.user_id,
 	U.signin_username AS username,
     UP.nickname,
@@ -142,7 +142,7 @@ ORDER BY is_removable, at_last, UP.nickname_initial ASC, convert(UP.nickname usi
 // FindOrganizationUsersByKeyword 通过keyword和分页搜索用户
 func (db *DbClient) FindOrganizationUsersByKeyword(ctx context.Context, organizationID int32, keyword string, size int32, offset int32) ([]*User, error) {
 	var users []*User
-	db.Raw(`SELECT
+	db.GetDB(ctx).Raw(`SELECT
 	DISTINCT OU.user_id,
 	U.signin_username  AS username,
 	UP.nickname,
@@ -178,7 +178,7 @@ limit ? offset ?`, organizationID, sqlEscape(keyword)+"%", size, offset).Scan(&u
 // FindOrganizationUsersIDList 查看组织下用户ID的List
 func (db *DbClient) FindOrganizationUsersIDList(ctx context.Context, organizationID int) ([]int, error) {
 	var users []*User
-	db.Raw(`SELECT
+	db.GetDB(ctx).Raw(`SELECT
 		OU.user_id
     FROM 
         organization_user AS OU

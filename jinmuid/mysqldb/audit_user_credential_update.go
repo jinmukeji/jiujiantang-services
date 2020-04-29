@@ -39,5 +39,5 @@ func (a AuditUserCredentialUpdate) TableName() string {
 
 // CreateAuditUserCredentialUpdate 新增一个审计记录
 func (db *DbClient) CreateAuditUserCredentialUpdate(ctx context.Context, auditUserCredentialUpdate *AuditUserCredentialUpdate) error {
-	return db.DB(ctx).Create(auditUserCredentialUpdate).Error
+	return db.GetDB(ctx).Create(auditUserCredentialUpdate).Error
 }

@@ -39,8 +39,8 @@ func NewClientPreferences(configFile string) ClientPreferences {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return ClientPreferences{
+	client := ClientPreferences{
 		mapClientConfig: configDoc,
 	}
-
+	return client
 }

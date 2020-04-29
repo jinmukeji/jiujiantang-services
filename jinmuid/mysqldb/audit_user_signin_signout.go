@@ -36,13 +36,13 @@ func (a AuditUserSigninSignout) TableName() string {
 
 // CreateAuditUserSigninSignout 新增登录/登出审计记录
 func (db *DbClient) CreateAuditUserSigninSignout(ctx context.Context, auditUserSigninSignout *AuditUserSigninSignout) error {
-	return db.DB(ctx).Create(auditUserSigninSignout).Error
+	return db.GetDB(ctx).Create(auditUserSigninSignout).Error
 }
 
 // FindUsingClients 寻找正在使用的客户端
 func (db *DbClient) FindUsingClients(ctx context.Context, userID int32) ([]Client, error) {
 	var clients []Client
-	err := db.DB(ctx).Raw("SELECT distinct(AU.client_id),C.remark,C.`usage` FROM audit_user_signin_signout as AU inner join `client` as C on C.client_id = AU.client_id where AU.user_id = ? and AU.client_id <> '' and AU.deleted_at IS NULL", userID).Scan(&clients).Error
+	err := db.GetDB(ctx).Raw("SELECT distinct(AU.client_id),C.remark,C.`usage` FROM audit_user_signin_signout as AU inner join `client` as C on C.client_id = AU.client_id where AU.user_id = ? and AU.client_id <> '' and AU.deleted_at IS NULL", userID).Scan(&clients).Error
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (db *DbClient) FindUsingClients(ctx context.Context, userID int32) ([]Clien
 // FindUserSigninRecord 查询登录记录
 func (db *DbClient) FindUserSigninRecord(ctx context.Context, userID int32) ([]AuditUserSigninSignout, error) {
 	var auditUserSigninSignout []AuditUserSigninSignout
-	err := db.DB(ctx).Raw(`
+	err := db.GetDB(ctx).Raw(`
     SELECT sign_in_machine,created_at from (
         SELECT AU.sign_in_machine as sign_in_machine, min(AU.created_at) as created_at
             FROM audit_user_signin_signout as AU

@@ -3,8 +3,8 @@ package handler
 import (
 	"os"
 
+	"github.com/jinmukeji/jiujiantang-services/device/mysqldb"
 	db "github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
-	"github.com/jinmukeji/go-pkg/mysqldb"
 	"github.com/joho/godotenv"
 )
 

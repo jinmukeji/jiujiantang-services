@@ -5,7 +5,7 @@ import (
 
 	"fmt"
 
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
 )
 
 // GetUserCountOfSubscription  获取订阅下的用户数量

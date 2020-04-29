@@ -29,6 +29,12 @@ fi
 mkdir -p ${OUT_DIR}/sys_data
 cp ${ASSETS_DIR}/sys_data/config.yml ${OUT_DIR}/sys_data
 
+info "--> preparing web-go data..."
+if [ -d "${OUT_DIR}/web-go" ]; then
+    rm -rf ${OUT_DIR}/web-go
+fi
+mkdir -p ${OUT_DIR}/web-go
+cp ${ASSETS_DIR}/web-go/resource.yml ${OUT_DIR}/web-go
 
 info "--> preparing ae v2 data..."
 

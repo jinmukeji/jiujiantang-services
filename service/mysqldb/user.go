@@ -80,7 +80,7 @@ func (u User) TableName() string {
 // FindUserByUsername 返回数据库中的用户
 func (db *DbClient) FindUserByUsername(ctx context.Context, username string) (*User, error) {
 	var u User
-	if err := db.Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
 		U.user_id, 
 		U.username, 
 		U.nickname,
@@ -119,7 +119,7 @@ func (db *DbClient) FindUserByUsername(ctx context.Context, username string) (*U
 
 // CreateUser 创建一个新用户
 func (db *DbClient) CreateUser(ctx context.Context, u *User) (*User, error) {
-	if err := db.Create(u).Error; err != nil {
+	if err := db.GetDB(ctx).Create(u).Error; err != nil {
 		return nil, err
 	}
 	return u, nil
@@ -128,7 +128,7 @@ func (db *DbClient) CreateUser(ctx context.Context, u *User) (*User, error) {
 // FindUserByUserID 返回数据库中的用户
 func (db *DbClient) FindUserByUserID(ctx context.Context, userID int) (*User, error) {
 	var u User
-	if err := db.Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
 	U.user_id, 
 	U.signin_username, 
 	UP.nickname,
@@ -159,7 +159,7 @@ func (db *DbClient) FindUserByUserID(ctx context.Context, userID int) (*User, er
 // UpdateUserProfile 更新用户个人信息
 func (db *DbClient) UpdateUserProfile(ctx context.Context, profile ProtoUserProfile, userID int32) error {
 	birthday, _ := ptypes.Timestamp(profile.GetBirthday())
-	return db.Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"nickname":             profile.GetNickname(),
 		"birthday":             birthday,
 		"height":               profile.GetHeight(),
@@ -181,7 +181,7 @@ func (db *DbClient) UpdateUserProfile(ctx context.Context, profile ProtoUserProf
 // UpdateUserProfileContainGender 更新用户含有gender的个人信息
 func (db *DbClient) UpdateUserProfileContainGender(ctx context.Context, profile ProtoUserProfile, userID int32, gender string) error {
 	birthday, _ := ptypes.Timestamp(profile.GetBirthday())
-	return db.Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", userID).Updates(map[string]interface{}{
 		"nickname":             profile.GetNickname(),
 		"birthday":             birthday,
 		"height":               profile.GetHeight(),
@@ -203,7 +203,7 @@ func (db *DbClient) UpdateUserProfileContainGender(ctx context.Context, profile 
 
 // UpdateSimpleUserProfile 简易更新用户个人信息
 func (db *DbClient) UpdateSimpleUserProfile(ctx context.Context, user *User) error {
-	return db.Model(&User{}).Where("user_id = ?", user.UserID).Updates(map[string]interface{}{
+	return db.GetDB(ctx).Model(&User{}).Where("user_id = ?", user.UserID).Updates(map[string]interface{}{
 		"height":   user.Height,
 		"weight":   user.Weight,
 		"gender":   user.Gender,
@@ -214,7 +214,7 @@ func (db *DbClient) UpdateSimpleUserProfile(ctx context.Context, user *User) err
 // GetUserByRecordID 通过RecordID 获取 User
 func (db *DbClient) GetUserByRecordID(ctx context.Context, recordID int32) (*User, error) {
 	var user User
-	if err := db.Raw(`SELECT 
+	if err := db.GetDB(ctx).Raw(`SELECT 
 	user.user_id, 
 	user.nickname,
 	user.gender, 
@@ -233,12 +233,13 @@ func (db *DbClient) GetUserByRecordID(ctx context.Context, recordID int32) (*Use
 // CountUserByCustomizedCode 通过customizedCode计算User的数量
 func (db *DbClient) CountUserByCustomizedCode(ctx context.Context, customizedCode string) (int, error) {
 	var count int
-	count, err := db.countByRaw(ctx, `SELECT count(U.user_id) FROM user AS U
+	row := db.GetDB(ctx).Raw(`SELECT count(U.user_id) FROM user AS U
 	inner Join organization_user AS OU  ON U.user_id = OU.user_id 
 	AND OU.deleted_at IS NULL
-	where U.customized_code = ? AND U.deleted_at IS NULL`, customizedCode)
-	if err != nil {
-		return 0, err
+    where U.customized_code = ? AND U.deleted_at IS NULL`, customizedCode)
+	errScan := row.Scan(&count)
+	if errScan != nil {
+		return -1, errScan.Error
 	}
 	return count, nil
 }
@@ -246,24 +247,26 @@ func (db *DbClient) CountUserByCustomizedCode(ctx context.Context, customizedCod
 // countByRaw 通过raw拿到数量
 func (db *DbClient) countByRaw(ctx context.Context, rawSQL string, params ...interface{}) (int, error) {
 	var count int
-	row := db.Raw(rawSQL, params...).Row()
-    errScan := row.Scan(&count)
-    if errScan != nil{
-        return -1, errScan
-    }
+	row := db.GetDB(ctx).Raw(rawSQL, params...).Row()
+	errScan := row.Scan(&count)
+	if errScan != nil {
+		return -1, errScan
+	}
 	return count, nil
 }
 
 // GetIsRemovableStatus 获取用户是否可移除的状态
 func (db *DbClient) GetIsRemovableStatus(ctx context.Context, username string) (bool, error) {
-	count, err := db.countByRaw(ctx, `SELECT 
+	var count int
+	row := db.GetDB(ctx).Raw(`SELECT 
     count(U.user_id)
     FROM user AS U
     INNER JOIN organization_owner AS OO ON U.user_id = OO.owner_id
     WHERE U.signin_username = ? AND U.has_set_username = ? AND OO.deleted_at IS NULL 
     AND U.deleted_at IS NULL`, username, true)
+	err := row.Scan(&count)
 	if count == 0 || err != nil {
-		return true, err
+		return true, err.Error
 	}
 	return false, nil
 }

@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
+	mlog "github.com/jinmukeji/go-pkg/v2/log"
 	"github.com/jinmukeji/jiujiantang-services/api-v2/config"
-	mlog "github.com/jinmukeji/go-pkg/log"
 	"github.com/sirupsen/logrus"
 )
 

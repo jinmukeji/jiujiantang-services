@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
+	"github.com/jinmukeji/go-pkg/v2/mac"
 	"github.com/jinmukeji/jiujiantang-services/device/mysqldb"
-	"github.com/jinmukeji/go-pkg/mac"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/device/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/device/v1"
 )
 
 // UserGetUsedDevices 用户使用过的设备

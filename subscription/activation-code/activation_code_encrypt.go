@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 
-	"github.com/jinmukeji/go-pkg/crypto/encrypt/legacy"
+	"github.com/jinmukeji/go-pkg/v2/crypto/encrypt/legacy"
 )
 
 // DefaultActivationCodeCipherHelper 默认激活码加密算法帮助类

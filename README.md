@@ -295,7 +295,7 @@ go get -u google.golang.org/grpc
 
 # Micro 框架
 # 	https://micro.mu/docs/install-guide.html
-go get -u github.com/micro/go-micro
+go get -u github.com/micro/go-micro/v2
 ```
 
 定期更新相关工具
@@ -307,7 +307,7 @@ brew update && brew upgrade
 
 go get -u google.golang.org/grpc
 
-go get -u github.com/micro/go-micro
+go get -u github.com/micro/go-micro/v2
 ```
 
 ### 定期更新 Go 包

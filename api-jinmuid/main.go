@@ -5,8 +5,8 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/api-jinmuid/config"
 	"github.com/jinmukeji/jiujiantang-services/api-jinmuid/rest"
-	"github.com/micro/cli"
-	"github.com/micro/go-micro/web"
+	"github.com/micro/cli/v2"
+	"github.com/micro/go-micro/v2/web"
 )
 
 var (
@@ -24,31 +24,7 @@ func main() {
 		// Fault Tolerance - Heartbeating
 		web.RegisterTTL(config.DefaultRegisterTTL),
 		web.RegisterInterval(config.DefaultRegisterInterval),
-		web.Flags(
-			cli.StringFlag{
-				Name:        "x_api_base",
-				Value:       "",
-				Usage:       "API Base URL",
-				EnvVar:      "X_API_BASE",
-				Destination: &apiBase,
-			},
-			cli.StringFlag{
-				Name:        "x_jwt_sign_in_key",
-				Usage:       "JWT Sign-in key",
-				EnvVar:      "X_JWT_SIGN_IN_KEY",
-				Destination: &jwtSignInKey,
-			},
-			cli.BoolFlag{
-				Name:  "version",
-				Usage: "Show version information",
-			},
-			cli.BoolFlag{
-				Name:        "x_enable_debug",
-				Usage:       "Enable debug",
-				EnvVar:      "X_ENABLE_DEBUG",
-				Destination: &debug,
-			},
-		),
+		webOptions(),
 	)
 	// Init Micro service
 	err := service.Init(
@@ -73,4 +49,32 @@ func main() {
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func webOptions() web.Option {
+	return web.Flags(
+		&cli.StringFlag{
+			Name:        "x_api_base",
+			Value:       "",
+			Usage:       "API Base URL",
+			EnvVars:     []string{"X_API_BASE"},
+			Destination: &apiBase,
+		},
+		&cli.StringFlag{
+			Name:        "x_jwt_sign_in_key",
+			Usage:       "JWT Sign-in key",
+			EnvVars:     []string{"X_JWT_SIGN_IN_KEY"},
+			Destination: &jwtSignInKey,
+		},
+		&cli.BoolFlag{
+			Name:  "version",
+			Usage: "Show version information",
+		},
+		&cli.BoolFlag{
+			Name:        "x_enable_debug",
+			Usage:       "Enable debug",
+			EnvVars:     []string{"X_ENABLE_DEBUG"},
+			Destination: &debug,
+		},
+	)
 }

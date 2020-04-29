@@ -29,7 +29,7 @@ func (d Device) TableName() string {
 // GetDeviceByDeviceID 通过DeviceID查询Device
 func (db *DbClient) GetDeviceByDeviceID(ctx context.Context, deviceID int) (*Device, error) {
 	var device Device
-	err := db.Model(&Device{}).Where("device_id = ?", deviceID).Scan(&device).Error
+	err := db.GetDB(ctx).Model(&Device{}).Where("device_id = ?", deviceID).Scan(&device).Error
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (db *DbClient) GetDeviceByDeviceID(ctx context.Context, deviceID int) (*Dev
 // GetDeviceByMac 通过 mac 查询Device
 func (db *DbClient) GetDeviceByMac(ctx context.Context, mac uint64) (*Device, error) {
 	var device Device
-	err := db.Model(&Device{}).Where("mac = ?", mac).Scan(&device).Error
+	err := db.GetDB(ctx).Model(&Device{}).Where("mac = ?", mac).Scan(&device).Error
 	if err != nil {
 		return nil, err
 	}
@@ -49,6 +49,6 @@ func (db *DbClient) GetDeviceByMac(ctx context.Context, mac uint64) (*Device, er
 // ExistDeviceByMac 查看 mac 能否存在
 func (db *DbClient) ExistDeviceByMac(ctx context.Context, mac uint64) (bool, error) {
 	var count int
-	err := db.Model(&Device{}).Where("mac = ?", mac).Count(&count).Error
+	err := db.GetDB(ctx).Model(&Device{}).Where("mac = ?", mac).Count(&count).Error
 	return count == 1, err
 }

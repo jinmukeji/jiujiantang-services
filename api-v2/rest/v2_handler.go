@@ -2,15 +2,15 @@ package rest
 
 import (
 	jwtmiddleware "github.com/jinmukeji/jiujiantang-services/pkg/rest/jwt"
-	jinmuidpb "github.com/jinmukeji/proto/gen/micro/idl/jinmuid/v1"
-	analysispb "github.com/jinmukeji/proto/gen/micro/idl/jm/analysis/v1"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
-	subscriptionpb "github.com/jinmukeji/proto/gen/micro/idl/jm/subscription/v1"
-	"github.com/micro/go-micro/client"
+	analysispb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/analysis/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
+	subscriptionpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/subscription/v1"
+	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	"github.com/micro/go-micro/v2/client"
 )
 
 type v2Handler struct {
-	rpcSvc                    corepb.JinmuhealthAPIService
+	rpcSvc                    corepb.XimaAPIService
 	jwtMiddleware             *jwtmiddleware.Middleware
 	rpcSubscriptionManagerSvc subscriptionpb.SubscriptionManagerAPIService
 	rpcJinmuidSvc             jinmuidpb.UserManagerAPIService
@@ -26,7 +26,7 @@ const (
 
 func newV2Handler(jwtMiddleware *jwtmiddleware.Middleware) *v2Handler {
 	return &v2Handler{
-		rpcSvc:                    corepb.NewJinmuhealthAPIService(rpcServiceName, client.DefaultClient),
+		rpcSvc:                    corepb.NewXimaAPIService(rpcServiceName, client.DefaultClient),
 		jwtMiddleware:             jwtMiddleware,
 		rpcSubscriptionManagerSvc: subscriptionpb.NewSubscriptionManagerAPIService(rpcSubscriptionServiceName, client.DefaultClient),
 		rpcJinmuidSvc:             jinmuidpb.NewUserManagerAPIService(rpcJinmuidServiceName, client.DefaultClient),

@@ -5,7 +5,7 @@ import (
 
 	"github.com/jinmukeji/jiujiantang-services/service/auth"
 	"github.com/jinmukeji/jiujiantang-services/service/mysqldb"
-	"github.com/micro/go-micro/server"
+	"github.com/micro/go-micro/v2/server"
 	"golang.org/x/net/context"
 )
 
@@ -27,29 +27,29 @@ type WhiteList map[string]bool
 var (
 	// 白名单，客户端不需要设置client信息
 	clientAuthWhiteList = WhiteList{
-		"JinmuhealthAPI.ClientAuth":              true,
-		"JinmuhealthAPI.Echo":                    true,
-		"JinmuhealthAPI.GetVersion":              true,
-		"JinmuhealthAPI.GetFAQBaseUrl":           true,
-		"JinmuhealthAPI.ScanQRCode":              true,
-		"JinmuhealthAPI.GetAnalyzeResultByToken": true,
-		"JinmuhealthAPI.GetJMResBaseUrl":         true,
-		"JinmuhealthAPI.GetLocalNotifications":   true,
+		"XimaAPI.ClientAuth":              true,
+		"XimaAPI.Echo":                    true,
+		"XimaAPI.GetVersion":              true,
+		"XimaAPI.GetFAQBaseUrl":           true,
+		"XimaAPI.ScanQRCode":              true,
+		"XimaAPI.GetAnalyzeResultByToken": true,
+		"XimaAPI.GetJMResBaseUrl":         true,
+		"XimaAPI.GetLocalNotifications":   true,
 	}
 	// 白名单，用户不需要经过用户登录认证
 	tokenWhiteList = WhiteList{
-		"JinmuhealthAPI.Echo":                    true,
-		"JinmuhealthAPI.GetVersion":              true,
-		"JinmuhealthAPI.ClientAuth":              true,
-		"JinmuhealthAPI.UserSignIn":              true,
-		"JinmuhealthAPI.AccountLogin":            true,
-		"JinmuhealthAPI.GetFAQBaseUrl":           true,
-		"JinmuhealthAPI.ScanQRCode":              true,
-		"JinmuhealthAPI.CreateWxUser":            true,
-		"JinmuhealthAPI.JinmuLAccountLogin":      true,
-		"JinmuhealthAPI.GetAnalyzeResultByToken": true,
-		"JinmuhealthAPI.GetJMResBaseUrl":         true,
-		"JinmuhealthAPI.GetLocalNotifications":   true,
+		"XimaAPI.Echo":                    true,
+		"XimaAPI.GetVersion":              true,
+		"XimaAPI.ClientAuth":              true,
+		"XimaAPI.UserSignIn":              true,
+		"XimaAPI.AccountLogin":            true,
+		"XimaAPI.GetFAQBaseUrl":           true,
+		"XimaAPI.ScanQRCode":              true,
+		"XimaAPI.CreateWxUser":            true,
+		"XimaAPI.JinmuLAccountLogin":      true,
+		"XimaAPI.GetAnalyzeResultByToken": true,
+		"XimaAPI.GetJMResBaseUrl":         true,
+		"XimaAPI.GetLocalNotifications":   true,
 	}
 )
 

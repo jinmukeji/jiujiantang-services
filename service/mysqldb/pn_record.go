@@ -21,7 +21,7 @@ func (pr PnRecord) TableName() string {
 
 // CreatePnRecord 创建通知记录
 func (db *DbClient) CreatePnRecord(ctx context.Context, pr *PnRecord) error {
-	if err := db.Create(pr).Error; err != nil {
+	if err := db.GetDB(ctx).Create(pr).Error; err != nil {
 		return err
 	}
 	return nil
@@ -30,7 +30,7 @@ func (db *DbClient) CreatePnRecord(ctx context.Context, pr *PnRecord) error {
 // ExistPnRecord 是否已经存在PnRecord
 func (db *DbClient) ExistPnRecord(ctx context.Context, pnID int32, UserID int32) (bool, error) {
 	var count int
-	err := db.Model(&PnRecord{}).Where("pn_id = ? and user_id= ?", pnID, UserID).Count(&count).Error
+	err := db.GetDB(ctx).Model(&PnRecord{}).Where("pn_id = ? and user_id= ?", pnID, UserID).Count(&count).Error
 	if err != nil {
 		return false, err
 	}

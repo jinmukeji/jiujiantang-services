@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	"github.com/stretchr/testify/suite"
 )
 

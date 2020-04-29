@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/jinmukeji/jiujiantang-services/jinmuid/mysqldb"
-	"github.com/micro/go-micro/server"
+	"github.com/micro/go-micro/v2/server"
 	"golang.org/x/net/context"
 )
 

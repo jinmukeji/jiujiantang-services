@@ -10,7 +10,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/google/uuid"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/pulsetestinfo/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/pulsetestinfo/v1"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"

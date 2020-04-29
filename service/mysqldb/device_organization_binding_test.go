@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-    "github.com/stretchr/testify/suite"
-    context "golang.org/x/net/context"
+	"github.com/stretchr/testify/suite"
+	context "golang.org/x/net/context"
 )
 
 type DeviceTestSuite struct {
@@ -26,8 +26,8 @@ func (suite *DeviceTestSuite) TestGetOrganizationDeviceList() {
 	t := suite.T()
 	ctx := context.Background()
 	var organizationID int32 = 2
-    num := 6
-	deviceOrganizationBindingList, err := suite.db.GetOrganizationDeviceList(ctx, organizationID)
+	num := 6
+	deviceOrganizationBindingList, err := suite.db.GetDB(ctx).GetOrganizationDeviceList(ctx, organizationID)
 	assert.NoError(t, err)
 	assert.Equal(t, num, len(deviceOrganizationBindingList))
 }

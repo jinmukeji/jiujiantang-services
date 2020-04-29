@@ -34,7 +34,7 @@ func (suite *OrganizationUserTestSuite) TestCreateOrganizationUser() {
 		Name:    organizationName,
 		IsValid: 1,
 	}
-	assert.NoError(t, suite.db.CreateOrganization(ctx, o))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganization(ctx, o))
 	now := time.Now()
 	s := &Subscription{
 		OrganizationID: o.OrganizationID,
@@ -42,7 +42,7 @@ func (suite *OrganizationUserTestSuite) TestCreateOrganizationUser() {
 		ExpiredAt:      now.UTC(),
 		ContractYear:   0,
 	}
-	assert.NoError(t, suite.db.CreateSubscription(ctx, s))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateSubscription(ctx, s))
 	// 加入组织
 	now := time.Now()
 	for userID := 1; userID < 5; userID++ {
@@ -53,8 +53,8 @@ func (suite *OrganizationUserTestSuite) TestCreateOrganizationUser() {
 			UpdatedAt:      now,
 		})
 	}
-	assert.NoError(t, suite.db.CreateOrganizationUsers(ctx, users))
-	ok, err := suite.db.CheckOrganizationUser(ctx, users[0].UserID, o.OrganizationID)
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganizationUsers(ctx, users))
+	ok, err := suite.db.GetDB(ctx).CheckOrganizationUser(ctx, users[0].UserID, o.OrganizationID)
 	assert.NoError(t, err)
 	assert.True(t, ok)
 }
@@ -71,14 +71,14 @@ func (suite *OrganizationUserTestSuite) TestDeleteOrganizationUser() {
 		IsValid: 1,
 	}
 	now := time.Now()
-	assert.NoError(t, suite.db.CreateOrganization(ctx, o))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganization(ctx, o))
 	s := &Subscription{
 		OrganizationID: o.OrganizationID,
 		ActivatedAt:    now.UTC(),
 		ExpiredAt:      now.UTC(),
 		ContractYear:   0,
 	}
-	assert.NoError(t, suite.db.CreateSubscription(ctx, s))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateSubscription(ctx, s))
 	// 加入组织
 	users := make([]*OrganizationUser, 0)
 	now = time.Now()
@@ -88,11 +88,11 @@ func (suite *OrganizationUserTestSuite) TestDeleteOrganizationUser() {
 		CreatedAt:      now.UTC(),
 		UpdatedAt:      now.UTC(),
 	})
-	assert.NoError(t, suite.db.CreateOrganizationUsers(ctx, users))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganizationUsers(ctx, users))
 	// 从组织删除该用户
-	errDeleteOrganizationUser := suite.db.DeleteOrganizationUser(ctx, userID, o.OrganizationID)
+	errDeleteOrganizationUser := suite.db.GetDB(ctx).DeleteOrganizationUser(ctx, userID, o.OrganizationID)
 	assert.NoError(t, errDeleteOrganizationUser)
-	ok, err := suite.db.CheckOrganizationUser(ctx, userID, o.OrganizationID)
+	ok, err := suite.db.GetDB(ctx).CheckOrganizationUser(ctx, userID, o.OrganizationID)
 	assert.NoError(t, err)
 	assert.False(t, ok)
 }
@@ -107,7 +107,7 @@ func (suite *OrganizationUserTestSuite) TestDeleteOrganizationUsers() {
 		Name:    organizationName,
 		IsValid: 1,
 	}
-	assert.NoError(t, suite.db.CreateOrganization(ctx, o))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganization(ctx, o))
 	now := time.Now()
 	s := &Subscription{
 		OrganizationID: o.OrganizationID,
@@ -115,7 +115,7 @@ func (suite *OrganizationUserTestSuite) TestDeleteOrganizationUsers() {
 		ExpiredAt:      now.UTC(),
 		ContractYear:   0,
 	}
-	assert.NoError(t, suite.db.CreateSubscription(ctx, s))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateSubscription(ctx, s))
 	// 加入组织
 	now := time.Now()
 	uids := make([]int32, 0)
@@ -129,12 +129,12 @@ func (suite *OrganizationUserTestSuite) TestDeleteOrganizationUsers() {
 		})
 		uids = append(uids, int32(userID))
 	}
-	assert.NoError(t, suite.db.CreateOrganizationUsers(ctx, users))
+	assert.NoError(t, suite.db.GetDB(ctx).CreateOrganizationUsers(ctx, users))
 	// 从组织删除该用户
-	errDeleteOrganizationUsers := suite.db.DeleteOrganizationUsers(ctx, uids, int32(o.OrganizationID))
+	errDeleteOrganizationUsers := suite.db.GetDB(ctx).DeleteOrganizationUsers(ctx, uids, int32(o.OrganizationID))
 	assert.NoError(t, errDeleteOrganizationUsers)
 	for _, uid := range uids {
-		ok, err := suite.db.CheckOrganizationUser(ctx, int(uid), o.OrganizationID)
+		ok, err := suite.db.GetDB(ctx).CheckOrganizationUser(ctx, int(uid), o.OrganizationID)
 		assert.NoError(t, err)
 		assert.False(t, ok)
 	}
@@ -149,14 +149,14 @@ func (suite *OrganizationUserTestSuite) TestFindOrganizationUsers() {
 	const username = "xx"
 	// 加入组织
 	now := time.Now()
-	errCreateOrganizationUsers := suite.db.CreateOrganizationUsers(ctx, []*OrganizationUser{&OrganizationUser{
+	errCreateOrganizationUsers := suite.db.GetDB(ctx).CreateOrganizationUsers(ctx, []*OrganizationUser{&OrganizationUser{
 		OrganizationID: organizationID,
 		UserID:         userID,
 		CreatedAt:      now,
 		UpdatedAt:      now,
 	}})
 	assert.NoError(t, errCreateOrganizationUsers)
-	users, err := suite.db.FindOrganizationUsers(ctx, organizationID)
+	users, err := suite.db.GetDB(ctx).FindOrganizationUsers(ctx, organizationID)
 	assert.NoError(t, err)
 	assert.Equal(t, username, users[0].Username)
 }

@@ -91,6 +91,13 @@
             "package": "github.com/jinmukeji/jiujiantang-services/api-sys",
             "enabled_cgo": false,
             "build_files": "../api-sys"
+        },
+        {
+            "name": "web-go",
+            "version": "latest",
+            "package": "github.com/jinmukeji/jiujiantang-services/api-sys",
+            "enabled_cgo": false,
+            "build_files": "../web-go"
         }
     ]
 }

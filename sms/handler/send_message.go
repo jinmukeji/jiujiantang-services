@@ -9,8 +9,8 @@ import (
 
 	mysqldb "github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
 	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
-	generalpb "github.com/jinmukeji/proto/gen/micro/idl/ptypes/v2"
-	smspb "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
+	smspb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 )
 
 const (
@@ -20,8 +20,6 @@ const (
 	limitsIn1Minutes = 60
 	// AliyunPlatform 阿里云平台
 	AliyunPlatform = "Aliyun"
-	// TencentYunPlatform 腾讯平台
-	TencentYunPlatform = "Tencent"
 )
 
 // SMSTemplateParam 用于解析proto传来的短信模版参数
@@ -52,15 +50,8 @@ func (j *SMSGateway) SendMessage(ctx context.Context, req *smspb.SendMessageRequ
 
 // SendSMSMessage 发送短信
 func (j *SMSGateway) SendSMSMessage(req *smspb.SendMessageRequest, resp *smspb.SendMessageResponse) error {
-	// 优先使用阿里云发送短信，如何不成功使用腾讯云
-	isSuccess, _ := j.SendAliyunMessage(req, resp)
-	if !isSuccess {
-		_, errSendSms := j.SendTencentMessage(req, resp)
-		if errSendSms != nil {
-			return errSendSms
-		}
-	}
-	return nil
+	_, err := j.SendAliyunMessage(req, resp)
+	return err
 }
 
 // SendAliyunMessage 阿里云处理短信逻辑
@@ -164,53 +155,4 @@ func mapProtoLanguageToDB(language generalpb.Language) (mysqldb.Language, error)
 		return mysqldb.English, nil
 	}
 	return mysqldb.SimpleChinese, fmt.Errorf("invalid proto language %d", generalpb.Language_LANGUAGE_INVALID)
-}
-
-// SendTencentMessage 腾讯处理短信逻辑
-func (j *SMSGateway) SendTencentMessage(req *smspb.SendMessageRequest, resp *smspb.SendMessageResponse) (bool, error) {
-	var client sms.SMSClient = j.tencentYunSmsClient
-	// 这里先用阿里云发送短信
-	smsLanguage, errMapProtoLanguageToSms := mapProtoLanguageToSms(req.Language)
-	if errMapProtoLanguageToSms != nil {
-		return false, errMapProtoLanguageToSms
-	}
-	templateAction, errMapProtoTemplateActionToSms := mapProtoTemplateActionToSms(req.TemplateAction)
-	if errMapProtoTemplateActionToSms != nil {
-		return false, errMapProtoTemplateActionToSms
-	}
-	isSucceed, errSendSms := client.SendSms(req.Phone, req.NationCode, templateAction, smsLanguage, req.TemplateParam)
-
-	// 生成记录
-	now := time.Now().UTC()
-	templateParam, errTemplateParam := json.Marshal(req.TemplateParam)
-	if errTemplateParam != nil {
-		return false, fmt.Errorf("failed to get marshal format %v: %s", req.TemplateParam, errTemplateParam.Error())
-	}
-	language, errmapProtoLanguageToDB := mapProtoLanguageToDB(req.Language)
-	if errmapProtoLanguageToDB != nil {
-		return false, errmapProtoLanguageToDB
-	}
-	record := &mysqldb.SmsRecord{
-		Phone:          req.Phone,
-		TemplateAction: req.TemplateAction.String(),
-		PlatformType:   TencentYunPlatform,
-		TemplateParam:  string(templateParam),
-		NationCode:     req.NationCode,
-		Language:       language,
-		CreatedAt:      now,
-		UpdatedAt:      now,
-	}
-	if isSucceed {
-		record.SmsStatus = mysqldb.SendSucceed
-	} else {
-		record.SmsStatus = mysqldb.SendFailed
-	}
-	if errSendSms != nil {
-		record.SmsErrorLog = errSendSms.Error()
-	}
-	errCreateSmsRecord := j.datastore.CreateSmsRecord(record)
-	if errSendSms != nil {
-		return false, fmt.Errorf("failed to create sem record of phone %s%s: %s", req.NationCode, req.Phone, errSendSms.Error())
-	}
-	return isSucceed, errCreateSmsRecord
 }

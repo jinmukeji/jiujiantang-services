@@ -7,11 +7,13 @@ import (
 	"github.com/jinmukeji/jiujiantang-services/sms/config"
 	"github.com/jinmukeji/jiujiantang-services/sms/mysqldb"
 	sms "github.com/jinmukeji/jiujiantang-services/sms/sms_client"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/sms/v1"
+	dbutilmysql "github.com/jinmukeji/plat-pkg/v2/dbutil/mysql"
+	storemysql "github.com/jinmukeji/plat-pkg/v2/store/mysql"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/sms/v1"
 
 	handler "github.com/jinmukeji/jiujiantang-services/sms/handler"
-	"github.com/micro/cli"
-	micro "github.com/micro/go-micro"
+	"github.com/micro/cli/v2"
+	micro "github.com/micro/go-micro/v2"
 )
 
 func main() {
@@ -31,15 +33,10 @@ func main() {
 		micro.WrapHandler(logger.LogWrapper),
 
 		// // Setup runtime flags
-		dbClientOptions(), aliyunSmsOptions(), tencentYunSmsOptions(),
+		dbClientOptions(), aliyunSmsOptions(),
 
 		// Setup --version flag
-		micro.Flags(
-			cli.BoolFlag{
-				Name:  "version",
-				Usage: "Show version information",
-			},
-		),
+		defaultVersionFlags(),
 
 		// Setup metadata
 		micro.Metadata(versionMeta),
@@ -47,11 +44,12 @@ func main() {
 
 	// optionally setup command line usage
 	service.Init(
-		micro.Action(func(c *cli.Context) {
+		micro.Action(func(c *cli.Context) error {
 			if c.Bool("version") {
 				config.PrintFullVersionInfo()
 				os.Exit(0)
 			}
+			return nil
 		}),
 	)
 
@@ -75,11 +73,7 @@ func main() {
 	if errNewAliyunSmsClient != nil {
 		log.Fatalln(errNewAliyunSmsClient)
 	}
-	tencentYunSmsClient, errTencentYunSmsClient := newTencentYunSmsClient()
-	if errTencentYunSmsClient != nil {
-		log.Fatalln(errTencentYunSmsClient)
-	}
-	smsGateway := handler.NewSMSGateway(db, aliyunSmsClient, tencentYunSmsClient)
+	smsGateway := handler.NewSMSGateway(db, aliyunSmsClient)
 	if err := proto.RegisterSmsAPIHandler(server, smsGateway); err != nil {
 		log.Fatalln(err)
 	}
@@ -105,43 +99,29 @@ var (
 	aliyunSmsAccessKeySecret string
 )
 
-var (
-	tencentYunSmsAccessKeyID     string
-	tencentYunSmsAccessKeySecret string
-)
-
-// aliyunSmsOptions 构建命令行启动参数
-func aliyunSmsOptions() micro.Option {
+func defaultVersionFlags() micro.Option {
 	return micro.Flags(
-		cli.StringFlag{
-			Name:        "x_aliyun_sms_access_key_id",
-			Usage:       "Aliyun SMS Access Key ID",
-			EnvVar:      "X_ALIYUN_SMS_ACCESS_KEY_ID",
-			Destination: &aliyunSmsAccessKeyID,
-		},
-		cli.StringFlag{
-			Name:        "x_aliyun_sms_access_key_secret",
-			Usage:       "Aliyun SMS Access Key Secret",
-			EnvVar:      "X_ALIYUN_SMS_ACCESS_KEY_Secret",
-			Destination: &aliyunSmsAccessKeySecret,
+		&cli.BoolFlag{
+			Name:  "version",
+			Usage: "Show version information",
 		},
 	)
 }
 
-// tencentYunSmsOptions 构建命令行启动参数
-func tencentYunSmsOptions() micro.Option {
+// aliyunSmsOptions 构建命令行启动参数
+func aliyunSmsOptions() micro.Option {
 	return micro.Flags(
-		cli.StringFlag{
-			Name:        "x_tencent_yun_sms_access_key_id",
-			Usage:       "Tencent Yun SMS Access Key ID",
-			EnvVar:      "X_TENCENT_YUN_SMS_ACCESS_APP_ID",
-			Destination: &tencentYunSmsAccessKeyID,
+		&cli.StringFlag{
+			Name:        "x_aliyun_sms_access_key_id",
+			Usage:       "Aliyun SMS Access Key ID",
+			EnvVars:     []string{"X_ALIYUN_SMS_ACCESS_KEY_ID"},
+			Destination: &aliyunSmsAccessKeyID,
 		},
-		cli.StringFlag{
-			Name:        "x_tencent_yun_sms_access_key_secret",
-			Usage:       "Tencent Yun Access Key Secret",
-			EnvVar:      "X_TENCENT_YUN_SMS_ACCESS_KEY_Secret",
-			Destination: &tencentYunSmsAccessKeySecret,
+		&cli.StringFlag{
+			Name:        "x_aliyun_sms_access_key_secret",
+			Usage:       "Aliyun SMS Access Key Secret",
+			EnvVars:     []string{"X_ALIYUN_SMS_ACCESS_KEY_Secret"},
+			Destination: &aliyunSmsAccessKeySecret,
 		},
 	)
 }
@@ -149,41 +129,41 @@ func tencentYunSmsOptions() micro.Option {
 // dbClientOptions 构建命令行启动参数
 func dbClientOptions() micro.Option {
 	return micro.Flags(
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_address",
 			Value:       "localhost:3306",
 			Usage:       "MySQL instance `ADDRESS` - [host]:[port]",
-			EnvVar:      "X_DB_ADDRESS",
+			EnvVars:     []string{"X_DB_ADDRESS"},
 			Destination: &dbAddress,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_username",
 			Usage:       "MySQL login `USERNAME`",
-			EnvVar:      "X_DB_USERNAME",
+			EnvVars:     []string{"X_DB_USERNAME"},
 			Destination: &dbUsername,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_password",
 			Usage:       "MySQL login `PASSWORD`",
-			EnvVar:      "X_DB_PASSWORD",
+			EnvVars:     []string{"X_DB_PASSWORD"},
 			Destination: &dbPassword,
 		},
-		cli.StringFlag{
+		&cli.StringFlag{
 			Name:        "x_db_database",
 			Usage:       "MySQL database name",
-			EnvVar:      "X_DB_DATABASE",
+			EnvVars:     []string{"X_DB_DATABASE"},
 			Destination: &dbDatabase,
 		},
-		cli.BoolFlag{
+		&cli.BoolFlag{
 			Name:        "x_db_enable_log",
 			Usage:       "Enable MySQL client log",
-			EnvVar:      "X_DB_ENABLE_LOG",
+			EnvVars:     []string{"X_DB_ENABLE_LOG"},
 			Destination: &dbEnableLog,
 		},
-		cli.IntFlag{
+		&cli.IntFlag{
 			Name:        "x_db_max_connections",
 			Usage:       "Max connections of MySQL client",
-			EnvVar:      "X_DB_MAX_CONNECTIONS",
+			EnvVars:     []string{"X_DB_MAX_CONNECTIONS"},
 			Value:       1,
 			Destination: &dbMaxConns,
 		},
@@ -192,22 +172,23 @@ func dbClientOptions() micro.Option {
 
 // newDbClient 创建一个 DbClient
 func newDbClient() (*mysqldb.DbClient, error) {
-	return mysqldb.NewDbClient(
-		mysqldb.Address(dbAddress),
-		mysqldb.Username(dbUsername),
-		mysqldb.Password(dbPassword),
-		mysqldb.Database(dbDatabase),
-		mysqldb.EnableLog(dbEnableLog),
-		mysqldb.MaxConnections(dbMaxConns),
+	cfg := dbutilmysql.NewConfig()
+	cfg.User = dbUsername
+	cfg.Passwd = dbPassword
+	cfg.Net = "tcp"
+	cfg.Addr = dbAddress
+	cfg.DBName = dbDatabase
+	db, err := dbutilmysql.OpenGormDB(
+		dbutilmysql.WithMySQLConfig(cfg),
 	)
+	if err != nil {
+		return nil, err
+	}
+
+	return mysqldb.NewDbClient(*storemysql.NewStore(db))
 }
 
 // newAliyunSmsClient 创建阿里云短信网关客户端
 func newAliyunSmsClient() (*sms.AliyunSMSClient, error) {
 	return sms.NewAliyunSMSClient(aliyunSmsAccessKeyID, aliyunSmsAccessKeySecret)
-}
-
-// newTencentYunSmsClient 创建腾讯云短信网关客户端
-func newTencentYunSmsClient() (*sms.TencentYunSMSClient, error) {
-	return sms.NewTencentYunSMSClient(tencentYunSmsAccessKeyID, tencentYunSmsAccessKeySecret)
 }

@@ -29,7 +29,7 @@ func (suite *VCRecordTestSuite) SetupSuite() {
 func (suite *VCRecordTestSuite) TestSearchVcRecordCountsIn24hours() {
 	t := suite.T()
 	ctx := context.Background()
-	_, err := suite.db.SearchVcRecordCountsIn24hours(ctx, os.Getenv("X_TEST_EMAIL"))
+	_, err := suite.db.GetDB(ctx).SearchVcRecordCountsIn24hours(ctx, os.Getenv("X_TEST_EMAIL"))
 	assert.NoError(t, err)
 }
 
@@ -37,7 +37,7 @@ func (suite *VCRecordTestSuite) TestSearchVcRecordCountsIn24hours() {
 func (suite *VCRecordTestSuite) TestSearchVcRecordCountsIn1Minute() {
 	t := suite.T()
 	ctx := context.Background()
-	_, err := suite.db.SearchVcRecordCountsIn1Minute(ctx, os.Getenv("X_TEST_EMAIL"))
+	_, err := suite.db.GetDB(ctx).SearchVcRecordCountsIn1Minute(ctx, os.Getenv("X_TEST_EMAIL"))
 	assert.NoError(t, err)
 }
 
@@ -45,7 +45,7 @@ func (suite *VCRecordTestSuite) TestSearchVcRecordCountsIn1Minute() {
 func (suite *VCRecordTestSuite) TestSearchVcRecordEarliestTimeIn1Minute() {
 	t := suite.T()
 	ctx := context.Background()
-	_, err := suite.db.SearchVcRecordEarliestTimeIn1Minute(ctx, os.Getenv("X_TEST_EMAIL"))
+	_, err := suite.db.GetDB(ctx).SearchVcRecordEarliestTimeIn1Minute(ctx, os.Getenv("X_TEST_EMAIL"))
 	assert.NoError(t, err)
 }
 
@@ -57,7 +57,7 @@ func (suite *VCRecordTestSuite) TestFindVcRecord() {
 	vc := os.Getenv("X_TEST_VC")
 	sendTo := os.Getenv("X_TEST_EMAIL")
 	usage := SignUp
-	_, err := suite.db.FindVcRecord(ctx, sn, vc, sendTo, usage)
+	_, err := suite.db.GetDB(ctx).FindVcRecord(ctx, sn, vc, sendTo, usage)
 	assert.NoError(t, err)
 }
 
@@ -67,7 +67,7 @@ func (suite *VCRecordTestSuite) TestHasSnExpired() {
 	ctx := context.Background()
 	sn := os.Getenv("X_TEST_SN")
 	vc := os.Getenv("X_TEST_VC")
-	_, err := suite.db.HasSnExpired(ctx, sn, vc)
+	_, err := suite.db.GetDB(ctx).HasSnExpired(ctx, sn, vc)
 	assert.NoError(t, err)
 }
 
@@ -76,7 +76,7 @@ func (suite *VCRecordTestSuite) TestModifyVcRecordStatus() {
 	t := suite.T()
 	ctx := context.Background()
 	recordID, _ := strconv.Atoi(os.Getenv("X_TEST_RECORD_ID"))
-	err := suite.db.ModifyVcRecordStatus(ctx, int32(recordID))
+	err := suite.db.GetDB(ctx).ModifyVcRecordStatus(ctx, int32(recordID))
 	assert.NoError(t, err)
 }
 
@@ -88,7 +88,7 @@ func (suite *VCRecordTestSuite) TestVerifyMVC() {
 	vc := os.Getenv("X_TEST_VC")
 	sendTo := os.Getenv("X_TEST_EMAIL")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
-	_, err := suite.db.VerifyMVC(ctx, sn, vc, sendTo, nationCode)
+	_, err := suite.db.GetDB(ctx).VerifyMVC(ctx, sn, vc, sendTo, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -100,7 +100,7 @@ func (suite *VCRecordTestSuite) TestSearchVcRecord() {
 	vc := os.Getenv("X_TEST_VC")
 	sendTo := os.Getenv("X_TEST_EMAIL")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
-	_, err := suite.db.SearchVcRecord(ctx, sn, vc, sendTo, nationCode)
+	_, err := suite.db.GetDB(ctx).SearchVcRecord(ctx, sn, vc, sendTo, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -110,7 +110,7 @@ func (suite *VCRecordTestSuite) TestFindLatestVcRecord() {
 	ctx := context.Background()
 	sendTo := os.Getenv("X_TEST_EMAIL")
 	usage := SignUp
-	_, err := suite.db.FindLatestVcRecord(ctx, sendTo, usage)
+	_, err := suite.db.GetDB(ctx).FindLatestVcRecord(ctx, sendTo, usage)
 	assert.NoError(t, err)
 }
 
@@ -120,7 +120,7 @@ func (suite *VCRecordTestSuite) TestSearchSpecificVcRecordCountsIn24hours() {
 	ctx := context.Background()
 	sendTo := os.Getenv("X_TEST_EMAIL")
 	usage := SignUp
-	_, err := suite.db.SearchSpecificVcRecordCountsIn24hours(ctx, sendTo, usage)
+	_, err := suite.db.GetDB(ctx).SearchSpecificVcRecordCountsIn24hours(ctx, sendTo, usage)
 	assert.NoError(t, err)
 }
 
@@ -130,7 +130,7 @@ func (suite *VCRecordTestSuite) TestSearchSpecificVcRecordEarliestTimeIn24hours(
 	ctx := context.Background()
 	sendTo := os.Getenv("X_TEST_EMAIL")
 	usage := SignUp
-	_, err := suite.db.SearchSpecificVcRecordEarliestTimeIn24hours(ctx, sendTo, usage)
+	_, err := suite.db.GetDB(ctx).SearchSpecificVcRecordEarliestTimeIn24hours(ctx, sendTo, usage)
 	assert.NoError(t, err)
 }
 
@@ -140,7 +140,7 @@ func (suite *VCRecordTestSuite) TestSearchLatestPhoneVerificationCode() {
 	ctx := context.Background()
 	sendTo := os.Getenv("X_TEST_EMAIL")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
-	_, err := suite.db.SearchLatestPhoneVerificationCode(ctx, sendTo, nationCode)
+	_, err := suite.db.GetDB(ctx).SearchLatestPhoneVerificationCode(ctx, sendTo, nationCode)
 	assert.NoError(t, err)
 }
 
@@ -149,7 +149,7 @@ func (suite *VCRecordTestSuite) TestSearchLatestEmailVerificationCode() {
 	t := suite.T()
 	ctx := context.Background()
 	sendTo := os.Getenv("X_TEST_EMAIL")
-	_, err := suite.db.SearchLatestEmailVerificationCode(ctx, sendTo)
+	_, err := suite.db.GetDB(ctx).SearchLatestEmailVerificationCode(ctx, sendTo)
 	assert.NoError(t, err)
 }
 
@@ -160,7 +160,7 @@ func (suite *VCRecordTestSuite) TestVerifyMVCBySecureEmail() {
 	sn := os.Getenv("X_TEST_SN")
 	vc := os.Getenv("X_TEST_VC")
 	email := os.Getenv("X_TEST_EMAIL")
-	_, err := suite.db.VerifyMVCBySecureEmail(ctx, sn, vc, email)
+	_, err := suite.db.GetDB(ctx).VerifyMVCBySecureEmail(ctx, sn, vc, email)
 	assert.NoError(t, err)
 }
 
@@ -171,7 +171,7 @@ func (suite *VCRecordTestSuite) TestModifyVcRecordStatusByEmail() {
 	verificationCode := os.Getenv("X_TEST_VC")
 	serialNumber := os.Getenv("X_TEST_SN")
 	email := os.Getenv("X_TEST_EMAIL")
-	err := suite.db.ModifyVcRecordStatusByEmail(ctx, email, verificationCode, serialNumber)
+	err := suite.db.GetDB(ctx).ModifyVcRecordStatusByEmail(ctx, email, verificationCode, serialNumber)
 	assert.NoError(t, err)
 }
 
@@ -183,7 +183,7 @@ func (suite *VCRecordTestSuite) TestSetVcAsUsed() {
 	vc := os.Getenv("X_TEST_VC")
 	email := os.Getenv("X_TEST_EMAIL")
 	nationCode := os.Getenv("X_TEST_NATION_CODE")
-	err := suite.db.SetVcAsUsed(ctx, sn, vc, email, nationCode)
+	err := suite.db.GetDB(ctx).SetVcAsUsed(ctx, sn, vc, email, nationCode)
 	assert.NoError(t, err)
 }
 

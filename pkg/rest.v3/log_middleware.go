@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	mlog "github.com/jinmukeji/go-pkg/log"
+	mlog "github.com/jinmukeji/go-pkg/v2/log"
 	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 )

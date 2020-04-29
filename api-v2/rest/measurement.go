@@ -6,8 +6,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/golang/protobuf/ptypes"
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	corepb "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	corepb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/kataras/iris/v12"
 )
 
@@ -50,28 +51,13 @@ const (
 	MeasurementPostureLying = 2
 )
 
-// Measurement 测量
-type Measurement struct {
-	MeasurementData MeasurementData `json:"measurement"`
-}
+const (
+	// SunmitMeasurementPayloadCodec 提交测量的 Payload 解码方式
+	SunmitMeasurementPayloadCodec = "ring-red-raw"
+)
 
-// MeasurementData 测量数据
-type MeasurementData struct {
-	UserID              int    `json:"user_id"`                // 用户ID
-	Data0               string `json:"data0"`                  // 第一条数据
-	Data1               string `json:"data1"`                  // 第二条数据
-	Mac                 string `json:"mac"`                    // mac
-	MobileType          string `json:"mobile_type"`            // 手机类型
-	AppHeartRate        int    `json:"app_heart_rate"`         // 心率
-	Finger              int    `json:"finger"`                 // 测量手指
-	RecordType          int    `json:"record_type"`            // 记录类型
-	AppHighestHeartRate int32  `json:"app_highest_heart_rate"` // app最高心率
-	AppLowestHeartRate  int32  `json:"app_lowest_heart_rate"`  // app最低心率
-	MeasurementPosture  int32  `json:"measurement_posture"`    // 测量姿态
-}
-
-// SubmitMeasurementData 提交测量数据
-type SubmitMeasurementData struct {
+// SubmitMeasurementDataResponse 提交测量数据的响应
+type SubmitMeasurementDataResponse struct {
 	RecordID            int32     `json:"record_id"`
 	Cid                 int32     `json:"cid"`
 	C0                  int32     `json:"c0"`
@@ -92,109 +78,118 @@ type SubmitMeasurementData struct {
 	AppLowestHeartRate  int32     `json:"app_lowest_heart_rate"`  // app最低心率
 }
 
+// 指环测量的采样数据
+type RingSamplePayload struct {
+	Fps               int32     `json:"fps"`    // 实际指环采样工作时的 FPS
+	Finger            int       `json:"finger"` // 采样使用的手指
+	Count             int32     `json:"count"`  // 测量采样到的数据点的数量
+	PointSize         int32     `json:"point_size"`
+	Payload           string    `json:"payload"`             // 测量采样数据点的数据，字节流形式。
+	SamplingStartTime time.Time `json:"sampling_start_time"` // 采样开始时间
+	SamplingStopTime  time.Time `json:"sampling_stop_time"`  // 采样结束时间
+}
+
+// 提交测量数据请求
+type SubmitMeasurementInfo struct {
+	UserId             int32              `json:"user_id"`             // UserID
+	Mac                string             `json:"mac"`                 // mac地址
+	MobileType         string             `json:"mobile_type"`         // 手机类型
+	MeasurementPosture int32              `json:"measurement_posture"` // 测量姿态
+	Payload            *RingSamplePayload `json:"payload"`             // 采样数据
+	Extras             map[string]string  `json:"extras"`              // 额外的扩展上下文数据，KV 键值对
+}
+
+type SubmitMeasurementInfoRequest struct {
+	Measurement SubmitMeasurementInfo `json:"measurement"`
+}
+
 func (h *v2Handler) SubmitMeasurementData(ctx iris.Context) {
-	var measurement Measurement
-	err := ctx.ReadJSON(&measurement)
+
+	var request SubmitMeasurementInfoRequest
+	err := ctx.ReadJSON(&request)
 	if err != nil {
 		writeError(ctx, wrapError(ErrParsingRequestFailed, "", err), false)
 		return
 	}
-	if measurement.MeasurementData.UserID == 0 {
+	submitMeasurementInfoRequest := request.Measurement
+	if submitMeasurementInfoRequest.UserId == 0 {
 		writeError(
 			ctx,
-			wrapError(ErrValueRequired, "", fmt.Errorf("invalid userID %d", measurement.MeasurementData.UserID)),
+			wrapError(ErrValueRequired, "", fmt.Errorf("invalid userID %d", submitMeasurementInfoRequest.UserId)),
+			false,
+		)
+		return
+	}
+	ringSamplePayload := *(submitMeasurementInfoRequest.Payload)
+	if ringSamplePayload.Finger < 1 || ringSamplePayload.Finger > 10 {
+		writeError(
+			ctx,
+			wrapError(ErrInvalidValue, "", fmt.Errorf("invalid finger %d", ringSamplePayload.Finger)),
 			false,
 		)
 		return
 	}
 
-	if measurement.MeasurementData.AppHeartRate < 0 {
+	if submitMeasurementInfoRequest.MobileType != Android && submitMeasurementInfoRequest.MobileType != Iphone {
 		writeError(
 			ctx,
-			wrapError(ErrInvalidValue, "", fmt.Errorf("invalid app heart rate %d", measurement.MeasurementData.AppHeartRate)),
+			wrapError(ErrInvalidValue, "", fmt.Errorf("mobile type must be ANDROID or IPHONE,current type is %s", submitMeasurementInfoRequest.MobileType)),
 			false,
 		)
 		return
 	}
 
-	if measurement.MeasurementData.AppHighestHeartRate < 0 {
+	if submitMeasurementInfoRequest.MeasurementPosture < 0 || submitMeasurementInfoRequest.MeasurementPosture > 2 {
 		writeError(
 			ctx,
-			wrapError(ErrInvalidValue, "", fmt.Errorf("invalid app highest heart rate %d", measurement.MeasurementData.AppHeartRate)),
-			false,
-		)
-		return
-	}
-
-	if measurement.MeasurementData.AppLowestHeartRate < 0 {
-		writeError(
-			ctx,
-			wrapError(ErrInvalidValue, "", fmt.Errorf("invalid app lowest heart rate %d", measurement.MeasurementData.AppHeartRate)),
-			false,
-		)
-		return
-	}
-
-	if measurement.MeasurementData.Finger < 1 || measurement.MeasurementData.Finger > 10 {
-		writeError(
-			ctx,
-			wrapError(ErrInvalidValue, "", fmt.Errorf("invalid finger %d", measurement.MeasurementData.Finger)),
-			false,
-		)
-		return
-	}
-
-	if measurement.MeasurementData.MobileType != Android && measurement.MeasurementData.MobileType != Iphone {
-		writeError(
-			ctx,
-			wrapError(ErrInvalidValue, "", fmt.Errorf("mobile type must be ANDROID or IPHONE,current type is %s", measurement.MeasurementData.MobileType)),
-			false,
-		)
-		return
-	}
-
-	if measurement.MeasurementData.MeasurementPosture < 0 || measurement.MeasurementData.MeasurementPosture > 2 {
-		writeError(
-			ctx,
-			wrapError(ErrInvalidValue, "", fmt.Errorf("invalid measurement posture %d", measurement.MeasurementData.MeasurementPosture)),
+			wrapError(ErrInvalidValue, "", fmt.Errorf("invalid measurement posture %d", submitMeasurementInfoRequest.MeasurementPosture)),
 			false,
 		)
 		return
 	}
 
 	req := new(corepb.SubmitMeasurementInfoRequest)
-	req.UserId = int32(measurement.MeasurementData.UserID)
-	protoMobileType, errmapRestMobiletypeToProto := mapRestMobiletypeToProto(measurement.MeasurementData.MobileType)
+	protoMobileType, errmapRestMobiletypeToProto := mapRestMobiletypeToProto(submitMeasurementInfoRequest.MobileType)
 	if errmapRestMobiletypeToProto != nil {
 		writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestMobiletypeToProto), false)
 		return
 	}
-	req.MobileType = protoMobileType
-	req.AppHighestHr = measurement.MeasurementData.AppHighestHeartRate
-	req.AppLowestHr = measurement.MeasurementData.AppLowestHeartRate
-	protoMeasurementPosture, errmapRestMeasurementPostureToProto := mapRestMeasurementPostureToProto(measurement.MeasurementData.MeasurementPosture)
+	protoMeasurementPosture, errmapRestMeasurementPostureToProto := mapRestMeasurementPostureToProto(submitMeasurementInfoRequest.MeasurementPosture)
 	if errmapRestMeasurementPostureToProto != nil {
 		writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestMeasurementPostureToProto), false)
 		return
 	}
+	req.UserId = int32(submitMeasurementInfoRequest.UserId)
+	req.Mac = submitMeasurementInfoRequest.Mac
+	req.MobileType = protoMobileType
 	req.MeasurementPosture = protoMeasurementPosture
-	data0, _ := base64.StdEncoding.DecodeString(measurement.MeasurementData.Data0)
-	req.Info0 = &corepb.BluetoothInfo{
-		Ir5160: data0,
-	}
-
-	data1, _ := base64.StdEncoding.DecodeString(measurement.MeasurementData.Data1)
-	req.Info1 = &corepb.BluetoothInfo{
-		Ir5160: data1,
-	}
-	req.Mac = measurement.MeasurementData.Mac
-	req.AppHr = int32(measurement.MeasurementData.AppHeartRate)
-	protoFinger, errMapProtoFingerToProto := mapRestFingerToProto(measurement.MeasurementData.Finger)
+	payload, _ := base64.StdEncoding.DecodeString(ringSamplePayload.Payload)
+	protoFinger, errMapProtoFingerToProto := mapRestFingerToProto(ringSamplePayload.Finger)
 	if errMapProtoFingerToProto != nil {
 		writeError(ctx, wrapError(ErrInvalidValue, "", errmapRestMobiletypeToProto), false)
 		return
 	}
-	req.Finger = protoFinger
+	samplingStartTime, err := ptypes.TimestampProto(ringSamplePayload.SamplingStartTime)
+	if err != nil {
+		writeError(ctx, wrapError(ErrInvalidValue, "", err), false)
+		return
+	}
+	samplingStopTime, err := ptypes.TimestampProto(ringSamplePayload.SamplingStopTime)
+	if err != nil {
+		writeError(ctx, wrapError(ErrInvalidValue, "", err), false)
+		return
+	}
+	req.Payload = &corepb.RingSamplePayload{
+		Fps:               uint32(ringSamplePayload.Fps),
+		Finger:            protoFinger,
+		Count:             uint32(ringSamplePayload.Count),
+		PointSize:         uint32(ringSamplePayload.PointSize),
+		Payload:           payload,
+		PayloadCodec:      SunmitMeasurementPayloadCodec,
+		SamplingStartTime: samplingStartTime,
+		SamplingStopTime:  samplingStopTime,
+	}
+	req.Extras = submitMeasurementInfoRequest.Extras
 	resp, errResp := h.rpcSvc.SubmitMeasurementInfo(
 		newRPCContext(ctx), req,
 	)
@@ -203,7 +198,7 @@ func (h *v2Handler) SubmitMeasurementData(ctx iris.Context) {
 		return
 	}
 
-	rest.WriteOkJSON(ctx, SubmitMeasurementData{
+	rest.WriteOkJSON(ctx, SubmitMeasurementDataResponse{
 		RecordID:            resp.RecordId,
 		Cid:                 resp.RecordId,
 		C0:                  resp.C0,

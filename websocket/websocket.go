@@ -23,9 +23,9 @@ func main() {
 // 	"github.com/jinmukeji/jiujiantang-services/websocket/config"
 // 	websocket "github.com/kataras/iris/v12/websocket"
 // 	"github.com/kataras/iris/v12"
-// 	"github.com/micro/cli"
-// 	"github.com/micro/go-micro"
-// 	"github.com/micro/go-micro/broker"
+// 	"github.com/micro/cli/v2"
+// 	"github.com/micro/go-micro/v2"
+// 	"github.com/micro/go-micro/v2/broker"
 // )
 
 // const (

@@ -4,9 +4,9 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/ptypes"
-	proto "github.com/jinmukeji/proto/gen/micro/idl/jm/core/v1"
+	proto "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/core/v1"
 	"github.com/kataras/iris/v12"
-	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/v2/client"
 )
 
 // StatData 统计数据
