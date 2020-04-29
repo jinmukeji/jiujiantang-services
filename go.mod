@@ -26,7 +26,8 @@ require (
 	github.com/jinmukeji/go-pkg v1.1.1
 	github.com/jinmukeji/plat-pkg v1.18.1
 	github.com/jinmukeji/plat-report v1.0.10
-	github.com/jinmukeji/proto v0.0.0-20200109071617-e8ce07396f92
+	github.com/jinmukeji/proto v0.0.0-20191220062128-ceb7d3ca7dae
+	github.com/jinmukeji/proto/v3 v3.0.4
 	github.com/jinzhu/gorm v1.9.12
 	github.com/joho/godotenv v1.3.0
 	github.com/jpillora/ipfilter v1.2.1
