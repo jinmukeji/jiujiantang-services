@@ -53,6 +53,7 @@ var codeToMsg = map[int]string{
 	ErrMultiOwnersOfOrganization:        "组织有多个拥有者",
 	ErrNonexistentOwnerOfOrganization:   "组织没有拥有者",
 	ErrAEError:                          "分析错误",
+	ErrMeasurement:                      "测量异常",
 }
 
 const (
@@ -149,6 +150,8 @@ const (
 	ErrNonexistentOwnerOfOrganization = 87000
 	// ErrAEError 分析错误
 	ErrAEError = 88000
+	// ErrMeasurement 测量异常
+	ErrMeasurement = 94000
 )
 
 // ErrorMsg 根据错误码获得标准错误消息内容

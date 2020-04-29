@@ -310,11 +310,11 @@ func buildSameModulesOfWeeklyMonthlyAndMeasurement(ctxData core.ContextData, opt
 		Enabled: options["DisplayConditioningAdvice"],
 		DietaryAdvice: &analysispb.DietaryAdviceModule{
 			Enabled: options["DisplayDietaryAdvice"],
-			Lookups: parseLookupsIncludeKeyContent(out["dietary_advice"]),
+			Lookups: parseDietaryAdvice(out["dietary_advice"]),
 		},
 		SportsAdvice: &analysispb.SportsAdviceModule{
 			Enabled: options["DisplaySportsAdvice"],
-			Lookups: parseLookupsIncludeKeyContent(out["sports_advice"]),
+			Lookups: parseparseSportAdvice(out["sports_advice"]),
 		},
 		ChineseMedicineAdvice: &analysispb.ChineseMedicineAdviceModule{
 			Enabled: options["DisplayChineseMedicineAdvice"],
@@ -534,6 +534,94 @@ func buildSameModulesOfWeeklyMonthlyAndMeasurement(ctxData core.ContextData, opt
 	return modules, nil
 }
 
+// parseDietaryAdvice 获得食疗建议
+func parseDietaryAdvice(outModule interface{}) []*analysispb.Lookup {
+	if outModule == nil {
+		return nil
+	}
+	module := outModule.(map[string]interface{})
+	_, ok := module["lookups"].([]interface{})
+	var lenModuleOutputLookups int
+	var lookups []interface{}
+	if ok {
+		lookups, ok = module["lookups"].([]interface{})
+		if ok {
+			lenModuleOutputLookups = len(lookups)
+		} else {
+			lenModuleOutputLookups = 0
+		}
+	} else {
+		// 如果没有 lookups，则会获取默认建议
+		lookups, ok = module["health_tips"].([]interface{})
+		if ok {
+			lenModuleOutputLookups = len(lookups)
+		} else {
+			lenModuleOutputLookups = 0
+		}
+	}
+	moduleOutputLookups := make([]*analysispb.Lookup, lenModuleOutputLookups)
+	if lookups != nil {
+		for idx, lookup := range lookups {
+			v, ok := lookup.(map[interface{}]interface{})
+			if ok {
+				var content string
+				if v["content"] != nil {
+					content = v["content"].(string)
+				}
+				moduleOutputLookups[idx] = &analysispb.Lookup{
+					Key:     v["key"].(string),
+					Content: content,
+				}
+			}
+		}
+	}
+	return moduleOutputLookups
+}
+
+// parseparseSportAdvice 获得运动建议
+func parseparseSportAdvice(outModule interface{}) []*analysispb.Lookup {
+	if outModule == nil {
+		return nil
+	}
+	module := outModule.(map[string]interface{})
+	_, ok := module["lookups"].([]interface{})
+	var lenModuleOutputLookups int
+	var lookups []interface{}
+	if ok {
+		lookups, ok = module["lookups"].([]interface{})
+		if ok {
+			lenModuleOutputLookups = len(lookups)
+		} else {
+			lenModuleOutputLookups = 0
+		}
+	} else {
+		// 如果没有 lookups，则会获取默认建议
+		lookups, ok = module["health_tips"].([]interface{})
+		if ok {
+			lenModuleOutputLookups = len(lookups)
+		} else {
+			lenModuleOutputLookups = 0
+		}
+	}
+	moduleOutputLookups := make([]*analysispb.Lookup, lenModuleOutputLookups)
+	if lookups != nil {
+		for idx, lookup := range lookups {
+			v, ok := lookup.(map[interface{}]interface{})
+			if ok {
+				var content string
+				if v["content"] != nil {
+					content = v["content"].(string)
+				}
+				moduleOutputLookups[idx] = &analysispb.Lookup{
+					Key:     v["key"].(string),
+					Content: content,
+				}
+			}
+		}
+	}
+	return moduleOutputLookups
+}
+
 func getGynecologicalInflammation(outModule interface{}) *analysispb.Lookup {
 	if outModule == nil {
 		return nil
@@ -567,13 +655,34 @@ func getDiseasesMessageFromInput(output map[string]interface{}) ([]*analysispb.L
 	var disease []*analysispb.Lookup
 	var promptMessage []*analysispb.Lookup
 
-	for _, v := range output {
-		nextModules, ok := v.(map[string]interface{})
+	diseaseOrder := []string{
+		// 18种疾病按照输出顺序排序
+		"blood_pressure",
+		"blood_sugar",
+		"hyperlipidemia",
+		"chd",
+		"anxiety",
+		"immunity",
+		"fatigue_and_pressure",
+		"sleep_problems",
+		"depression",
+		"gastritis",
+		"hypomotility_of_stomach",
+		"acute_pharyngitis",
+		"chronic_cough",
+		"spinal_disease",
+		"spine",
+		"cerebral_insufficiency",
+		"inflammation_risk",
+		"renal_dysfunction",
+	}
+	for _, value := range diseaseOrder {
+		correspondModule, ok := output[value].(map[string]interface{})
 		if ok {
-			if nextModules["disease_estimate"] == nil {
+			if correspondModule["disease_estimate"] == nil {
 				continue
 			}
-			for _, value := range nextModules["disease_estimate"].([]interface{}) {
+			for _, value := range correspondModule["disease_estimate"].([]interface{}) {
 
 				diseaseScore, ok := value.(map[interface{}]interface{})
 				if ok {
@@ -586,7 +695,7 @@ func getDiseasesMessageFromInput(output map[string]interface{}) ([]*analysispb.L
 				}
 
 			}
-			promptMessage = append(promptMessage, parseLookupsIncludeKeyContent(nextModules)...)
+			promptMessage = append(promptMessage, parseLookupsIncludeKeyContent(correspondModule)...)
 		}
 	}
 	return disease, promptMessage

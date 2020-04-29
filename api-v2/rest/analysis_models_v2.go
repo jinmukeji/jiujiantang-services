@@ -242,7 +242,7 @@ type StressStateJudgmentModule struct {
 	HasRhinitisEpisode     bool `json:"has_rhinitis_episode"`
 	HasAbdominalPain       bool `json:"has_abdominal_pain"`
 	HasViralInfection      bool `json:"has_viral_infection"`
-	HasPhysiologicalPeriod bool `son:"has_physiological_period"`
+	HasPhysiologicalPeriod bool `json:"has_physiological_period"`
 	HasOvulation           bool `json:"has_ovulation"`
 	HasPregnant            bool `json:"has_pregnant"`
 	HasLactation           bool `json:"has_lactations"`
