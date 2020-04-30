@@ -44,6 +44,11 @@ const (
 	algorithmSampleType = "RING"
 )
 
+const (
+	// 最高最低心率修正的阈值
+	HeartRateThreshold = 0.02
+)
+
 // SubmitMeasurementInfo 用户提交测量数据
 func (j *JinmuHealth) SubmitMeasurementInfo(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest, resp *corepb.SubmitMeasurementInfoResponse) error {
 
@@ -350,8 +355,11 @@ func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest
 	C5CV := float64(resp.GetResult().GetC5Cv())
 	C6CV := float64(resp.GetResult().GetC6Cv())
 	C7CV := float64(resp.GetResult().GetC7Cv())
-	HighestHr := int32(resp.GetResult().GetHighestHeartRate())
-	LowestHr := int32(resp.GetResult().GetLowestHeartRate())
+	heartRate := req.GetAppHeartRate()
+	// 根据阈值处理最高最低心率
+	// 小数直接取整
+	lowestHr := int32(float64(heartRate) * (1 - HeartRateThreshold))
+	highestHr := int32(float64(heartRate) * (1 + HeartRateThreshold))
 	measurementPosture, errmapProtoPostureToDB := mapProtoPostureToDB(req.MeasurementPosture)
 	if errmapProtoPostureToDB != nil {
 		return nil, errmapProtoPostureToDB
@@ -361,9 +369,11 @@ func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest
 		return nil, errMapProtoFingerToDB
 	}
 	record := &mysqldb.Record{
-		AppHeartRate:              float64(resp.GetResult().GetAverageHeartRate()),
-		AlgorithmHighestHeartRate: HighestHr,
-		AlgorithmLowestHeartRate:  LowestHr,
+		AppHeartRate:              float64(heartRate),
+		HeartRate:                 float64(heartRate),
+		HeartRateCV:               float32(resp.GetResult().GetHeartRateCv()),
+		AlgorithmHighestHeartRate: highestHr,
+		AlgorithmLowestHeartRate:  lowestHr,
 		ClientID:                  clientID,
 		UserID:                    int(req.UserId),
 		DeviceID:                  0,
@@ -403,14 +413,6 @@ func buildDbRecord(ctx context.Context, req *corepb.SubmitMeasurementInfoRequest
 		CreatedAt:          now,
 		UpdatedAt:          now,
 	}
-
-	// 设置心率
-	heartRate := resp.GetResult().GetAverageHeartRate()
-	record.HeartRate = float64(heartRate)
-
-	// 心率变异
-	heartRateCV := resp.GetResult().GetHeartRateCv()
-	record.HeartRateCV = float32(heartRateCV)
 	return record, nil
 }
 
