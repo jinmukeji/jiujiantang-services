@@ -96,6 +96,7 @@ type SubmitMeasurementInfo struct {
 	MobileType         string             `json:"mobile_type"`         // 手机类型
 	MeasurementPosture int32              `json:"measurement_posture"` // 测量姿态
 	Payload            *RingSamplePayload `json:"payload"`             // 采样数据
+	AppHeartRate       int32              `json:"app_heart_rate"`      // App端传过来的心率
 	Extras             map[string]string  `json:"extras"`              // 额外的扩展上下文数据，KV 键值对
 }
 
@@ -163,6 +164,7 @@ func (h *v2Handler) SubmitMeasurementData(ctx iris.Context) {
 	req.Mac = submitMeasurementInfoRequest.Mac
 	req.MobileType = protoMobileType
 	req.MeasurementPosture = protoMeasurementPosture
+	req.AppHeartRate = submitMeasurementInfoRequest.AppHeartRate
 	payload, _ := base64.StdEncoding.DecodeString(ringSamplePayload.Payload)
 	protoFinger, errMapProtoFingerToProto := mapRestFingerToProto(ringSamplePayload.Finger)
 	if errMapProtoFingerToProto != nil {

@@ -2,7 +2,7 @@ version: '3'
 services:
   ###################################
   calc:
-    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/calc:0.2.5
+    image: 949191617935.dkr.ecr.cn-north-1.amazonaws.com.cn/jm-app/calc-ring:0.1
     command:
       - "--registry=mdns"
       - "--server_address=:50051"
