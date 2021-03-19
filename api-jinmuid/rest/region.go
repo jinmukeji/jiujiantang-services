@@ -37,8 +37,8 @@ func (h *webHandler) SelectRegion(ctx iris.Context) {
 	req.UserId = body.UserID
 	protoRegion, errMapRestRegionToProto := mapRestRegionToProto(*body.Region)
 	if errMapRestRegionToProto != nil {
-        writeError(ctx, wrapError(ErrInvalidValue, "", errMapRestRegionToProto), false)
-        return
+		writeError(ctx, wrapError(ErrInvalidValue, "", errMapRestRegionToProto), false)
+		return
 	}
 	req.Region = protoRegion
 	_, errUserSelectRegion := h.rpcSvc.UserSelectRegion(newRPCContext(ctx), req)

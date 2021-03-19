@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"path"
 	"strings"
 	"time"
@@ -69,7 +68,7 @@ func (client *Client) DownloadFile(key string) ([]byte, error) {
 		return nil, err
 	}
 	defer output.Body.Close() // nolint: errcheck
-	data, err := ioutil.ReadAll(output.Body)
+	data, err := io.ReadAll(output.Body)
 	if err != nil {
 		return nil, err
 	}

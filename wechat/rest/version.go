@@ -1,8 +1,8 @@
 package rest
 
 import (
-    "github.com/kataras/iris/v12"
-    "github.com/jinmukeji/jiujiantang-services/pkg/rest"
+	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
+	"github.com/kataras/iris/v12"
 )
 
 // GetVersion 获取服务版本信息

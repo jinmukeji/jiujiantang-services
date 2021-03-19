@@ -1,7 +1,7 @@
 package rest_test
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"path/filepath"
 	"testing"
@@ -48,7 +48,7 @@ func (suite *MeasurementTestSuite) TestSubmitMeasurementData() {
 	headers["X-Access-Token"] = token
 	headers["Content-Type"] = "application/json"
 	envFilepath := filepath.Join("testdata", "algorithmServerTest.json")
-	jsondata, _ := ioutil.ReadFile(envFilepath)
+	jsondata, _ := io.ReadFile(envFilepath)
 	e.POST("/v2-api/owner/measurements").
 		WithHeaders(headers).
 		WithBytes(jsondata).

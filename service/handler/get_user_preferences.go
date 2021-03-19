@@ -13,7 +13,7 @@ func (j *JinmuHealth) GetUserPreferences(ctx context.Context, req *corepb.GetUse
 	reqGetUserPreferences.UserId = req.UserId
 	respGetUserPreferences, errGetUserPreferences := j.jinmuidSvc.GetUserPreferences(ctx, reqGetUserPreferences)
 	if errGetUserPreferences != nil {
-        log.Errorf("failed to get user preferences")
+		log.Errorf("failed to get user preferences")
 		return errGetUserPreferences
 	}
 	resp.Preferences = &corepb.Preferences{

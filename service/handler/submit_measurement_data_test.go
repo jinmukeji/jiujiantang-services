@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"io/ioutil"
+	"io"
 	"testing"
 
 	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
@@ -312,7 +312,7 @@ func (suite *SubmitMeasurementInfoTestSuite) TestSubmitMeasurementInfoSuccess() 
 
 // getTestMeasureData 读取测量数据文件
 func getTestMeasureData() []byte {
-	jsondata, _ := ioutil.ReadFile("testdata/test.json")
+	jsondata, _ := io.ReadFile("testdata/test.json")
 	return jsondata
 }
 
