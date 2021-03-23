@@ -1,7 +1,7 @@
 package rest_test
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"path/filepath"
 	"testing"
@@ -50,7 +50,7 @@ func (suite *AnalysisV2TestSuite) TestGetV2AnalyzeResult() {
 	headers["Authorization"] = auth
 	headers["X-Access-Token"] = token
 	envFilepath := filepath.Join("testdata", "analysis_report_request_body.json")
-	jsondata, _ := ioutil.ReadFile(envFilepath)
+	jsondata, _ := io.ReadFile(envFilepath)
 	e.POST("/v2-api/owner/measurements/{record_id}/v2/analyze").
 		WithHeaders(headers).
 		WithPath("record_id", suite.Account.RecordID).

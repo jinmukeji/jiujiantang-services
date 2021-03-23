@@ -3,7 +3,6 @@ package aws
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"testing"
@@ -83,7 +82,7 @@ func (suite *ClientTestSuite) TestDownloadWaveData() {
 	fullKey := path.Join(suite.client.options.PulseTestRawDataEnvironmentS3KeyPrefix, key)
 	dataDownload, err := suite.client.DownloadFile(fullKey)
 	filename := fmt.Sprintf("%s/229967.pbd", dir)
-	errWriteFile := ioutil.WriteFile(filename, dataDownload, 0655)
+	errWriteFile := os.WriteFile(filename, dataDownload, 0655)
 	assert.NoError(t, errWriteFile)
 	assert.NoError(t, err)
 	assert.NotEqual(t, "", string(dataDownload))

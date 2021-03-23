@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/jinmukeji/jiujiantang-services/pkg/rest"
-	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	jinmuidpb "github.com/jinmukeji/proto/v3/gen/micro/idl/partner/xima/user/v1"
+	generalpb "github.com/jinmukeji/proto/v3/gen/micro/idl/ptypes/v2"
 	"github.com/kataras/iris/v12"
 )
 

@@ -12,12 +12,11 @@ func internalServerError(ctx iris.Context) {
 	})
 }
 
-
 func writeSessionErrorJSON(ctx iris.Context, redirectURL string, err error) {
 	// nolint: errcheck, gas
 	ctx.JSON(iris.Map{
-        "ok":       false,
-		"error":    wrapError(ErrSessionUnauthorized,"",err),
+		"ok":       false,
+		"error":    wrapError(ErrSessionUnauthorized, "", err),
 		"redirect": redirectURL,
 	})
 }

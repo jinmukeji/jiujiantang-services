@@ -2,7 +2,7 @@ package rest_test
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"path/filepath"
 	"testing"
@@ -78,7 +78,7 @@ func (suite *SearchHistoryTestSuite) TestDeleteRecords() {
 	headers["X-Access-Token"] = token
 	headers["Content-Type"] = "application/json"
 	envFilepath := filepath.Join("testdata", "algorithmServerTest.json")
-	jsondata, _ := ioutil.ReadFile(envFilepath)
+	jsondata, _ := io.ReadFile(envFilepath)
 	// 添加一条记录
 	body := e.POST("/v2-api/owner/measurements").
 		WithHeaders(headers).
