@@ -1,8 +1,8 @@
 package preference
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -32,7 +32,7 @@ type ClientPreferences struct {
 
 // NewClientPreferences 建立ClientPreferences
 func NewClientPreferences(configFile string) ClientPreferences {
-	data, _ := ioutil.ReadFile(configFile)
+	data, _ := os.ReadFile(configFile)
 	configDoc := Client{}
 	// 读取配置文件
 	err := yaml.Unmarshal(data, &configDoc)

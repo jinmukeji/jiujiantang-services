@@ -1,9 +1,8 @@
 package rest
 
 import (
-	"io/ioutil"
-
 	"fmt"
+	"os"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -22,7 +21,7 @@ type Content map[string]string
 // LoadResourceFile 加载资源链接文件
 func LoadResourceFile(filepath string) (*Resource, error) {
 	res := Resource{}
-	content, err := ioutil.ReadFile(filepath)
+	content, err := os.ReadFile(filepath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read file from path %s: %s", filepath, err.Error())
 	}

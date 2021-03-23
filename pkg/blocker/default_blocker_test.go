@@ -59,7 +59,7 @@ func (suite *DefaultBlockerTestSuite) TestIsIPBlocked() {
 // TestIgnoreIPCheck mac是否在免ip过滤白名单内
 func (suite *DefaultBlockerTestSuite) TestIgnoreIPCheck() {
 	t := suite.T()
-	clientID := "jm-10004" 
+	clientID := "jm-10004"
 	mac := "BBC123456789"
 	blocker := suite.blockerPool.GetBlocker(clientID)
 	ok := blocker.IgnoreIPCheck(mac)

@@ -1,7 +1,7 @@
 package blocker
 
 import (
-	"io/ioutil"
+	"os"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -21,7 +21,7 @@ type ClientConfigDoc struct {
 
 // LoadConfig 从某个路径中加载配置文件,blockerConfigFile是配置文件的位置，blockerDBConfigFile是ip数据库文件的位置
 func LoadConfig(blockerConfigFile string) (*ConfigDoc, error) {
-	data, _ := ioutil.ReadFile(blockerConfigFile)
+	data, _ := os.ReadFile(blockerConfigFile)
 	configDoc := ConfigDoc{}
 	// 读取配置文件
 	err := yaml.Unmarshal(data, &configDoc)

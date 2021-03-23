@@ -24,7 +24,7 @@ func (suite *UserSigninTestSuite) SetupSuite() {
 	envFilepath := filepath.Join("testdata", "local.svc-biz-core.env")
 	db, _ := newTestingDbClientFromEnvFile(envFilepath)
 	suite.Account = newTestingAccountFromEnvFile(envFilepath)
-	suite.jinmuHealth = NewJinmuHealth(db, nil, nil, nil, nil, nil, nil,"")
+	suite.jinmuHealth = NewJinmuHealth(db, nil, nil, nil, nil, nil, nil, "")
 }
 
 // TestUserSiginin 测试用户登录
